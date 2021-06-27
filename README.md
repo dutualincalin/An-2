@@ -1,4 +1,4 @@
-#Repo Facultate - An 2:
+Repo Facultate - An 2:
 - Achizitii de date
 - Analiza Algoritmilor
 - Calculatoare Numerice I
