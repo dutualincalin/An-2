@@ -1,0 +1,30 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+	Laboratorul 6 PC
+
+In acest laborator se afla:
+- client.c
+- helpers.h
+- Makefile
+- README
+- server.c
+
+In client.c s-a declarat socket-ul, s-au populat campurile structurii to_station
+cu constanta AF_INET, cu numarul portului care se gaseste in args[2] ca vector de
+litere, care cu un apel de atoi se transforma in int si cu htons un int in Network
+order respectiv cu un apel al functiei inet_aton care pune in al 3-lea camp ip-ul
+serverului. Urmeaza adaugarea unui ciclu care se termina cand fisierul de intrare
+este complet citit si care contine citirea a cate 10 bytes si trimiterea catre
+server folosind functia sendto. Dupa trecerea while-ului se trimite un mesaj de
+incheiere a transmisiei si se inchide fisierul de intrare si socket-ul.
+
+In server.c am declarat socket-ul, am apelat functia bind si am populat campurile
+structurii my_sockaddr exact ca la structura to_station din client. Am apelat un
+while la infinit care va primi mesajul de la client si il va adauga in fisier. De
+asemenea, pentru a iesi din while s-a mai adaugat si un if care verifica daca s-a
+trimis mesajul de final. In final se inchid fisierul de iesire si socket-ul.
+
+Probleme laborator: Fiind pe o masina virtuala cu Ubuntu 20.04, functia sendto trimite
+doar 50% din mesaje. De ce? Nu stiu.. Am rulat codul pe Ubuntu cu dual boot si
+merge, dar aici nu stiu.

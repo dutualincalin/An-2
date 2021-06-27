@@ -1,0 +1,26 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+
+			Laboratorul 4
+
+
+Laboratorul contine:
+- Folderul cpp cu programele in C/C++
+- Folderul java cu programele in Java
+- Folderul tests cu testele pentru programe
+- Fisierul check
+- README
+
+
+Exercitii
+
+1) Complexitatea temporala a algoritmului scris este O(n * S) din cauza celor doua
+for-uri folosite pentru cazul general. Complexitatea spatiala este O(S) deoarece
+cel mai costisitor lucru este vectorul d folosit in tehnica cu DP, adica rezolvam
+si retinem S subprobleme.
+
+2) Complexitatea temporala a algoritmului scris este O(n * m) datorita celor doua
+for-uri folosite pentru aplicarea cazului general pe metoda programarii dinamice.
+Complexitatea spatiala este tot O(n * m) deoarece se retine in memorie o matrice
+de n x m elemente (n * m subprobleme).

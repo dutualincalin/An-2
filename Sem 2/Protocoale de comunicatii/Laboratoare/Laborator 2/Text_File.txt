@@ -1,0 +1,1 @@
+Ce s-ar intampla intr-un caz real? Ce dezavantaje puteti identifica pentru aceasta implementare de STOP AND WAIT? Discutati cu asistentul ce se poate intampla in cazul in care mesajele de confirmare sunt alterate/pierdute, sau legatura de date este inceata?

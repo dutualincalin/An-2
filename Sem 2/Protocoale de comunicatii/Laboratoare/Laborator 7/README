@@ -1,0 +1,28 @@
+Nume: Dutu Alin Calin si Panaitescu Iulian
+Grupa: 323 CD
+
+		Laboratorul 7
+
+Laboratorul contine:
+- client.c
+- server.c
+- Makefile
+- helpers.h
+- README
+
+
+In acest laborator s-a lucrat in fisierele client.c si server.c.
+
+In client.c am declarat socket-ul, am populat structura serv_addr cu adresa
+IPv4 si cu portul primite ca parametrii de functia main, am folosit functia
+connect pentru a crea conexiunea la server si am apelat functia run_client. 
+In aceasta, se citeste mesajul de la stdin, se trimite catre server si se
+asteapta primirea raspunsului, iar la receptionarea acestuia se va scrie in
+output. La final inchidem socket-ul.
+
+In server.c deschidem un socket pentru server, populam structura serv_addr,
+facem bind pe adresa respectiva si apelam functiile celor 2 task-uri. Diferenta
+dintre cele doua functii este faptul ca in run_echo avem un singur client, iar
+in run_chat avem 2 clienti. Ambele asculta pe socket-ul server-ului, primesc
+mesajele de la client/clienti si le trimit destinatarului. In final se inchid 
+toate conexiunile.

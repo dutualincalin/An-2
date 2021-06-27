@@ -1,0 +1,19 @@
+\chapter{Analiz'a comparativ'a}
+\section{Divide et Impera}
+\myindent
+Tehnica Divide et Impera aduce multe avantaje mai ales la sort'ari deoarece cu ajutorul acestei tehnici s-a ajuns s'a se creeze algoritmi de sortare foarte eficien'ti cum ar fi Merge Sort care are cea mai bun'a complexitate pe toate cele 3 cazuri dintre to'ti algoritmii de sortare, O(n * log n). De asemenea, aceast'a metod'a a introdus 'si algoritmul de c'autare binar'a care efectuat pe un vector sortat va avea o complexitate O(log n) care este printre cele mai bune din toat'a lista de algoritmi de c'autare, 'ins'a dac'a nu este sortat, atunci c'autarea binar'a va avea O(n) care este asem'an'atoare cu complexitatea c'aut'arii liniare. De asemenea, tot 'in acest caz este mai pu'tin eficient 'a din punct de vedere al timpului de execu'tie c'autarea binar'a dac'a se apeleaz'a 'impreun'a cu o func'tie de sortare fa't'a de al'te metode cum ar fi chiar c'autarea liniar'a. Astfel, Divide et Impera este o tehnic'a eficient'a, 'ins'a doar pentru anumite probleme 'si 'in anumite condi'tii.
+
+\vspace{10mm}
+\section{Greedy}
+\myindent
+Tehnica Greedy 'imbin'a eficien'ta cu simplitatea rezolv'arii unui algoritm folosind "scurt'aturi" pentru a construi c\^at mai rapid solu'tiile. De exemplu, 'in Problema Rucsacului unde avem un num'ar de obiecte care au o greutate 'si o valoare vom aplica tehnica Greedy prin compararea obiectelor cu rezultatul c\^atului dintre pre'tul si greutatea obiectelor. Un avantaj este c'a vom ob'tine o solu'tie mult mai rapid'a 'si mai eficent'a, 'ins'a nu este 'si cea mai corect'a solu'tie. Pe anumite input-uri acest ra'tionament nu scoate solu'tia cea mai optim'a ceea ce este un dezavantaj pentru tehnica Greedy. Pentru a rezolva acest neajuns putem folosi Programare Dinamic'a.
+
+\vspace{10mm}
+\section{Programare dinamic'a}
+\myindent
+Programarea dinamic'a are la baz'a un concept cu totul diferit fa't'a de Greedy, construie'ste solu'tia actual'a dup'a solu'tiile precedente folosind un vector sau o matrice unde sunt re'tinute toate solu'tiile. Avantajul fa't'a de Greedy este c'a solu'tia creat'a va fi mereu cea mai optim'a, 'ins'a un mare dezavantaj 'il constituie crearea vectorului/matricei de solu'tii care pentru input-uri mari au o dimensiune foarte mare consum\^and astfel timp 'si resurse. Pe de alt'a parte exist'a algoritmi eficien'ti care au la baz'a programare dinamic'a. Dac'a avem o recuren'ta, de exemplu, 'in loc s'a folosim un vector 'in care s'a re'tinem solu'tiile, putem folosi tehnica de exponen'tiere pe matrice pentru recuren'te liniare care o complexitate excelent'a, O(log n) care scoate un timp excelent, mult mai bun dec\^at solu'tia clasic'a. Astfel, Programarea Dinamic'a este 'in general folosit'a eficient la problemele care se rezolv'a cu recuren'te sau cu solu'tii care depind de cele precedente.
+
+\vspace{10mm}
+\section{Backtracking}
+\myindent
+Metoda Backtracking este folosit'a pentru a crea toate solu'tiile posibile av\^and anumite restric'tii de care s'a putem 'tine cont. Este folosit 'in general 'in problemele unde trebuiesc generate mul'timi sau submul'timi pe baza unui domeniu dat 'si care s'a respecte restric'tiile impuse. Avantajul acestei metode este eficien'ta 'in compara'tie cu metoda brute-force care genereaz'a toate posibilit'a'tile si deabia dup'a le selecteaz'a, 'ins'a chiar 'si a'sa complexitatea algoritmilor care au la baz'a Backtracking este foarte mare. Fa't'a de celelalte metode Backtraking este mai mult ca o ultim'a alternativ'a, ceva ce se poate folosi eficient doar dac'a nu exist'a alte posibilit'a'ti 'si din acest punct de vedere se poate considera o metod'a eficient'a.

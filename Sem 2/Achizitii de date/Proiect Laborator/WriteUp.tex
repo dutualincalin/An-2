@@ -1,0 +1,61 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{graphicx}																		
+\usepackage[romanian]{babel}
+\usepackage[unicode]{hyperref}
+\usepackage[dvipsnames]{xcolor} 
+\usepackage{amsmath,epsfig,pifont,calc,pifont,pstricks}
+\usepackage{rom} 						 % pentru a scrie cu diacritice in limba romana	
+\usepackage{color}
+\usepackage{listings}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+\usepackage{placeins}
+
+\definecolor{ultramarine}{rgb}{0.07, 0.04, 0.56}
+\definecolor{Capri}{rgb}{0.0, 0.75, 1.0}
+\definecolor{violet}{rgb}{0.56, 0.0, 1.0}
+
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\chapter*}{\section*}{}{}
+
+%%% setari ale paginii
+%indentarea la inceput de paragraf
+\setlength{\parindent}{3ex}
+
+%dimensiunea textului pe pagina
+\setlength{\voffset}{-2cm}
+\setlength{\textheight}{23cm}  
+\setlength{\textwidth}{16cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{1cm}
+\renewcommand{\baselinestretch}{1.2}
+\newcommand{\myindent}{\hspace*{3ex}}
+%\renewcommand{\baselinestretch}{1}
+
+%margini
+\setlength{\oddsidemargin}{0.5cm}
+\setlength{\evensidemargin}{-0.3cm}
+%\raggedright
+\raggedbottom
+
+%% begin preambul - macro-uri definite de autor
+\newcommand{\D}{\mathrm{d}}	% va fi folosita in mediul matematic, pentru diferentiala d
+\newcommand{\I}{\mathrm{i}}	% va fi folosita in mediul matematic, pentru unitatea imaginara
+\newcommand{\eul}{\mathrm{e}}	% numarul lui Euler
+\newcommand{\vect}[1]{\mathbf{#1}}	% comanda cu un argument, pentru scrierea vectorilor cu lidere aldine, drepte
+
+\begin{document}
+\title{\centering \LARGE{\color{ultramarine}{\textbf{Proiect AD} \\Sound Keyboard\\}}}
+\author{Facultatea de Automatic'a 'si Calculatoare\\Universitatea Politehnic'a Bucure'sti\\\\ {\em Du'tu Alin C'alin}}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\input{Fisiere/Arduino}
+
+\newpage
+\nocite{*}
+\bibliographystyle{plainrom}
+\addcontentsline{toc}{section}{Bibliografie}
+\bibliography{Fisiere/Bibliografie}
+\end{document}

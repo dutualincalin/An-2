@@ -1,0 +1,52 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+		Laboratorul 3
+
+Laboratorul contine:
+- link_emulator
+- lib.h
+- Makefile
+- README
+- run_experiment.sh
+- send.c
+- recv.c
+
+1) lib.h
+
+In lib.h a mai fost adaugat campul check_sum de tip char care are rol in
+verificarea integritatii mesajului.
+
+
+2) recv.c
+
+In recv.c pentru fiecare frame se primeste mesajul trimis de sender si se
+verifica integritatea acestuia prin recalcularea lui check_sum si verificarea
+cu check_sum-ul calculat la sender. In caz de esec la primirea mesajului sau la
+verificarea integritatii programul se opreste si afiseaza eroare. In caz de
+succes se trimite confirmarea mesajului catre sender.
+
+
+3) send.c
+
+In send.c exista doua mari operatii:
+- Trimiterea unui mesaj care consta in crearea unui mesaj la intamplare folosind
+functia rand() si calcularea check_sum-ului pentru acel mesaj. Aceasta suma de
+verificare va fi atasata la sfarsitul mesajului. In final se trimite mesajul
+spre receiver.
+- Primirea unui mesaj care consta in verificarea confirmarii unui mesaj si apoi
+pregatirea unui nou mesaj pentru a fi trimis la receiver.
+
+Ideea programului se imparte in 3 etape:
+- Etapa 1 care trimite un numar de wso mesaje in acelasi timp catre receiver
+(wso = BDP/frame_size).
+- Etapa 2 imita o procedura stop and wait la modul in care la fiecare primire a
+unei confirmari de la receiver, sender-ul va trimite urmatorul mesaj
+- Etapa 3 va goli canalul de transmisie preluand ultimele wso confirmari trimise
+de receiver
+
+
+Cerinta bonus: Daca se trimite o cantitate de date care depaseste valoarea
+Window_size canalul nu va putea prelua toata informatia deoarece canalul va fi deja
+plin dupa cateva mesaje, ceea ce inseamna pierdere de informatie. Mai mult la verificare
+programul se va opri deoarece check_sum va observa pierderile de frame-uri.

@@ -1,0 +1,34 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+		Laboratroul 5
+
+Fisierele laboratorului:
+- arp.h
+- arp.o
+- icmp.c
+- Makefile
+- README
+- utils.c
+- utils.h
+
+In acest laborator am lucrat cu fisierul icmp.c.
+
+Pentru functia ping am umplut campurile: daddr, id, ihl, protocol, tot_len, ttl,
+saddr, version si check din header-ul protocolului IPv4 si campurile type si
+checksum din header-ul protocolului ICMP cu valorile corespunzatoare si la final
+am dat un printf care afiseaza numarul pachetului, timpul de trimitere si primire,
+ttl si checksum. Toate aceste lucruri sunt incadrate intr-un while care merge pana
+cand se indeplineste conditia de la inceputul while-ului care face posibila apelarea
+ping-ului de un numara finit de ori.
+
+Pentru functia traceroute s-au efectuat cam aceleasi chestii ca si la functia ping,
+doar ca: tll-ul ip-header-ului este initializat la 0 si creste cu fiecare pachet trimis,
+se afiseaza de data asta si adresa ip prin care trece pachetul si traceroute isi va
+termina executia folosind o conditie de final schimbata (Daca s-a ajuns la adresa
+destinatie atunci se da break la while).
+
+Am intalnit si mici probleme. La traceroute s-a blocat de cateva ori la o anumita adresa IP,
+dar dupa alte rulari afiseaza din nou ruta pana la adresa ip a site-ului google.com. Am pus
+si niste poze cu mai multe output-uri pentru ping si traceroute(mai mult pentru traceroute)
+in cazul in care exista posibilitatea ca traceroute sa nu functioneze.

@@ -1,0 +1,135 @@
+#define tempSensor A0
+
+#define redLED 8
+#define blueLED 9
+#define buzzer 10
+
+
+// Temperature value
+int temp = 0;
+
+// 7seg display digits
+int firstDigit = 0;
+int secondDigit = 0;
+
+
+
+#define SH_INPUT1 7 
+#define SH_CLOCK1 5
+#define OR_CLOCK1 6
+
+#define SH_INPUT2 4 
+#define SH_CLOCK2 2
+#define OR_CLOCK2 3
+
+
+
+const byte pattern[16] = { B00111111, // 0 
+                                B00000110, // 1 
+                                B01011011, // 2 
+                                B01001111, // 3 
+                                B01100110, // 4 
+                                B01101101, // 5 
+                                B01111101, // 6 
+                                B00000111, // 7 
+                                B01111111, // 8 
+                                B01101111, // 9 
+                                B01110111, // A 
+                                B01111100, // b 
+                                B00111001, // C 
+                                B01011110, // d 
+                                B01111001, // E 
+                                B01110001 // F 
+                               };
+void writeDigit1(byte value)
+{
+  digitalWrite(OR_CLOCK1, LOW);
+  shiftOut(SH_INPUT1, SH_CLOCK1, MSBFIRST, value);
+  digitalWrite(OR_CLOCK1, HIGH);
+}
+
+void writeDigit2(byte value)
+{
+  digitalWrite(OR_CLOCK2, LOW);
+  shiftOut(SH_INPUT2, SH_CLOCK2, MSBFIRST, value);
+  digitalWrite(OR_CLOCK2, HIGH);
+}
+
+
+
+
+
+void setup()
+{
+  Serial.begin(9600);
+  
+  pinMode(tempSensor, INPUT);
+  
+  pinMode(redLED, OUTPUT);
+  pinMode(blueLED, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+}
+
+void loop()
+{
+  
+  // Temperature range: -40 -> 125 (degrees Celsius)
+  // Convert analog value to digital value
+  temp = map(((analogRead(tempSensor) - 20) * 3.04), 0, 1023, -40, 125);
+  
+  
+  // Display temperature in serial monitor
+  Serial.println(temp);
+  Serial.print(" C, ");
+  
+
+  
+ 
+  // Below zero
+  if(temp < 0)
+  {
+    digitalWrite(redLED, LOW);
+    digitalWrite(blueLED, HIGH);
+    digitalWrite(buzzer, LOW);
+    
+    secondDigit = (temp * (-1)) % 10;
+  	firstDigit = (temp * (-1)) / 10;
+    writeDigit1(pattern[firstDigit]);
+  	writeDigit2(pattern[secondDigit]);
+  }
+  
+  // Above zero
+  if(temp >= 0 && temp < 100)
+  {
+    digitalWrite(redLED, HIGH);
+    digitalWrite(blueLED, LOW);
+    
+    // Activate buzzer if temperature is above 30
+    if(temp > 30)
+    {
+      digitalWrite(buzzer, HIGH);
+    }
+    else
+    {
+      digitalWrite(buzzer, LOW);
+    }
+    
+    
+    secondDigit = temp % 10;
+  	firstDigit = temp / 10;
+    writeDigit1(pattern[firstDigit]);
+  	writeDigit2(pattern[secondDigit]);
+  }
+  
+  // Cannot display temperature above 99
+  if(temp >= 100)
+  {
+    digitalWrite(redLED, HIGH);
+    digitalWrite(blueLED, LOW);
+    digitalWrite(buzzer, LOW);
+    
+    writeDigit1(pattern[9]);
+  	writeDigit2(pattern[9]);
+  }
+  
+}

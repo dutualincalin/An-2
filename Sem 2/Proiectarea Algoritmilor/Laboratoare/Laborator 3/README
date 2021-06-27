@@ -1,0 +1,24 @@
+Nume: Dutu Alin Calin
+Grupa: 323CD
+
+
+		Laboratorul 2 - Proiectarea algoritmilor
+
+Laboratorul contine:
+- Folderul Ocw
+- Folderul Huffman
+
+1) Huffman - Contine toate fisierele necesare implementarii arborelui Huffman
+2) Ocw - Contine toate fisierele pentru exercitiile de pe Ocw. S-au folosit
+fisierele din limbajul C++, doar ca functiile result au fost scrise exclusiv in
+C, cu exceptia apelarii variabilelor din obiecte.
+
+
+Exercitii Ocw:
+
+1) Complexitatea temporala este O(n^2) datorita celor 2 for-uri de la sortare,
+iar complexitatea spatiala este O(n) datorita alocarii vectorului de sortare.
+
+3) Complexitatea temporala este O(n^2) datorita celor 2 for-uri de la sortare,
+iar complexitatea spatiala O(n) vine de la alocarile dinamice pentru vectorul
+de teme sortate si pentru vectorul de utilizari.

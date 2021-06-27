@@ -1,0 +1,5 @@
+Parcurgerea Inorder: 5, 29, 31, 35, 44, 51, 73, 77, 91, 97;
+Maximul din AVL: 97
+Minimul din AVL: 5
+Maximul dupa delete: 91, 97
+Minimul dupa delete: 29, 5

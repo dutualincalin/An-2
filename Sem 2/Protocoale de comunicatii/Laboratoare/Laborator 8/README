@@ -1,0 +1,26 @@
+Nume: Dutu Alin Calin si Panaitescu Iulian
+Grupa: 323 CD
+
+		Laboratorul 8
+
+Laboratorul contine:
+- client.c
+- server.c
+- Makefile
+- helpers.h
+- README
+
+
+In acest laborator s-a lucrat in fisierele client.c si server.c.
+
+Client.c:
+Am declarat listele de socket-uri si am adaugat socket-ul 0 pentru stdin si sockfd
+pentru conexiunea cu server-ul. Am apelat select pe lista, am gasit socket-ul
+setat si:
+- pentru 0 avem citire de la tastatura
+- pentru sockfd avem citire de la socket :)
+
+Server.c:
+In cazul in care se receptioneaza date pe unul din socketii de client, se preia
+destinatia din mesaj (primul caracter din sir) si se trimite mesajul.
+

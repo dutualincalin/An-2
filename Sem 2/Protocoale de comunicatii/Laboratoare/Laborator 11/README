@@ -1,0 +1,26 @@
+Nume: Dutu Alin Calin & Panaitescu Iulian
+Grupa: 323CD
+
+
+	Laboratorul 11
+
+Laboratorul contine:
+- README
+- commands.png
+- server.png
+- file.txt
+- send_mail.c
+- Makefile
+
+1. Am pornit serverul intr-un terminal folosind comanda:
+python -m smtpd -n -c DebuggingServer 127.0.0.1:25;
+
+apoi din alt terminal am folosit comanda:telnet 127.0.0.1 25 si dupa am dat
+comenzile din exemplul din laborator, dupa cum se poate observa in screenshot-uri;
+
+
+2. Pentru a crea conexiunea TCP am folosit functia "open_connection" din laboratorul
+anterior. Apoi am trimis comenzile: HELO, MAIL FROM, RCPT TO, DATA cu "Content-Type:
+multipart/mixed; boundary=abc" avand o parte de text/plain si alta cu attachment,
+delimitate de "abc". Dupa am terminat sectiune de DATA cu \r\n.\r\n (\r\n din urma
+sunt puse de functia send_command) si am dat "QUIT".

@@ -1,0 +1,19 @@
+1) Cautam trenul cu cea mai mica greutate folosind AVL si apoi folosind Heap.
+
+Tren-ul din AVL cu cea mai mica greutate: 70 -  Tren de Marfa - Cereale;
+Timp de executie: 0.000333 ms
+
+
+Tren-ul din Heap cu cea mai mica greutate: 70 -  Tren de Marfa - Cereale;
+Timp de executie: 0.002838 ms
+
+2) Cautam un tren cu o anumita greutate primita ca parametru folosind AVL apoi folosind Heap.
+
+Tren-ul din AVL cu greutatea cautata: 200 -  Tren de Marfa - alimente si lapte;
+Timp de executie: 0.000181 ms
+
+
+Tren-ul din Heap cu greutatea cautata: 200 -  Tren de Marfa - alimente si lapte;
+Timp de executie: 0.001275 ms
+
+

@@ -1,0 +1,366 @@
+===== Java basics =====
+
+====Obiective====
+
+Scopul acestui laborator este familiarizarea studenților cu noțiunile de bază ale programării în Java.
+
+Aspectele urmărite sunt:
+  * organizarea unui proiect Java
+  * familiarizarea cu IDE-ul
+  * definirea noțiunilor de clasă, câmpuri, proprietăți, metode, specificatori de acces
+  * folosirea unor tipuri de date 
+
+
+
+====Organizarea unui proiect Java====
+În cadrul acestui laborator veți avea de ales între a folosi [[https://www.jetbrains.com/idea/|IntelliJ IDEA]] ([[:poo-ca-cd:resurse-utile:instalare-intellij-idea|tutorial instalare]]) folosind contul de mail de la facultate ([[:poo-ca-cd:resurse-utile:activare-intellij-idea|tutorial activare]]) sau [[https://eclipse.org/|Eclipse]] ([[:poo-ca-cd:resurse-utile:instalare-eclipse|tutorial instalare]]). Primul pas este să vă familiarizați cu structura unui proiect și a unui fișier sursă Java.
+
+Înainte de a începe orice implementare, trebuie să vă gandiți cum grupați logica întregului program pe unități. Elementele care se regăsesc în același grup trebuie să fie **conectate în mod logic**, pentru o ușoară implementare și înțelegere ulterioară a codului. În cazul Java, aceste grupuri logice se numesc **pachete** și se reflectă pe disc conform ierarhiei din cadrul proiectului. Pachetele pot conține atât alte pachete, cât și fișiere sursă.
+
+{{ poo-ca-cd:laboratoare:java-basics:java_packages.png?790 | Organizarea pachetelor in Java}} 
+
+Următorul pas este delimitarea entităților din cadrul unui grup, pe baza unor trăsături individuale. În cazul nostru, aceste entități vor fi clasele. Pentru a crea o clasă, trebuie mai întâi să creăm un fișier aparținând proiectului nostru și unui pachet (dacă este cazul și proiectul nu este prea simplu pentru a-l împărți în pachete). În cadrul acestui fișier definim una sau mai multe clase, conform urmatoarelor reguli:
+  * dacă dorim ca această clasă să fie vizibilă din întreg proiectul, îi vom pune specificatorul **public** (vom vorbi despre specificatori de acces mai în detaliu în cele ce urmează); acest lucru implică însă 2 restricții:
+    * fișierul și clasa publică trebuie să aibă același nume
+    * nu poate exista o altă clasă/interfață publică în același fișier (vom vedea în laboratoarele următoare ce sunt interfețele)
+  * pot exista mai multe clase în același fișier sursă, cu condiția ca **maxim una** să fie publică
+
+Pentru mai multe informații despre cum funcționează mașina virtuală de Java (JVM) precum și o aprofundare în POO și Java, consultați [[:poo-ca-cd:laboratoare:poo-java|acest link]].
+
+Pentru un exemplu de creare a unui proiect, adăugare de pachete și fișiere sursă, consultați [[:poo-ca-cd:resurse-utile:proiect-intellij-idea|acest link]] pentru IntelliJ Idea si [[:poo-ca-cd:resurse:proiect-eclipse|acest link]] pentru Eclipse.
+
+====Tipuri primitive====
+
+Conform POO, **orice este un obiect**, însă din motive de performanță, Java suportă și tipurile de bază, care nu sunt clase.
+
+<code java>
+boolean isValid = true;
+
+char nameInitial = 'L';
+
+byte hexCode = (byte)0xdeadbeef;
+
+short age = 23;
+
+int credit = -1;
+
+long userId = 169234;
+
+float percentage = 0.42;
+
+double money = 99999;
+</code>
+  
+ Biblioteca Java oferă clase **wrapper** pentru fiecare tip primitiv. Avem astfel clasele ''Char'', ''Integer'', ''Float'' etc. Un exemplu de instanțiere este următorul: 
+<code java> 
+ new Integer(0); 
+</code> 
+
+====Clase==== 
+  
+ Clasele reprezintă tipuri de date definite de utilizator sau deja existente în sistem (din ''class library'' - set de biblioteci dinamice oferite pentru a asigura portabilitatea, eliminând dependența de sistemul pe care rulează programul). O clasă poate conține: 
+  * **membri** - ''variabile membru'' (**câmpuri**) și ''proprietăți'', care definesc starea obiectului
+  * **metode** - ''functii membru'', ce reprezintă operații asupra stării. 
+ Prin instanțierea unei clase se înțelege crearea unui obiect care corespunde unui șablon definit. În cazul general, acest lucru se realizează prin intermediul cuvântului cheie ''new''. 
+
+Procesul de inițializare implică: declarare, instanțiere și atribuire. Un exemplu de inițializare este următorul:
+<code java>
+ Integer myZero = new Integer(0);
+</code>
+  
+ Un alt exemplu de clasă predefinita este clasa ''String''. Ea se poate instanția astfel (**nu** este necesară utilizarea ''new''): 
+
+<code java> 
+ String s1, s2; 
+
+ s1 = "My first string"; 
+ s2 = "My second string"; 
+</code> 
+  
+ Aceasta este varianta preferată pentru instanțierea string-urilor. De remarcat că și varianta următoare este corectă, dar **ineficientă**, din motive ce vor fi explicate ulterior. 
+
+<code java> 
+ s = new String("str"); 
+</code> 
+  
+====Câmpuri (membri)==== 
+  
+ Un câmp este un obiect având tipul unei clase sau o variabilă de tip primitiv. Dacă este un obiect atunci trebuie inițializat înainte de a fi folosit (folosind cuvântul cheie ''new''). 
+  
+ <code java> 
+ class DataOnly { 
+     int i; 
+     float f; 
+     boolean b; 
+     String s; 
+ } 
+ </code> 
+  
+ Declarăm un obiect de tip ''DataOnly'' și îl inițializăm: 
+  
+ <code java> 
+ DataOnly d = new DataOnly(); 
+
+ // set the field i to the value 1 
+ d.i = 1; 
+
+ // use that value 
+ System.out.println("Field i of the object d is " + d.i); 
+ </code> 
+  
+ Observăm că pentru a utiliza un câmp/funcție membru dintr-o funcție care nu aparține clasei respective, folosim **sintaxa**:  
+  
+ <code java> 
+ classInstance.memberName 
+ </code>  
+
+
+====Proprietăți==== 
+  
+ O proprietate este un câmp (membru) căruia i se atașează două metode ce îi pot expune sau modifica starea. Aceste doua metode se numesc ''getter'' si ''setter''.
+  
+ <code java> 
+ class PropertiesExample {      
+     String myString;
+     
+     String getMyString() {
+         return myString;
+     }
+     
+     void setMyString(String s) {
+         myString = s;
+     }
+ } 
+ </code> 
+  
+ Declarăm un obiect de tip ''PropertiesExample'' și îi inițializăm membrul ''myString'' astfel: 
+  
+ <code java> 
+ PropertiesExample pe = new PropertiesExample(); 
+
+ pe.setMyString("This is my string!");
+
+ System.out.println(pe.getMyString()); 
+ </code> 
+
+
+
+====Metode (funcții membru)==== 
+  
+Putem modifica programul anterior astfel: 
+
+<code java> 
+ String s1, s2; 
+
+ s1 = "My first string"; 
+ s2 = "My second string"; 
+
+ System.out.println(s1.length()); 
+ System.out.println(s2.length()); 
+</code> 
+
+Va fi afișată lungimea în caractere a șirului respectiv. Se observă că pentru a aplica o funcție a unui obiect, se folosește sintaxa: 
+<code java> 
+ classInstance.methodName(param1, param2, ..., paramN); 
+</code> 
+  
+Funcțiile membru se declară asemănător cu funcțiile din C. 
+
+==== Specificatori de acces ====
+
+În limbajul Java (şi în majoritatea limbajelor de programare de tipul OOP), orice clasă, atribut sau metodă posedă un **specificator de acces**, al cărui rol este de a restricţiona accesul la entitatea respectivă, din perspectiva altor clase. Există specificatorii:
+
+^  Tip primitiv  ^Definitie ^
+|  **private**  | limitează accesul doar în cadrul clasei curente  |
+|  **default**  | accesul este permis doar în cadrul //pachetului// (package private)  |
+|  **protected**  | accesul este permis doar în cadrul pachetului si în clasele ce moștenesc clasa curentă  |
+|  **public**  | permite acces complet  |
+
+<note warning>Atenţie, nu confundaţi specificatorul default (lipsa unui specificator explicit) cu ''protected''</note>
+
+//**Încapsularea**// se referă la acumularea atributelor şi metodelor caracteristice unei anumite categorii de obiecte într-o clasă. Pe de altă parte, acest concept denotă şi ascunderea informaţiei de stare internă a unui obiect, reprezentată de atributele acestuia, alături de valorile aferente, şi asigurarea modificării lor doar prin intermediul metodelor. 
+
+<note important>Utilizarea specificatorilor contribuie la realizarea //**încapsulării**//.</note> 
+
+Încapsularea conduce la izolarea modului de implementare a unei clase (atributele acesteia şi cum sunt manipulate) de utilizarea acesteia. Utilizatorii unei clase pot conta pe funcţionalitatea expusă de aceasta, **indiferent de implementarea ei internă** (chiar şi dacă se poate modifica în timp).
+
+====Exemplu de implementare==== 
+  
+ Clasa ''task1.VeterinaryReport'' este o versiune micșorată a clasei care permite unui veterinar să țină evidența animalelor tratate, pe categorii (câini/pisici):
+  
+ <code java> 
+ public class task1.VeterinaryReport {
+     int dogs; 
+     int cats; 
+  
+     public int getAnimalsCount() { 
+         return dogs + cats;
+     } 
+  
+     public void displayStatistics() { 
+         System.out.println("Total number of animals is " + getAnimalsCount());
+     } 
+ } 
+ </code> 
+  
+ Clasa ''task1.VeterinaryTest'' ne permite să testăm funcționalitatea oferită de clasa anterioară.
+  
+ <code java> 
+ public class task1.VeterinaryTest {
+     public static void main(String[] args) { 
+         task1.VeterinaryReport vr = new task1.VeterinaryReport();
+         
+         vr.cats = 99;
+         vr.dogs = 199; 
+         
+         vr.displayStatistics();
+         System.out.println("The class method says there are " + vr.getAnimalsCount() + " animals"); 
+     } 
+ } 
+ </code> 
+  
+ 
+ <note important>
+**Observații:**
+
+  * Dacă //nu inițializăm// valorile câmpurilor explicit, mașina virtuală va seta toate //referințele// (vom discuta mai mult despre ele în laboratorul următor) la ''null'' și //tipurile primitive// la 0 (pentru tipul ''boolean'' la ''false''). 
+  * În Java //fișierul trebuie să aibă numele clasei (publice) care e conținută în el//. Cel mai simplu și mai facil din punctul de vedere al organizării codului este de a avea fiecare clasă în propriul fișier. În cazul nostru, ''task1.VeterinaryReport.java'' și ''task1.VeterinaryTest.java''.
+</note>
+
+ Obiectele au fiecare propriul spațiu de date: fiecare câmp are o valoare separată pentru fiecare obiect creat. Codul următor arată această situație: 
+  
+ <code java> 
+ public class task1.VeterinaryTest {
+     public static void main(String[] args) { 
+         task1.VeterinaryReport vr = new task1.VeterinaryReport();
+         task1.VeterinaryReport vr2 = new task1.VeterinaryReport();
+          
+         vr.cats = 99; 
+         vr.dogs = 199; 
+         vr2.dogs = 2; 
+         
+         vr.displayStatistics(); 
+         vr2.displayStatistics(); 
+         
+         System.out.println("The first class method says there are " + vr.getAnimalsCount() + " animals");
+         System.out.println("The second class method says there are " + vr2.getAnimalsCount() + " animals");
+     }
+ }
+</code>
+
+Se observă că:
+
+  * Deși câmpul ''dogs'' aparținând obiectului ''vr2'' a fost actualizat la valoarea 2, câmpul ''dogs'' al obiectului ''vr1'' a rămas la valoarea inițiala (199). **Fiecare obiect are spațiul lui pentru date!**
+  * ''System.out.println(...)'' este metoda utilizată pentru a afișa la consola standard de ieșire
+  * Operatorul '+' este utilizat pentru a concatena două șiruri
+  * Având în vedere cele două observații anterioare, observăm că noi am afișat cu succes șirul "The first/second class method says there are " + vr.getAnimalsCount() + " animals", deși metoda getAnimalsCount() întoarce un întreg. Acest lucru este posibil deoarece se apelează implicit o metodă care convertește numărul întors de metodă în șir de caractere. Apelul acestei //metode implicite// atunci când chemăm ''System.out.println'' se întâmplă pentru orice obiect și primitivă, nu doar pentru întregi.
+
+<note important>
+Având în vedere că au fost oferite exemple de cod în acest laborator, puteți observa că se respectă un anumit stil de a scrie codul in Java. Acest **coding style** face parte din informațiile transmise in cadrul acestei materii și trebuie să încercați să îl urmați încă din primele laboratoare, devenind un criteriu obligatoriu ulterior în corectarea temelor. Puteți gasi documentația oficială pe site-ul Oracle. Pentru început, încercați să urmați regulile de denumire: http://www.oracle.com/technetwork/java/codeconventions-135099.html
+
+</note>
+
+==== Arrays ====
+
+Vectorii sunt utilizați pentru a stoca mai multe valori într-o singură variabilă. Un vector este de fapt o matrice (array) unidimensională.
+
+<code Java Exemplu definire vector de String-uri cu valorile deja cunoscute>
+String[] cars = { "Volvo", "BMW", "Ford" };
+</code>
+
+<code Java Exemplu creare și populare vector cu valori de la 1 la 20>
+int[] intArray = new int[20];
+for (int i = 0; i < intArray.length; i++) {
+	intArray[i] = i + 1;
+}
+</code>
+
+<note>
+  * Înainte să populăm vectorul, trebuie declarat (**int[] intArray**) și alocată memorie pentru 20 elemente de tip int (**new int[20]**).
+  * Pentru a accesa lungimea vectorului, folosim câmpul **length** păstrat în vector.
+  * Indexarea elementelor într-un array începe de la 0.
+</note>
+==== Nice to know ====
+
+  * Fiecare versiune de Java aduce și concepte noi, dar codul rămâne cross-compatible (cod scris pt Java 8 va compila si rula cu Java 12). Dintre lucrurile adaugate in versiuni recente avem declararea variabilelor locale folosind ''var'', ceea ce face implicit inferarea tipului. Codul devine astfel mai ușor de urmărit  ([[https://dzone.com/articles/finally-java-10-has-var-to-declare-local-variables|Detalii și exemple]])
+<code>
+var labString = "lab 1" // type String
+</code>
+
+  * Când folosiți biblioteci third-party o să observați că pachetele au denumiri de forma //com.organizationname.libname//. Acesta este modul recomandat pentru a le denumi, vedeți mai multe detalii pe [[https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html|pagina oficială]]. Există situații în care acest stil este obligatoriu, de exemplu o aplicație Android nu poate fi publicată pe Play Store dacă numele pachetelor sale nu respectă aceasta convenție.
+
+==== Summary ====
+
+  * Codul Java este scris în interiorul claselor, enum-urilor și interfețelor ([[:poo-ca-cd:laboratoare:clase-abstracte-interfete|lab interfete]]) 
+  * Un fișier de tip java poate conține mai multe clase
+  * Numele singurei clase publice dintr-un fișier trebuie să fie același cu numele fișierului (fără extensia //.java//)
+  * Fișierele sunt grupate în pachete
+  * În interiorul unei clase declarăm
+    * variabile
+    * metode
+    * alte clase ([[:poo-ca-cd:laboratoare:clase-interne|lab clase interne]])
+  * **Clasele și metodele ar trebui să aibă o singură responsabilitate. Evitați metodele lungi și clase cu mai mult de un rol. Nu puneți toată logica în metoda //main//. Metoda main ar trebui să conțină doar câteva linii cu instațieri si apeluri de metodele specializate.**
+  * În declarația claselor, câmpurilor, metodelor putem adăuga specificatori de acces sau diverse keywords pe care le vom studia în următoarele laboratoare
+    * specificatori de access: public, private, default, protected
+  * Java are coding style-ul său și este importantă respectarea lui, altfel proiectele, mai ales cele cu mulți dezoltatori, ar arăta haotic.
+  * Tipuri de date primitive: int, long, boolean, float, double, byte, char, short. Câmpurile primitive se inițializează automat la instanțierea unei clase cu valori default: e.g. 0 pentru int.
+  * Clasa String oferă multe metode pentru manipularea șirurilor de caractere. 
+  
+====Exerciții====
+
+<note tip>În cadrul laboratorului și la teme vom lucra cu Java 12. Când consultați documentația uitați-vă la cea pentru această versiune.</note>
+
+**Prerequisites**
+  * Java JDK 12 instalat
+  * IDE ([[:poo-ca-cd:resurse-utile:instalare-intellij-idea|Intellij]], [[:poo-ca-cd:resurse-utile:instalare-eclipse|Eclipse]]) instalat
+  * Verificat din linia de comandă versiunea de java:
+    * ''javac -version'' - comanda //javac// este folosită pentru compilare
+    * ''java -version''  - comanda //java// este folosită pentru rulare
+
+**Task 1** (3p)
+  - Creați folosind IDE-ul un nou proiect și adăugați codul din secțiunea [[:poo-ca-cd:laboratoare:java-basics:#exemplu_de_implementare|Exemplu de implementare]]. Rulați codul din IDE.
+  - Folosind linia de comandă, compilați și rulați codul din exemplu
+  - Mutați codul într-un pachet //task1// (sau alt nume pe care îl doriți să îl folosiți). Folosiți-vă de IDE, de exemplu Refactor -> Move pentru IntelliJ. Observați ce s-a schimbat în fiecare fișier mutat.
+
+**Task 2**  (5p)
+
+Creați un pachet //task2// (sau alt nume pe care îl doriți să îl folosiți). În el creați clasele:
+    * ''Student'' cu proprietățile: //name// (String), //year// (Integer)
+    * ''Course'' 
+      * cu proprietățile: //title// (String), //description// (String), //students// (array de clase Student - [[:poo-ca-cd:laboratoare:java-basics#arrays|exemplu arrays]]).
+      * cu metoda: //filterYear// care întoarce o listă de studenți care sunt într-un an dat ca parametru.
+    * Nu folosiți vreun modificator de acces pentru variabile (aka "nu puneți nimic în fața lor în afară de tip")
+    * ''Test'' cu metoda //main//. La rulare, ca [[https://docs.oracle.com/javase/tutorial/essential/environment/cmdLineArgs.html|argument]] în linia de comandă se va da un integer reprezentând anul în care este un student
+      - creați un obiect //Course// și 3-4 obiecte //Student//. Populați obiectul Course.
+      - afișați toți studenții din anul dat ca parametru. **Hint:** folositi ''Arrays.toString(listStudenti)''. In clasa Student folositi IDE-ul pentru a genera metoda toString (pt Intellij Code->Generate...)
+      - rulați atât din IDE (modificati run configuration) cât și din linie de comandă
+    * Opțional, în loc de [[:poo-ca-cd:laboratoare:java-basics#arrays|arrays]] pentru //filterYear// puteți să folosiți și obiecte de tip List, e.g. [[https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/ArrayList.html|ArrayList]] ([[https://www.w3schools.com/java/java_arraylist.asp|exemplu]])
+
+** Task 3** (1p)
+
+    - Creați două obiecte //Student// cu aceleași date în ele. Afișați rezultatul folosirii //equals()// între ele. Discutați cu asistentul despre ce observați și pentru a vă explica mai multe despre această metodă.
+       * [[https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)|documentație]]
+
+/* moved to lab 2
+
+** Task 4** (1p)
+    - Afișați un obiect de tip //Course//. Ce observați?
+    - Implementați în clasa //Course// metoda //toString()// care întoarce un String compus din:
+      * titlul cu uppercase (folosiți una din metodele clasei [[https://docs.oracle.com/javase/9/docs/api/java/lang/String.html|String]])
+      * descrierea
+      * numele studenților 
+    - Afișați obiectul de tip //Course//
+      * //Hint//: puteți să porniți să implementați generând întâi metoda //toString// folosind IDE-ul
+*/
+** Task 4** (1p)
+   - Adăugați modificatorul de acces 'private' tuturor variabilelor claselor Student și Course (e.g. ''private String name;'')
+   - Rezolvați erorile de compilare adăugând metode getter și setter acestor variabile.
+     - Ce ați făcut acum se numește //încapsulare (encapsulation)// și este unul din principiile de bază din programarea orientată pe obiecte. Prin această restricționare protejați accesarea și modificarea variabilelor.
+       * //Hint//: pentru a vă eficientiza timpul, folosiți IDE-ul pentru a generarea aceste metode
+         * Eclipse: Source -> Generate Getters and Setters
+         * IntelliJ: Code -> Generate... -> Getters and Setters
+==== Resurse și linkuri utile====
+
+  * [[:poo-ca-cd:laboratoare:old-exercises|Exerciții din alți ani]]
+  * [[:poo-ca-cd:laboratoare:poo-java|POO și Java]]
+  * [[:poo-ca-cd:laboratoare:organizare-acces|Organizarea surselor și modificatori de acces]]

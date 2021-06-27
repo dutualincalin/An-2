@@ -1,0 +1,24 @@
+
+/* Exercitii 2013 si 2014 
+Tema comună a exercițiilor din acest laborator este realizarea unei aplicații care simulează un boardgame/cardgame, [[http://boardgamegeek.com/boardgame/36218/dominion |Dominion]]. Mecanica jocului se bazează pe trei tipuri de cărți: acțiuni, bani și victory cards (acestea stabilesc scorul). În fiecare tură fiecare jucător poate juca acțiuni și apoi cumpăra alte cărți cu banii pe care îi are atunci în mână.  
+
+Se observă că atunci când dorim să implementăm elemente din joc, putem folosi diferite pattern-uri pentru a structura  clasele, astfel acțiunile jucătorilor pot reprezenta comenzi (//Command Pattern//), jocul poate avea mai multe view-uri (un view pt scor, unul pt istoricul acțiunilor executate etc), deci //Observer Pattern//, folosim multe obiecte ce extind anumite tipuri și putem separa crearea de instanțe pentru acestea printr-un //Factory//.
+
+  - **(1p)** Creați două subclase ale clasei abstracte //GameCommand//, reprezentând acțiunile pe care le pot face jucătorii - //play// și //buy//, respectând detaliile din comentariile din scheletul de cod.
+  - **(1p)** Creați o clasă //PlayArea//, practic unde se desfășoară jocul, aceasta oferind metoda ''public void play(GameCommand c)'', care execută o acțiune din joc (//GameCommad//). 
+  - **(2p)** Modificați clasa //PlayArea// astfel încât să fie observabilă (implementează ''Observable'')
+      * menține o listă de observatori (//Observer//) 
+      * notifică observatorii atunci când un jucător execută ceva
+      * evenimentele trimise observatorilor sunt de tip //GameEvent//
+  - **(2p)** Implementați și testați doi observatori:
+      - //ScoreObserver// - ține cont de numărul de puncte acumulate de fiecare jucător (valoare dată de victory cards cumpărate)
+      - //GameLogger// - afișează fiecare acțiune efectuată de jucători - jucarea unor action cards, punerea în joc a unor treasure cards și cumpărarea de cărți.
+  - **(2p)** Creați un obiect de tip //singleton-factory// care întoarce obiecte de tip //GameCommand//. 
+  - **(2p)** Implementați un mecanism de undo/redo pe acțiunile jucătorului, cât timp este tura sa.
+        * undo/redo se aplică pe comenzile date pe //PlayArea//, deci aici trebuie ținută o listă cu acestea, pentru a știi sa le facem undo. 
+        * //PlayArea// va oferi metodele ''undo'' și ''redo''.
+        * când se efectuează un undo trebuie notificați observatorii (puteți adăuga un nou tip de GameAction), iar observatorul Logger va afișa la ce s-a făcut undo, iar cel de Score va scoate scorul, dacă s-a facut undo la un buy de victory card (se va scădea scorul aferent Victory-card-ului implicat).
+        * când se efectueză un redo notificați observatorii la fel cum îi notificați în metoda //play//.
+         
+Puteți juca Dominion și [[http://play.goko.com/Dominion/gameClient.html |online]].
+*/

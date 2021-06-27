@@ -1,0 +1,91 @@
+\documentclass[12pt,twoside]{report}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usetikzlibrary{calc}    
+\tikzset{
+  dim above/.style={to path={\pgfextra{
+        \pgfinterruptpath
+        \draw[>=latex,|<->|] let
+        \p1=($(\tikztostart)!2mm!90:(\tikztotarget)$),
+        \p2=($(\tikztotarget)!2mm!-90:(\tikztostart)$)
+        in(\p1) -- (\p2) node[pos=.5,sloped,above]{#1};
+        \endpgfinterruptpath
+      }(\tikztostart) -- (\tikztotarget) \tikztonodes
+    }
+  },
+  dim below/.style={to path={\pgfextra{
+        \pgfinterruptpath
+        \draw[>=latex,|<->|] let 
+        \p1=($(\tikztostart)!2mm!90:(\tikztotarget)$),
+        \p2=($(\tikztotarget)!2mm!-90:(\tikztostart)$)
+        in (\p1) -- (\p2) node[pos=.5,sloped,below]{#1};
+        \endpgfinterruptpath
+      }(\tikztostart) -- (\tikztotarget) \tikztonodes
+    }
+  },
+}
+
+\usepackage{graphicx}																		
+\usepackage[romanian]{babel}
+\usepackage[unicode]{hyperref} 
+\usepackage{amsmath,epsfig,pifont,calc,pifont,pstricks}
+\usepackage{rom}
+\usepackage{color}
+\usepackage{listings}
+\definecolor{mygreen}{RGB}{28,172,0}
+\definecolor{mylilas}{RGB}{170,55,241}
+	
+
+%%% setari ale paginii
+%indentarea la inceput de paragraf
+\setlength{\parindent}{3ex}
+
+%dimensiunea textului pe pagina
+\setlength{\voffset}{-2cm}
+\setlength{\textheight}{23cm}  
+\setlength{\textwidth}{16cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{1cm}
+\renewcommand{\baselinestretch}{1.2}
+\newcommand{\myindent}{\hspace*{3ex}}
+%\renewcommand{\baselinestretch}{1}
+
+%margini
+\setlength{\oddsidemargin}{0.5cm}
+\setlength{\evensidemargin}{-0.3cm}
+%\raggedright
+\raggedbottom
+
+%% begin preambul - macro-uri definite de autor
+\newcommand{\D}{\mathrm{d}}	% va fi folosita in mediul matematic, pentru diferentiala d
+\newcommand{\I}{\mathrm{i}}	% va fi folosita in mediul matematic, pentru unitatea imaginara
+\newcommand{\eul}{\mathrm{e}}	% numarul lui Euler
+\newcommand{\vect}[1]{\mathbf{#1}}	% comanda cu un argument, pentru scrierea vectorilor cu lidere aldine, drepte
+                                    % comanda \vec a LaTeX pune sageti deasupra.
+																										
+\newcommand{\reale}{\mbox{${\scriptstyle \rm I\!R}$}}  % multimea numerelor reale
+\newcommand{\complexe}{\mbox{${\scriptstyle \rm I\!\!\!\!C}$}}
+\newcommand{\rationale}{\mbox{${\scriptstyle \rm I\!\!\!\!Q}$}}
+\newcommand{\naturale}{\mbox{${\scriptstyle \rm I\!\!N}$}}
+\newcommand{\intregi}{\mbox{${\scriptstyle \rm Z\!\!\!Z}$}}
+
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
+\begin{document}
+\title{\LARGE{\textbf{Proiectarea Algoritmilor} \\Tema 0\\}}
+\author{Facultatea de Automatic'a 'si Calculatoare\\Universitatea Politehnic'a Bucure'sti\\\\ {\em Du'tu Alin C'alin}}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\input{Cuprins}
+
+\vspace{5 mm}
+\nocite{*}
+\bibliographystyle{plainrom}
+\addcontentsline{toc}{chapter}{Bibliografie}
+\bibliography{Bibliografie}
+\end{document}

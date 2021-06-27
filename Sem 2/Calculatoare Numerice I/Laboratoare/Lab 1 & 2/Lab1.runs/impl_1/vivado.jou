@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Mar 25 18:59:05 2021
+# Process ID: 19176
+# Current directory: C:/Users/Calin/Desktop/Facultate/An 2/Sem 2/Calculatoare Numerice I/Laboratoare/Lab 1/Lab1.runs/impl_1
+# Command line: vivado.exe -log Sumator.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source Sumator.tcl -notrace
+# Log file: C:/Users/Calin/Desktop/Facultate/An 2/Sem 2/Calculatoare Numerice I/Laboratoare/Lab 1/Lab1.runs/impl_1/Sumator.vdi
+# Journal file: C:/Users/Calin/Desktop/Facultate/An 2/Sem 2/Calculatoare Numerice I/Laboratoare/Lab 1/Lab1.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source Sumator.tcl -notrace

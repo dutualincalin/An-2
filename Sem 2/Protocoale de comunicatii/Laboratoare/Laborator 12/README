@@ -1,0 +1,10 @@
+Nume: Dutu Alin Calin si Panaitescu Iulian
+Grupa: 323CD
+
+	Laboratorul 12
+
+Ex 2: Diferenta dintre HTTP si HTTPS este ca pentru HTTP se puteau vedea username-ul
+si parola din Wireshark. In schimb pentru HTTPS informatia era criptata.
+
+Ex 4: Diferenta dintre Telnet si SSH e ca pentru Telnet puteam obtine datele de login
+litera cu litera din Wireshark, in schimb la SSH toata informatia era criptata.

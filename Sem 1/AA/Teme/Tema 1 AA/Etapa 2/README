@@ -1,0 +1,61 @@
+Nume: Dutu Alin Calin
+Grupa: 323CD
+
+Aceasta este etapa a 2-a a temei 1 la Analiza Algoritmilor, an universitar 2020-2021.
+
+Tema a fost implementata folosind C++, compilata folosind G++ versiunea 9.3.0 si a fost rulata pe o masina virtuala cu Ubuntu 20.04 cu 6GB RAM alocati. Configuratia host-ului este Windows 10 cu Procesor Intel Core i7-5500U cu 2 core-uri de 2,4 GHZ, 16 GB RAM si placa Video NVidia cu 2GB.
+
+Aceasta tema contine:
+1) folderul in
+2) folderul out
+3) algo.cpp
+4) algo.h
+5) algo_param1.cpp
+6) algo_param2.cpp
+7) algo_test.cpp
+8) Makefile
+9) README
+
+1) Folderul in - contine testele de intrare pentru programele algo_test, algo_program1 si algo_program2. 
+	Testele de la 1 la 5 sunt pentru testarea AVL-ului in programul algo_test si au pe prima linie numarul de elemente de introdus in AVL si pe a doua linie elementele AVL-ului. 
+	Testele de la 6 - 10 sunt pentru testarea Max-Heap-ului in programul algo_test si au pe prima linie capacitatea heap-ului, pe a doua linie numarul de elemente de adaugat si pe a 3-a linie elementele heap-ului.
+	Testul test_analize.in este folosit in programul algo_param2 si contine: pe prima linie capacitatea heap-ului folosit in program, pe a doua  linie numarul de elemente de adaugat si de la a 3-a linie elementele de adaugat sub forma de "prioritate  descriere". Spre exemplu, pentru elementul "12 Catalin Butacu - Test Aluminiu in sange", 12 reprezinta prioritatea si "Catalin Butacu - Test Aluminiu in sange" reprezinta descrierea
+	Testul test_tren.in este folosit in programul algo_param1 si contine: pe prima linie capacitatea heap-ului folosit in program, pe a doua  linie numarul de elemente de adaugat, de la liniile a 3-a pana la (numarul de elemente + 2) sunt elementele de adaugat sub forma de "greutate  descriere" ( exemplu, pentru elementul "1000 Tren de Marfa - Containtere", 1000 reprezinta greutatea si "Tren de Marfa - Containtere" reprezinta descrierea) si pe linia (numarul de elemente + 3) se afla greutatea trenului care se cere sa fie gasit in inventar.
+
+2) Folderul out = contine testele de iesire pentru programele algo_test, algo_program1 si algo_program2.
+	Testele de la 1 la 5 sunt rezultatele la testele AVL-ului si contin pe prima linie parcurgerea Inorder a AVL-ului, pe a doua si a 3-a linie se gasesc maximul respectiv minimul AVL-ului, iar pe a 4-a si a 5-a linie se gasesc maximul respectiv minimul arborelui dupa momentul stergerii vechiului maxim respectiv vechiului minim.
+	Testele de la 6 la 10 sunt rezultatele la teste Max-Heap-ului si contin pe prima maxim-ul Heap-ului si pe a doua linie maxim-ul Heap-ului dupa extragerea precedentului maxim.
+	Testele 11 si 12 contin outputurile programelor algo_program1 si algo_program2.
+	
+3) algo.cpp - Contine implementarile functiilor pentru AVL respectiv pentru Heap.
+
+4) algo.h - Fisierul Header care contine semnaturile tuturor functiilor implementate in algo.cpp
+
+5) algo_param1 - Program care simuleaza inventarul trenurilor dintr-o gara. Programul are scopul de a arata eficienta AVL-ului in favoarea Max-Heap-ului, eficienta demonstrata prin folosirea celor 2 structuri pentru a face aceleasi actiuni. S-au luat in calcul timpii de executie exprimati in milisecunde si marimea bazei de date care evidentiaza best, average si worst case-urile fiecarei structuri.
+
+6) algo_param2 - Program care simuleaza un soft de organizare a pacientilor in ordinea prioritatii lor. Programul are scopul de a evidentia punctele forte ale Max-Heap-ului in comparatie cu cele ale AVL-ului. Aceste puncte forte sunt demonstrate prin popularea celor doua structuri cu aceleasi elemente si apoi utilizarea acestora pentru realizarea aceluiasi scop. S-au luat in considerare timpul de executie exprimat in milisecunde al fiecarui task si marimea bazei de date care prin numarul sau de elemente evidentiaza best, average si worst case-urile acestor structuri.
+
+7) algo_test.cpp - Acest program contine implementarea testerului pentru tema care va folosi testele de la 1 la 10 din folderul in si va testa functionalitatea si corectitudinea implementarilor functiilor din algo.cpp. Testerul va contine in total 10 teste. Primele 5 teste vor avea subteste specifice pentru AVL si ultimele 5 vor avea subteste specifice pentru Max-Heap. Fiecare subtest va fi afisat in consola sub forma urmatoare: Nume - Rezultat - Timp de executie. In rubrica rezultatelor testelor va fi scris "Succes" daca testul va trece sau "Fail" daca testul va pica, iar in rubrica "Timp de executie" se vor afisa rezultate exprimate in milisecunde.
+
+8) Makefile - Contine 11 reguli de executare. Primele 6 sunt de build, urmatoarele 4 sunt de run si ultima este de clean. Regulile sunt urmatoarele:
+ - all - Compileaza codul. Aplica regula build;
+ - build - Transforma algo.cpp in fisier obiect si apoi combina obiectul cu fiecare din cele 3 implementari de programe de tip .cpp si creeaza cele 3 programe;
+ - algo.o - Transforma algo.cpp in fisier obiect;
+ - algo_test - Creeaza programul algo_test prin linkarea obiectului algo.o cu programul algo_test.cpp;
+ - algo_param1 - Creeaza programul algo_test prin linkarea obiectului algo.o cu programul algo_param1.cpp;
+ - algo_param2 - Creeaza programul algo_test prin linkarea obiectului algo.o cu programul algo_param2.cpp;
+ - run - Ruleaza toate programele deodata;
+ - run_tests - Ruleaza testele pentru AVL si Max-Heap;
+ - run_param1 - Ruleaza programul 1;
+ - run_param2 - Ruleaza programul 2;
+ - clean - Sterge toate programele si fisierul obiect;
+ 
+ Toate implementarile de programe contin comentarii.
+ 
+Surse si referinte:
+1) GeeksforGeeks - Link-uri accesate ultima oara in data de 27 noiembrie 2020
+	URL 1: https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
+	URL 2: https://www.geeksforgeeks.org/avl-tree-set-2-deletion/
+	
+2) Echipa de Structuri de Date din cadrul Universitatii Politehnica Bucuresti - Link accesat ultima oara in data de 29 noiembrie 2020
+	URL: https://acs.curs.pub.ro/2019/course/view.php?id=145

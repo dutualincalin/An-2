@@ -1,0 +1,9 @@
+#Ghidra Lock File
+#Tue Jan 12 22:29:41 EET 2021
+OS\ Name=Linux
+OS\ Version=4.15.0-130-generic
+Username=student
+Hostname=IOCLA
+<META>\ Supports\ File\ Channel\ Locking=Channel Lock
+OS\ Architecture=amd64
+Timestamp=1/12/21, 10\:29 PM

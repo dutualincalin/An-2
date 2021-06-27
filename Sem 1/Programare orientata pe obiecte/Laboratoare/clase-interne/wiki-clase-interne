@@ -1,0 +1,345 @@
+= Clase interne =
+
+
+
+
+== Obiective ==
+
+* prezentarea tipurilor de clase interne
+* utilizarea claselor interne
+* utilizarea sintaxei specifice claselor interne 
+
+
+
+==Introducere==
+
+Clasele declarate în interiorul unei alte clase se numesc clase interne (//nested classes//). Acestea permit gruparea claselor care sunt legate logic și controlul vizibilității uneia din cadrul celorlalte. 
+
+Clasele interne sunt de mai multe tipuri:
+* clase interne normale (//regular inner classes//)
+* clase anonime (//anonymous inner classes//)
+* clase interne statice (//static nested classes//)
+* clase interne metodelor (//method-local inner classes//) sau blocurilor
+
+<note important>
+* O clasă internă se comportă ca un membru al clasei în care a fost declarată
+* O clasă internă are acces la toți membrii clasei în care a fost declarată, inclusiv cei **private**
+* O clasă internă poate fi ''public'', ''final'', ''abstract'' dar și ''private'', ''protected'' și ''static'', însumând modificatorii claselor obișnuite și cei permiși metodelor și variabilelor 
+* [[https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html|Nested classes vs. Inner classes]]
+</note>
+
+==Clase interne "normale" ==
+
+O clasă internă este definită în interiorul unei clase și poate fi accesată doar la runtime printr-o instanță a clasei externe (la fel ca metodele și variabilele ne-statice). Compilatorul creează fișiere //.class// separate pentru fiecare clasă internă, în exemplul de mai jos generând fișierele ''Outer.class'' și ''Outer$Inner.class'', însă execuția fișierului ''Outer$Inner.class'' nu este permisă. 
+
+<code java Test.java>
+interface Engine {
+    public int getFuelCapacity();
+}
+
+class Car {
+    class OttoEngine implements Engine {
+        private int fuelCapacity;
+
+        public OttoEngine(int fuelCapacity) {
+            this.fuelCapacity = fuelCapacity;
+        }
+
+        public int getFuelCapacity() {
+            return fuelCapacity;
+        }
+    }
+
+    public OttoEngine getEngine() {
+        OttoEngine engine = new OttoEngine(11);
+        return engine;
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Car car = new Car();
+
+        Car.OttoEngine firstEngine = car.getEngine();
+        Car.OttoEngine secondEngine = car.new OttoEngine(10);
+
+        System.out.println(firstEngine.getFuelCapacity());
+        System.out.println(secondEngine.getFuelCapacity());
+    }
+}
+</code>
+
+<code html>
+student@poo:~$ javac Test.java
+student@poo:~$ ls
+Car.class Car$OttoEngine.class Engine.class Test.class Test.java
+</code>
+
+Urmăriți exemplul de folosire a claselor interne de mai sus. Adresați-vă asistentului pentru eventuale neclarități.
+
+Dintr-o clasă internă putem accesa **referința la clasa externă** (în cazul nostru ''Car'') folosind numele acesteia și keyword-ul //this//:
+
+<code java>
+Car.this;
+</code>
+
+<note hint>Rulați codul din exemplu. </note>
+
+===Modificatorii de acces pentru clase interne===
+
+Așa cum s-a menționat și în secțiunea [[.:clase-interne#introducere|Introducere]], claselor interne le pot fi asociați **orice** identificatori de acces, spre deosebire de clasele ''top-level'' Java, care pot fi doar ''public'' sau ''package-private''. Ca urmare, clasele interne pot fi, în plus, ''private'' și ''protected'', aceasta fiind o modalitate de a **ascunde implementarea**. 
+
+Folosind exemplul anterior, modificați clasa ''OttoEngine'' pentru a fi privată. Observați erorile de compilare care rezultă.
+
+* Tipul ''Car.OttoEngine'' nu mai poate fi accesat din exterior. Acest neajuns poate fi rezolvat cu ajutorul interfeței ''Engine''. Asociindu-i clasei interne ''Car.OttoEngine'' supertipul ''Engine'' prin moștenire, putem instanția clasa prin **upcasting**.
+
+* Fiind privată, clasa internă are implicit toți constructorii privați. Totuși, putem instanția obiecte de tipul ''Car.OttoEngine'' în interiorul clasei ''Car'', urmând să le întoarcem folosind tot upcasting la ''Engine''. Astfel, folosind metode getEngine, ascundem complet implementarea clasei ''Car.OttoEngine''.
+
+
+
+
+
+
+==Clase anonime==
+În dezvoltarea software, există situații când o componentă a aplicației are o utilitate suficient de mare pentru a putea fi considerată o entitate separată (sau clasă). De multe ori, însă, aceasta nu este utilizată decât într-o porțiune restrânsă din aplicație, într-un context foarte specific (într-un lanț de moșteniri sau ierarhie de interfețe). Într-o aplicație reală, crearea unei clase pentru fiecare astfel de componentă poate duce la fenomenul de Class Explosion, care, pe scurt, ar aduce după sine o aplicație cu performanțe scăzute și greu de modificat/extins.
+
+Pentru a evita acest fenomen, putem folosi **clase interne anonime** în locul definirii unei clase cu număr de utilizări reduse. Acestea nu au nume și apar în program ca instanțe ale unei clase moștenite (sau a unei interfețe extinse), care suprascriu (sau implementează) anumite metode.
+
+Întorcându-ne la exemplul cu clasa top-level ''Car'', putem rescrie metoda ''getEngine()'' a acesteia astfel:
+
+<code java>
+[...]
+class Car {
+    public Engine getEngine(int fuelCapacity) {
+        return new Engine () {
+            private int fuelCapacity = 11;
+
+            public int getFuelCapacity() {
+                return fuelCapacity;
+            }
+        };
+    }
+}
+[...]
+</code>
+
+<note> Modificați implementarea clasei Car. Rulați codul. Urmați instrucțiunile de mai jos pentru a restabilit funcționalitatea programului. Adresați-vă asistentului pentru neclarități.</note>
+
+Metoda folosită mai sus elimină necesitatea creări unei clase interne "normale", reducând volumul codului și crescând lizibilitatea acestuia. Sintaxa ''return new Engine() { ... }'' se poate citi astfel: "Crează o clasă care implementează interfața Engine, conform următoarei implementări".
+
+Observații:
+* acest obiect este instanțiat imediat după ''return'', folosind ''new'' (referința întoarsă de ''new'' va fi ''upcast'' la clasa de bază: ''Engine'')
+* numele clasei instanțiate este absent (ea este anonimă), însă ea este de ''tipul'' ''Engine'', prin urmare, va implementa metoda/metodele din interfață(cum e metoda ''getFuelCapacity''). Corpul clasei urmeaza imediat instanțierii.
+
+<note tip>IntelliJ sugerează înlocuirea cu funcții lambda însă acest concept nu este acoperit în laborator. Pentru detalii suplimentare urmăriți acest [[https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html#section2|exemplu]]</note>
+ 
+<note important>O clasă internă anonimă poate extinde o clasă //sau// să implementeze o singură interfață, nu poate face pe ambele împreună ca la clasele ne-anonime (interne sau nu), și nici nu poate să implementeze mai multe interfețe. </note>
+
+=== Constructori ===
+ Clasele anonime **nu** pot avea **constructori** din cauză că nu au nume (nu am ști cum să numim constructorii). Această restricție asupra claselor anonime ridică o problemă: în mod implicit, clasă de bază este creată cu constructorul //default//. 
+
+Ce se întâmplă dacă dorim să invocăm un **alt constructor** al clasei de bază? În clasele normale acest lucru era posibil prin apelarea explicită, în prima linie din constructor a constructorului clasei de bază cu parametrii doriți, folosind ''super''. În clasele interne acest lucru se obține prin transmiterea parametrilor către constructorul clasei de bază **direct** la crearea obiectului de tip clasă anonimă: 
+
+<code java>
+new Engine("Otto") {
+    // ...
+}
+</code>
+
+În acest exemplu, am instanțiat o clasa anonimă, ce implementează interfața ''Engine'', apelând constructorul clasei de bază cu parametrul ''"Otto"''.
+
+
+==Clase interne statice==
+
+În secțiunile precedente, s-a discutat doar despre clase interne ale caror instanțe există doar în contextul unei instanțe a clasei exterioare, astfel că poate accesa membrii obiectului exterior direct. De asemenea, am menționat că fiind membri ai claselor exterioare, clasele interne pot avea modificatorii disponibili pentru metode și variabile, dintre care și ''static'' (clasele exterioare nu pot fi statice!). Așa cum pentru a accesa metodele și variabilele statice ale unei clase nu este nevoie de o instanță a aceteia, putem obține o referință către o clasă internă fără a avea nevoie de o instanță a clasei exterioare. 
+
+Pentru a înțelege diferența dintre clasele interne statice și cele nestatice trebuie să reținem următorul aspect: **clasele nestatice țin legătura cu obiectul exterior** în vreme ce **clasele statice nu păstrează această legătură**. 
+  
+Pentru clasele interne statice:  
+ * nu avem nevoie de un obiect al clasei externe pentru a crea un obiect al clasei interne  
+ * nu putem accesa câmpuri nestatice ale clasei externe din clasă internă (nu avem o instanță a clasei externe)
+
+
+<note>
+* Pornind de la codul de [[.:clase-interne#Clase interne "normale"|aici]], modificați clasa internă ''OttoEngine'' pentru a fi statică.
+* Observați că trebuie modificat felul prin care aceasta este instanțiată. Pentru clasele interne statice, apelăm ''new Car.OttoEngine()''.
+* Rulați codul. Observați că în interiorul clasei ''Car'', putem instanția clasa internă statică folosind doar ''new OttoEngine()'', datorită contextului.
+</note>
+
+<note important> 
+* //Clasele interne statice nu au nevoie de o instanță a clasei externe -> atunci de ce le facem interne acesteia?//
+  * pentru a grupa clasele, dacă o clasă internă statică A.B este folosită doar de A, atunci nu are rost să o facem top-level.
+* //Avem o clasă internă A.B, când o facem statică?//
+  * în interiorul clasei B nu avem nevoie de nimic specific instanței clasei externe A, deci nu avem nevoie de o instanță a acesteia -> o facem statică
+</note>
+
+
+
+==Clase interne în metode și blocuri==
+
+Primele exemple prezintă modalitățile cele mai uzuale de folosire a claselor interne. Totuși, design-ul claselor interne este destul de complex și exista modalitati mai "obscure" de a le folosi: clasele interne pot fi definite și în cadrul metodelor sau al unor blocuri arbitrare de cod. 
+
+
+=== Clase interne în metode === 
+
+În exemplul următor, clasa internă a fost declarată în **interiorul funcției** ''getInnerInstance''. În acest mod, vizibilitatea ei a fost redusă pentru ca nu poate fi instanțiată decât în această funcție. 
+
+Singurii modificatori care pot fi aplicați acestor clase sunt ''abstract'' și'' final'' (binențeles, nu amândoi deodată).
+
+<code java Test.java>
+[...]
+class Car {
+    public Engine getEngine() {
+        class OttoEngine implements Engine {
+            private int fuelCapacity = 11;
+
+            public int getFuelCapacity() {
+                return fuelCapacity;
+            }
+        }
+
+        return new OttoEngine();
+    }
+}
+[...]
+</code>
+
+<note>
+* Schimbați implementarea clasei Car de [[.:clase-interne#Clase interne "normale"|aici]] folosind codul de mai sus
+* Observați că trebuie ''OttoEngine'' este vizibilă doar în interiorul metodei
+* Modificați metoda ''main'' astfel încât să ruleze (Hint: [[.:clase-interne#Clase anonime|upcast]])
+</note>
+
+
+<note important>Clasele interne declarate în metode nu pot folosi variabilele declarate în metoda respectivă și nici parametrii metodei. Pentru a le putea accesa, variabilele trebuie declarate ''final'', ca în exemplul următor. Această restricție se datorează faptului că variabilele si parametrii metodelor se află pe segmentul de stivă (zonă de memorie) creat pentru metoda respectivă, ceea ce face ca ele să nu existe la fel de mult cât clasa internă. Dacă variabila este declarată ''final'', atunci la runtime se va stoca o copie a acesteia ca un câmp al clasei interne, în acest mod putând fi accesată și după execuția metodei. Pentru o explicație detaliată citiți [[ http://techtracer.com/2008/04/14/mystery-of-accessibility-in-local-inner-classes/ | Link1 ]] și [[ http://stackoverflow.com/questions/1945663/where-are-java-final-local-variables-stored | Link2]].
+</note>
+=== Clase interne în blocuri === 
+Exemplu de clasa internă declarata într-un **bloc**:
+
+<code java>
+[...]
+class Car {
+    public Engine getEngine(int fuelCapacity) {
+        if (fuelCapacity == 11) {
+            class OttoEngine implements Engine {
+                private int fuelCapacity = 11;
+
+                public int getFuelCapacity() {
+                    return fuelCapacity;
+                }
+            }
+
+            return new OttoEngine();
+        }
+
+        return null;
+    }
+}
+[...]
+</code>
+
+<note>
+* Schimbați implementarea clasei Car de [[.:clase-interne#Clase interne "normale"|aici]] folosind codul de mai sus
+* Observați că trebuie ''OttoEngine'' este vizibilă doar în interiorul blocului
+* Modificați metoda ''main'' astfel încât să ruleze (Hint: [[.:clase-interne#Clase anonime|upcast]])
+</note>
+
+În acest exemplu, clasa internă ''OttoEngine'' este defintă în cadrul unui bloc //if//, dar acest lucru nu înseamnă că declarația va fi luată în considerare doar la rulare, în cazul în care condiția este adevarată.
+
+<note important>Semnificația declarării clasei într-un bloc este legată strict de vizibilitatea acesteia. La compilare clasa va fi creată indiferent care este valoarea de adevăr a condiției //if//.</note> 
+==Moștenirea claselor interne==
+
+Deoarece constructorul clasei interne trebuie sa se //atașeze// de un obiect al clasei exterioare, moștenirea unei clase interne este puțin mai complicată decât cea obișnuită. Problema rezidă în nevoia de a inițializa legătura (ascunsă) cu clasa exterioară, în contextul în care în clasa derivată nu mai există un obiect default pentru acest lucru.
+
+<code java>
+class Car {
+    class Engine {
+        public void getFuelCapacity() {
+            System.out.println("I am a generic Engine");
+        }
+    }
+}
+ 
+class OttoEngine extends Car.Engine {
+    OttoEngine() {
+    } // EROARE, avem nevoie de o legatura la obiectul clasei exterioare
+ 
+    OttoEngine(Car car) { // OK
+        car.super();
+    }
+}
+ 
+public class Test {
+    public static void main(String[] args) {
+        Car car = new Car();
+        OttoEngine ottoEngine = new OttoEngine(car);
+        ottoEngine.getFuelCapacity();
+    }
+}
+</code>
+
+Observăm ca ''OttoEngine'' moșteneste doar ''Car.Engine'' însa sunt necesare:
+* parametrul constructorului ''OttoEngine'' trebuie sa fie de tipul clasei externă (''Car'')
+* linia din constructorul ''OttoEngine'': ''car.super()''.
+
+<note>
+* Rulați codul de mai sus
+* Ștergeți constructorul ''OttoEngine()'', rulați din nou codul
+</note>
+
+==Utilizarea claselor interne==
+
+ Clasele interne pot părea un mecanism greoi și uneori artificial. Ele sunt însă foarte utile în următoarele situații: 
+  * Rezolvăm o problemă complicată și dorim să creăm o clasă care ne ajută la dezvoltarea soluției dar: 
+     * **nu** dorim să fie **accesibilă** din exterior sau 
+     * **nu** mai are **utilitate** în alte zone ale programului 
+  * Implementăm o anumită interfață și dorim să întoarcem o referință la acea interfață, **ascunzând** în același timp implementarea. 
+  * Dorim să folosim/extindem funcționalități ale mai **multor** clase, însă în JAVA nu putem extinde decât o singură clasă. Putem defini însă clase interioare. Acestea pot **moșteni** orice clasă și au, în plus, acces la obiectul clasei **exterioare**.  
+  *  Implementarea unei arhitecturi de control, marcată de nevoia de a trata evenimente într-un **sistem bazat pe evenimente**. Unul din cele mai importante sisteme de acest tip este **GUI** (graphical user interface). Bibliotecile Java [[http://en.wikipedia.org/wiki/Swing_(Java) | Swing]], [[http://en.wikipedia.org/wiki/Abstract_Window_Toolkit|AWT]], [[http://www.eclipse.org/swt/ | SWT]] sunt arhitecturi de control care folosesc intens clase interne. De exemplu, în Swing, pentru [[http://docs.oracle.com/javase/tutorial/uiswing/events/index.html|evenimente]] cum ar fi apăsarea unui buton se poate atașa obiectului buton o tratare particulară al evenimentului de apăsare în felul următor: 
+   
+   <code java> button.addActionListener(new ActionListener() { //interfata implementata e ActionListener
+	public void actionPerformed(ActionEvent e) {            
+	     numClicks++;
+	}
+    });</code>
+== Exerciții == 
+**Task 1 - Meta** (4p)
+
+Îndrumarul este o componentă importantă a laboratorului de POO, iar citirea și înțelegerea acestuia nu trebuie neglijate. În îndrumarul din acest laborator există mai multe căsuțe de tip **note**, de forma celei de mai jos:
+
+<note> Do stuff </note>
+
+Identificați toate căsuțele de tip **note** din laborator și urmați instrucțiunile din acestea. Puteți folosi scheletul pus la dispoziție. Pentru a ușura procesul de corectare, chemați asistentul după execuția fiecărei căsuțe de tip **note**.
+
+
+**Task 2 - Car Dealership: The Beginning** (2p)
+
+Scheletul de cod conține implementarea unui dealership de mașini. Acesta vinde autoturisme doar la cerere, conform cu tipul de mașină cerut de client. Totuși, patronul este nemulțumit. El ar dori ca:
+* toate tipurile de mașini vândute să nu fie vizibile decât de către angajați
+* dealership-ul să rămână unul cu specific și tradiție, continuând să vândă veșnic tipurile curente de mașini 
+
+''Hint: aceasta este o decizie de business teribilă din partea patronului, dar acesta v-a promis că veți putea închiria orice mașină de la el, dar doar după ce îl ajutați.''
+
+** Task 3 - Car Dealership: The Crisis ** (2p)
+
+Timpul a trecut peste dealership, iar vânzările au fost chiar bune, cu o singură excepție, mașinile de tip ''RACING''. Aceste tipuri de mașini sunt făcute pe comandă, iar cererea a fost atât de mică, încât nici după un an nu s-au vândut cele din primul lot. Astfel, dealership-ul riscă să dea faliment, din cauza datoriilor generate (mașinile de tip ''RACING'' sunt și cele mai scumpe).
+
+Din fericire, patronul a făcut o înțelegere cu ''Ferrari'', de unde a și cumpărat mașinile. Aceștia îl vor scăpa complet de datorii dacă acesta va elimina orice asociere dintre ''Dealership'' și ''Ferrari'', lăsând totuși posibilitatea pentru clienți de a-și ridica mașinile de la ''Dealership''. Patronul este disperat și vă cere din nou ajutorul. Va trebui să eliminați orice asociere dintre cele două entități, păstrând funcționalitatea aplicației.
+
+''Hint: Clienții vor mai putea să își ridice mașinile Ferrari, dar acestea nu vor mai fi administrate de către Dealership.''
+
+** Task 4 - Car Dealership: The New Age ** (2p)
+
+Business-ul merge bine, astfel că patronul nostru s-a hotărât să se extindă. El vrea să aducă în ''Dealership'' mașini de tip ''ELECTRIC'', ''Tesla'', și a vorbit chiar cu **Elon Musk** în acest sens. Această extindere este una importantă, astfel că patronul nostru vrea o performanță cât mai ridicată. Patronul vă roagă să îl ajutați cu o comparație între:
+
+* comandarea mașinilor ''Tesla'' folosind clase anonime
+* comandarea mașinilor ''Tesla'' folosind funcții lambda
+
+Un tutorial despre folosirea funcțiilor lambda îl găsiți în laborator, la secțiunea [[.:clase-interne#Clase anonime|Clase anonime]]. (opțional) Pentru o mică prezentare în discuția ''Anonymous vs. Lambda'', puteți verifica secțiunea de ''Referințe'' a laboratorului.
+== Resurse ==
+
+* {{:laboratoare:clase-interne:lab06-clase-interne-schelet.zip| Schelet}}
+
+== Referințe ==
+  - Kathy Sierra, Bert Bates. //SCJP Sun Certified Programmer for Java™ 6 - Study Guide//. Chapter 8 - Inner Classes ([[http://firozstar.tripod.com/_darksiderg.pdf|available online]])
+  - [[https://www.oracle.com/technetwork/java/jvmls2013kuksen-2014088.pdf]]

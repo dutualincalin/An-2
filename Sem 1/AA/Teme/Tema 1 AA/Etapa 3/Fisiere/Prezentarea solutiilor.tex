@@ -1,0 +1,72 @@
+\chapter{Prezentarea Solu'tiilor}
+Pentru acest proiect s-au implementat structurile de arbore AVL 'si Max-heap. Pentru ambele structuri s-a urm'arit, 'in principiu, comportamentul opera'tiilor de: creare a structurii, ad'augare a unui element, g'asierea elementului maxim, extragerea elementului maxim sau 'stergerea elementului maxim din structur'a 'si 'stergerea structurii.
+\section{Descrierea modului 'in care functioneaz'a algoritmii}
+\subsection{AVL Tree}
+Arborele AVL este un arbore binar de c'autare care are 'in plus proprietatea de auto-echilibrare. Aceast'a proprietate se refer'a la faptul c'a diferen'ta 'in'al'timii subarborelui st\^ang cu 'in'al'timea suboarborelui drept nu poate fi mai mare de un nod. Dac'a aceast'a condi'tie este 'inc'alcat'a atunci arborele va fi reechilibrat pentru a se p'astra proprietatea de echilibru\cite{SD}.
+\vspace{5 mm}
+\newline
+\myindent
+O alt'a proprietate a arborelui AVL este factorul de balan't'a care este egal pentru oricare nod din arbore cu diferen'ta dintre 'in'al'timea subarborelui st\^ang 'si 'in'al'timea subarborelui drept si poate lua valorile {-1, 0 ,1}, -1 pentru un AVL left-heavy, 0 pentru un AVL echilibrat 'si 1 pentru un AVL right-heavy\cite{SD}.
+\vspace{5 mm}
+\newline
+\myindent
+Pentru implementarea algoritmilor s-au folosit diferite surse de inspira'tie pentru implementarea structurii propriu-zise 'si pentru implementarea opera'tiilor acestuia, dar si cuno'stin'tele dob\^andite p\^an'a acum la cursurile de Structuri de date incluz\^and cursurile 'si laboratoarele parcurse\cite{GeeksforGeeks, SD}. Implementarea acestei structuri cuprinde doar nodul r'ad'acin'a. La 'inceput s-a optat 'si pentru implementarea cu santinel'a nil, ins'a pentru u'surin't'a s-a renun'tat la aceast'a variant'a. Implementarea opera'tiilor este in mare parte iterativ'a cu excep'tia opera'tiilor de inserare 'si eliminare de elemente care sunt recursive.
+\vspace{5 mm}
+\newline
+\myindent
+Pentru verificarea opera'tiilor de inserare a unui element 'si de g'asire a maximului respectiv minimului din structur'a s-a folosit func'tia Inorder care afi'seaz'a 'in fi'sierul de output toate nodurile arborelui Inorder. 'In plus s-au ad'augat 'in fi'sier 'si rezulatele opera'tiilor de g'asire a maximului 'si minimului, pentru comparare cu rezultatul functiei Inorder demonstr\^and astfel corectitudinea opera'tiei. Pentru opera'tia de 'stergere se mai afi'seaz'a inca odat'a noile valori extreme 'si se verific'a tot cu rezultatul functiei Inorder. De asemenea, pentru testarea inser'arii am folosit un instrument online care mi-a permis s'a verific arborele structura arborelui\cite{AVLVisualization}.
+\vspace{5 mm}
+\subsection{Max - Heap}
+Max-heap-ul este un arbore binar complet cu proprietatea c'a: pentru orice nod, cheia nodului este mai mare decât cheile din nodurile copii, dacă există copii \cite{SD}.
+\newline
+\myindent
+Pentru implementarea Heap-ului s-au folosit 'in principal cuno'stin'tele acumulate, dar 'si laboratoarele f'acute la cursul de Structuri de Date\cite{SD}. Toate opera'tiile implementate sunt iterative. 
+\newline
+\myindent
+Pentru verificarea inser'arii s-a folosit un instrument de vizualizare\cite{HeapVisualization} cu care se poate vedea aranjarea elementelor pe Heap. Pentru maxim s-a folosit un instrument online care s'a afi'seze maximul dintr-o list'a de numere, 'in acest caz din input\cite{MaxTool}. Iar pentru delete s-a efectuat aceea'si verificare ca la maxim cu precizarea c'a s-a eliminat vechiul maxim din list'a.
+\vspace{5 mm}
+\section{Analiza complexit'a'tii solu'tiilor}
+\subsection{AVL Tree}
+Conform teoriei un arbore AVL are 'in'al'timea O(log n). Urmeaz'a s'a fie demonstrat'a aceast'a afirma'tie. Fie h, 'in'al'timea arborelui 'si T(H) num'arul minim de noduri cu 'in'al'timea h. Pornim de la premisa c'a: Dac'a subarborele st'ang este umplut p\^an'a la 'in'al'timea h-1, atunci subarborele drept trebuie umplut p\^an'a la 'in'al'timea h-2. Astfel num'arul minim de noduri cu 'in'al'timea h este:
+\newline
+$T(h)$ = $T(h - 1)$ + $T(h - 2)$ + 1; cu $T(0)$ = 1, $ T(1)$ = 2 \\
+$T(h - 1)$ = $T(h - 2)$ + $T(h - 3)$ + 1 $\Rightarrow$ T(h) = 2 *  $T(h - 2)$ + $T(h - 3)$ + 2\\
+$T(h - 2)$ = $T(h - 3)$ + $T(h - 4)$ + 1 $\Rightarrow$ T(h) = 3 *  $T(h - 3)$ + $T(h - 4)$ + 2\\
+...
+De unde rezult'a c'a $T(h)$ = h * $T(h - h) + (h - 1) * $T(h - h + 1) + $2^{h}$ = 3h - 2 + $2^{h}$ $\Rightarrow$ $T(h)$  $>$ $2^{h}$\\
+$\Rightarrow$  $log$ $T(h)$ $>$ h. Fie $T(h) = n$, unde n este num'arul de noduri $\Rightarrow$ $log$ $n$ $>$ h $\Rightarrow$ $h$ = $O(log$ $n)$
+\vspace{5 mm}
+\subsubsection{Create AVL}
+Crearea unui AVL gol este o opera'tie foarte simpl'a f'ar'a apeluri recursive, f'ar'a structuri repetitive 'si care con'tine instructiuni de complexitate O(1), deci crearea arborelui AVL 'in cel mai r'au caz are complexitatea O(1).
+\vspace{5 mm}
+\subsubsection{Rotate left \& Rotate right}
+Opera'tiile de rotire ale nodurilor sunt necesare pentru echilibrarea arborelui 'in cazul 'in care factorul de balan't'a este mai mare dec\^at 1 sau mai mic dec\^at -1. De asemeneta, rotirea propriu-zis'a este o opera'tie care nu necesit'a recuren'te sau bucle repetitive, deci in cel mai r'au caz rotirea fie ea st\^ang'a sau dreapt'a are complexitatea O(1).
+\vspace{5 mm}
+\subsubsection{Insert}
+Inserarea unui nod are trei etape: prima reprezint'a crearea nodului care are complexitate O(1) deoarece opera'tia se execut'a iterativ 'si f'ar'a structuri repetitive, a doua etap'a const'a 'in gasirea locului unde trebuie ad'augat nodul. 'In worst case, se parcurge arborele pe toata 'inal'timea lui, asta 'insemn\^and complexitatea O(log n) 'si apoi urmeaz'a reechilibrarea arborelui, opera'tie ce are complexitatea in cel mai r'au caz tot O(log n), deoarece ajungand la frunze algoritmul se intoarce 'si face rotirile necesare pentru echilibrare (O(1)) de la frunz'a p\^an'a la r'ad'acin'a, practic o parcurgere invers'a a arborelui care are complexitate O(log n). Astfel Insert-ul ar avea complexitatea O(2 * log  n) = O(log n).
+\vspace{5 mm}
+\subsubsection{Get Min \& Max}
+Pentru elementul minim 'si maxim se 'stie din teorie c'a ele se g'asesc la extremit'a'tile arborelui, 'in sensul c'a nodul minim este frunza cea mai din st\^anga, iar nodul maxim este frunza cea mai din dreapta. Deci, pentru g'asirea fie a minimului, fie a maximului este necesar'a o parcurgere pe toat'a 'in'al'timea arborelui care are complexitatea O(log n). Astfel complexitatea opera'tiei de g'asire a minimului 'si maximului dintr-un AVL este  O(2 * log  n) = O(log n).
+\vspace{5 mm}
+\subsubsection{Delete}
+Opera'tia de 'stergere a unui element, desi este mai complex'a fa't'a de inserare, ea are aceea'si complexitate. Motivul este c'a opera'tia incepe prin c'autarea nodului de eliminat ( in worst case O(log n)), apoi inlocuirea nodului eliminat care are 3 cazuri: C\^and nodul eliminat nu are copii 'si atunci opera'tia are complexitatea O(1), c\^and are un copil 'si atunci opera'tia are complexitatea tot O(1) 'si c\^and are 2 copii, caz 'in care se poate alege fie valoarea maxim'a din subarborele st\^ang, fie valorea minim'a din subarborele drept ( in aceast'a implementare s-a luat 'in considerare valoarea maxim'a din subarborele st\^ang). Acest caz are complexitatea O(log n) deoarece se parcurge arborele p\^an'a la frunze. Ultima etap'a a opera'tiei este reechilibrarea arborelui (O(log n)). 'In total avem complexitatea O(3 * log n) = O(log n).
+\vspace{5 mm}
+\subsection{Max-Heap}
+\subsubsection{Create Heap}
+Opera'tia de creare a Heap-ului nu are bucle repetitive sau recursivit'a'ti, de aceea complexitatea opera'tiei este O(1).
+\vspace{5 mm}
+\subsubsection{Sift Up \& Sift Down}
+Opera'tia de Sift Up 'in aceast'a implementare nu este recursiv'a si nu are blocuri repetitive, deci complexitatea este O(1). 'In schimb Sift Down in cel mai r'au caz duce nodul r'ad'acin'a p\^an'a la frunze, practic o parcurgere a arborelui, deci complexitatea este O(h), unde h este 'in'al'timea arborelui, ins'a dat fiind faptul c'a 'in teorie se spune c'a heap-ul este un arbore complet se poate afirma c'a O(log n) este complexitatea opera'tiei de Sift Down.
+\vspace{5 mm}
+\subsubsection{Insert}
+'In cel mai r'au caz arborele adaug'a un nod la frunze si dup'a se face sift up p\^an'a c\^and nodul nou ajunge la r'ad'acin'a. Stiind c'a complexitatea lui Sift Up este O(1) se deduce c'a insertul este echivalent 'in acest caz cu parcurgerea arborelui de sus 'in jos ceea ce 'inseamn'a complexitate O(log n). Deci insertul are complexitatea O(log n).
+\vspace{5 mm}
+\subsubsection{Get Max}
+Stiind c'a valoarea maxim'a se g'ase'ste la r'ad'acin'a rezult'a complexitate O(1), deci complexitatea g'asirii elementului maxim este O(1).
+\vspace{5 mm}
+\subsubsection{Extract Max}
+Pentru Extract Max, opera'tia propriu-zis'a de extragere este echivalent'a cu opera'tia Get Max care are complexitatea O(1) 'impreun'a cu opera'tia de Sift Down care mai adaug'a complexitatea O(log n). Deci, complexitatea opera'tiei de extragere a elementului maxim 'in cazul cel mai nefavorabil este O(log n + 1) = O(log n).
+\section{Avantaje 'si dezavantaje}
+Principalele avantajele ale structurilor AVL Tree 'si Max-Heap sunt rapiditatea opera'tiilor de inserare, c'autare 'si g'asire a maximului, dar 'si eliminarea maximului deoarece toate aceste opera'tii au complexitate O(log n) care este mult mai bun'a fa'ta de complexit'a'tea unui arbore binar de c'autare obi'snuit de exemplu 'si ofer'a mai mult'a flexibilitate. Principalul dezavantaj pentru AVL este dificultatea implement'arii codului pentru opera'tii, iar pentru Max-Heap  principalul dezavantaj ar fi organizarea memoriei.
+
+

@@ -1,0 +1,265 @@
+= Colecții =
+
+* Responsabil: [[ casupopandrei@gmail.com | Andrei Casu-Pop ]]
+* Data publicării: 08.10.2017
+* Data ultimei modificări: 08.10.2017
+== Collections Framework==
+În pachetul **java.util** (pachet standard din JRE) existǎ o serie de clase pe care le veti găsi folositoare.
+[[http://docs.oracle.com/javase/tutorial/collections/index.html|Collections Framework]] este o arhitectură unificată pentru reprezentarea şi manipularea colecţiilor. Ea conţine:
+* **interfeţe**: permit colecţiilor sǎ fie folosite independent de implementǎrile lor
+* **implementǎri**
+* **algoritmi** metode de prelucrare (căutare, sortare) pe colecţii de obiecte oarecare. Algoritmii sunt polimorfici: un astfel de algoritm poate fi folosit pe implementări diferite de colecţii, deoarece le abordeazǎ la nivel de interfaţǎ.
+Colecţiile oferǎ implementǎri pentru urmǎtoarele tipuri:
+* **mulţime** (ordinea elementelor este neimportantǎ)
+* **listǎ**  (ordinea elementelor conteazǎ)
+* **tabel asociativ** (perechi cheie-valoare)
+
+Existǎ o interfaţǎ, numitǎ [[https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html|Collection]], pe care o implementeazǎ majoritatea claselor ce desemneazǎ colecţii din **java.util**. Explicaţii suplimentare gǎsiţi pe Java Tutorials - [[http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html|Collection]]
+
+Exemplul de mai jos construieşte o listǎ populatǎ cu nume de studenţi:
+<code java>
+Collection names = new ArrayList();
+names.add("Andrei");
+names.add("Matei");
+</code>
+
+==Parcurgerea colecţiilor==
+Colecţiile pot fi parcurse (element cu element) folosind:
+* iteratori
+* o construcţie **for** specialǎ (cunoscutǎ sub numele de **for-each**)
+
+==Iteratori==
+Un iterator este un obiect care permite traversarea unei colecţii şi modificarea acesteia (ex: ştergere de elemente) în mod selectiv. Puteţi obţine un iterator pentru o colecţie, apelând metoda sa **iterator()**. Interfaţa [[http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html|Iterator]] este urmǎtoarea:
+<code java>
+public interface Iterator<E> {
+    boolean hasNext();
+    E next();
+    void remove(); // optional
+}
+</code>
+
+Exemplu de folosire a unui iterator:
+<code java>
+Collection<Double> c  = new ArrayList<Double>();
+// working on c variable
+Iterator<Double> it = c.iterator();
+
+while (it.hasNext()) {
+    Double backup = it.next();
+    // the it.next() call should be done before the it.remove() call
+    if (backup < 5.0) {
+        it.remove();
+    }
+}
+</code>
+
+Apelul metodei [[http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#remove()|remove()]] a unui iterator face posibilă eliminarea elementului din colecţie care a fost întors la ultimul apel al metodei **next()** din acelaşi iterator.
+În exemplul anterior, toate elementele din colecţie mai mici decât 5 for fi şterse la ieşirea din bucla ''while''.
+==For-each==
+Aceastǎ construcţie permite (într-o manierǎ expeditivǎ) traversarea unei colecţii. **for-each** este foarte similar cu ''for''. Urmǎtorul exemplu parcurge elementele unei colecţii şi le afişeazǎ.
+<code java>
+Collection collection = new ArrayList();
+for (Object o : collection)
+    System.out.println(o);
+</code>
+Construcţia **for-each** se bazeazǎ, în spate, pe un iterator, pe care îl ascunde. Prin urmare **nu** putem şterge elemente în timpul iterǎrii.
+În aceastǎ manierǎ pot fi parcurşi şi **vectori** oarecare. De exemplu, ''collection'' ar fi putut fi definit ca ''Object[]''.
+
+==Genericitate==
+Fie urmǎtoarea porţiune de cod:
+<code java>
+c.add("Test");
+
+Iterator it  = c.iterator();
+
+while (it.hasNext()) {
+    String s = it.next();         // ERROR: next() returns an Object and it's needed an explicit cast to String
+    String s = (String)it.next(); // OK
+}
+</code>
+Am definit o colecţie ''c'', de tipul ''ArrayList'' (pe care îl vom examina într-o secţiune urmǎtoare). Apoi, am adǎugat în colecţie un element de tipul ''String''. Am realizat o parcurgere folosind un iterator, şi am încercat obţinerea elementului nostru folosind apelul: ''String s = it.next()'';. Funcţia ''next'' însǎ întoarce un obiect de tip ''Object''. Prin urmare apelul va eşua. Varianta corectǎ este ''String s = (String)it.next()'';.
+Am fi putut preciza, din start, ce tipuri de date dorim într-o colecţie:
+<code java>
+Collection<String> c = new ArrayList<String>();
+c.add("Test");
+c.add(2);      // ERROR!
+Iterator<String> it = c.iterator();
+
+while (it.hasNext()) {
+     String s = it.next();
+}
+</code>
+
+==Interfaţa List==
+O listǎ este o colecţie **ordonatǎ**. Listele pot conţine elemente **duplicate**. Pe langǎ operaţiile moştenite de la ''Collection'', interfaţa [[http://docs.oracle.com/javase/7/docs/api/java/util/List.html|List]] defineşte urmǎtoarele operaţii:
+* ''T get(int index)'' - întoarce elementul de la poziţia ''index''
+* ''T set(int index, T element)'' - modificǎ elementul de la poziţia ''index''
+* ''void add(int index, T element)'' - adaugǎ un element la poziţia ''index''
+* ''T remove(int index)'' - şterge elementul de la poziţia ''index''
+Alǎturi de ''List'', este definitǎ interfaţa [[http://docs.oracle.com/javase/7/docs/api/java/util/ListIterator.html|ListIterator]], ce extinde interfaţa ''Iterator'' cu metode de parcurgere în ordine inversǎ.
+''List'' posedǎ douǎ implementǎri standard:
+* ''ArrayList'' - implementare sub formǎ de vector. Accesul la elemente se face în timp constant: ''O(1)''
+* ''LinkedList'' - implementare sub formǎ de listǎ dublu înlǎnţuitǎ. Prin urmare, accesul la un element nu se face în timp constant, fiind necesarǎ o parcurgere a listei: ''O(n)''.
+Printre algoritmii implementaţi se numără:
+* ''sort'' - realizeazǎ sortarea unei liste
+* ''binarySearch'' - realizaeazǎ o cǎutare binarǎ a unei valori într-o listǎ
+În general, algoritmii pe colecţii sunt implementaţi ca metode statice în clasa [[http://docs.oracle.com/javase/7/docs/api/java/util/Collections.html|Collections]].
+<note important>
+**Atenţie**: Nu confundaţi interfaţa ''Collection'' cu clasa ''Collections''. Spre deosebire de prima, a doua este o clasǎ ce conţine exclusiv metode statice. Aici sunt implementate diverse operaţii asupra colecţiilor.
+</note>
+Iatǎ un exemplu de folosire a sortǎrii:
+<code java>
+List<Integer> l = new ArrayList<Integer>();
+l.add(5);
+l.add(7);
+l.add(9);
+l.add(2);
+l.add(4);
+
+Collections.sort(l);
+System.out.println(l);
+</code>
+Mai multe detalii despre algoritmi pe colecţii gǎsiţi pe Java Tutorials - [[http://docs.oracle.com/javase/tutorial/collections/algorithms/index.html|Algoritmi pe liste]]
+
+==Compararea elementelor==
+Rularea exemplului de sortare ilustrat mai sus aratǎ cǎ elementele din ''ArrayList'' se sorteazǎ crescator. Ce se întâmplǎ când dorim sǎ realizǎm o sortare particularǎ pentru un tip de date complex? Spre exemplu, dorim sǎ sortǎm o listǎ ''ArrayList<Student>'' dupǎ media anilor. Sǎ presupunem cǎ ''Student'' este o clasǎ ce conţine printre membrii sǎi o variabilǎ ce reţine media anilor.
+Acest lucru poate fi realizat folosind interfeţele:
+* [[https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html|Comparable]]
+* [[https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html|Comparator]]
+
+| |  **Comparable**|  **Comparator**|
+|  **Logica de sortare**|  Logica de sortare trebuie sa fie în clasa ale cărei obiecte sunt sortate. Din acest motiv, această metodă se numeşte //sortare naturală//.|  Logica de sortare se află într-o **clasă separată**. Astfel, putem defini mai multe metode de sortare, bazate pe diverse câmpuri ale obiectelor de sortat.|
+|  **Implementare**|  Clasa ale cărei instanţe se doresc a fi sortate trebuie sa **implementeze această interfaţă** şi, evident, să suprascrie metoda ''compareTo()''.|  Clasa ale cărei instanţe se doresc a fi sortate nu trebuie să implementeze această interfaţă. Este nevoie de o alta clasă (poate fi şi internă) care să implementeze interfaţa ''Comparator''.|
+|  **Metoda de comparare**|  ''int compareTo(Object o1)'' \\ Această metodă compară obiectul curent (this) cu obiectul o1 şi întoarce un întreg. Valoarea întoarsă este interpretată astfel: \\ 1. pozitiv – obiectul este mai mare decât o1 \\ 2. zero – obiectul este egal cu o1 \\ 3. negativ – obiectul este mai mic decât o1|  ''int compare(Object o1,Object o2)'' \\ Această metodă compară obiectele o1 and o2 şi întoarce un întreg. Valoarea întoarsă este interpretată astfel: \\ 1. pozitiv – o2 este mai mare decât o1 \\ 2. zero – o2 este egal cu o1 \\ 3. negativ – o2 este mai mic decât o1|
+|  **Metoda de sortare**|  ''Collections.sort(List)'' \\ Aici obiectele sunt sortate pe baza metodei ''compareTo()''.|  ''Collections.sort(List, Comparator)'' \\ Aici obiectele sunt sortate pe baza metodei ''compare()'' din Comparator.|
+|  **Pachet**|  Java.lang.Comparable |  Java.util.Comparator|
+
+==Interfaţa Set==
+Un [[http://docs.oracle.com/javase/7/docs/api/java/util/Set.html|Set]] (mulţime) este o colecţie ce nu poate conţine elemente duplicate. Interfaţa ''Set'' conţine doar metodele moştenite din ''Collection'', la care adaugǎ restricţii astfel încât elementele duplicate sǎ nu poatǎ fi adǎugate.
+Avem trei implementǎri utile pentru Set:
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/HashSet.html|HashSet]]: memoreazǎ elementele sale într-o **tabelǎ de dispersie** ''(hash table)''; este implementarea cea mai performantǎ, însǎ nu avem garanţii asupra **ordinii** de parcurgere. Doi iteratori **diferiţi** pot parcurge elementele mulţimii în ordine **diferitǎ**.
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html|TreeSet]]: memoreazǎ elementele sale sub formǎ de [[http://en.wikipedia.org/wiki/Red-black_tree|arbore roşu-negru]]; elementele sunt ordonate pe baza valorilor sale. Implementarea este mai **lentǎ** decat ''HashSet''.
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashSet.html|LinkedHashSet]]: este implementat ca o **tabelǎ de dispersie**. Diferenţa faţǎ de ''HashSet'' este cǎ ''LinkedHashSet'' menţine o listǎ dublu-înlǎnţuitǎ peste toate elementele sale. Prin urmare (şi spre deosebire de ''HashSet''), elementele rǎmân în **ordinea** în care au fost inserate. O parcurgere a ''LinkedHashSet'' va gǎsi elementele mereu în aceastǎ ordine.
+<note important>
+**Atenţie**: Implementarea ''HashSet'', care se bazeazǎ pe o **tabelǎ de dispersie**, calculeazǎ codul de dispersie al elementelor pe baza metodei [[http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#hashCode()|hashCode]], definitǎ în clasa ''Object''. De aceea, douǎ obiecte **egale**, conform funcţiei ''equals'', trebuie sǎ întoarcǎ **acelaşi** rezultat din ''hashCode''.
+</note>
+
+Explicaţii suplimentare gǎsiti pe Java Tutorials - [[http://docs.oracle.com/javase/tutorial/collections/interfaces/set.html|Set]].
+
+==Interfaţa Map==
+Un [[http://docs.oracle.com/javase/7/docs/api/java/util/Map.html|Map]]  este un obiect care mapeazǎ **chei** pe **valori**. Într-o astfel de structurǎ **nu** pot exista chei duplicate. Fiecare cheie este mapatǎ la exact o valoare. ''Map'' reprezintǎ o modelare a conceptului de funcţie: ''primeşte'' o entitate ca parametru (cheia), şi întoarce o altǎ entitate (valoarea).
+Cele trei implementǎri pentru ''Map'' sunt:
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html|HashMap]]
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html|TreeMap]]
+* [[http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html|LinkedHashMap]]
+Particularitǎţile de implementare corespund celor de la ''Set''.
+Exemplu de folosire:
+<code java>
+class Student {
+    String name; // the name of the student
+    float avg;   // its average grades
+
+    public Student(String name, float avg) {
+        this.name = name;
+        this.avg  = avg;
+    }
+
+    public String toString() {
+        return "[" + name + ", " + avg + "]";
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Map<String,Student> students = new HashMap<String, Student>();
+
+        students.put("Matei",  new Student("Matei",  4.90F));
+        students.put("Andrei", new Student("Andrei", 6.80F));
+        students.put("Mihai",  new Student("Mihai",  9.90F));
+
+        System.out.println(students.get("Mihai")); // the element whose key is "Mihai"
+
+        // we add an element with an existing key
+        System.out.println(students.put("Andrei", new Student("", 0.0F)));
+        // put(...) returns the old element,
+
+        // and then overrides it
+        System.out.println(students.get("Andrei"));
+
+        // remove(...) returns the deleted element
+        System.out.println(students.remove("Matei"));
+
+        // printing the structure
+        System.out.println(students);
+    }
+}
+</code>
+Interfaţa [[http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html|Map.Entry]] desemneazǎ o pereche (cheie, valoare) din map. Metodele caracteristice sunt:
+* **getKey**: întoarce cheia
+* **getValue**: întoarce valoarea
+* **setValue**: permite stabilirea valorii asociatǎ cu aceastǎ cheie
+O **iterare** obişnuitǎ pe un map se va face în felul urmǎtor:
+<code java>
+for (Map.Entry<String, Student> entry : students.entrySet())
+    System.out.println(entry.getKey() + " has the following average grade: " + entry.getValue().getAverage());
+</code>
+În bucla ''for-each'' de mai sus se ascunde, de fapt, iteratorul mulţimii de perechi, întoarse de ''entrySet''.
+Explicaţii suplimentare gǎsiţi pe Java Tutorials - [[http://docs.oracle.com/javase/tutorial/collections/interfaces/map.html|Map]].
+
+==Alte interfeţe==
+[[http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html|Queue]] defineşte operaţii specifice pentru **cozi**:
+* inserţia unui element
+* ştergerea unui element
+* operaţii de "inspecţie" a cozii
+Implementǎri utilizate frecvente pentru ''Queue'':
+* ''LinkedList'': pe lângǎ ''List'', ''LinkedList'' implementeazǎ şi ''Queue''
+* ''PriorityQueue'';
+Explicaţii suplimentare gǎsiţi pe Java Tutorials - [[http://docs.oracle.com/javase/tutorial/collections/interfaces/queue.html|Queue]]
+
+
+==TL;DR==
+
+* Pachetul [[https://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html|java.util]] oferă implementări ale unor stucturi de date și algoritmi pentru manipularea lor: ierarhiile [[https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html|Collection]] și [[https://docs.oracle.com/javase/8/docs/api/java/util/Map.html|Map]] și clasa cu metode statice [[https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html|Collections]].
+* **Parcurgerea** colecţiilor se face în două moduri:
+  * folosind iteratori (obiecte ce permit traversarea unei colecţii şi modificarea acesteia)
+  * folosind construcţia speciala **for each** (care nu permite modificarea colecţiei in timpul parcurgerii sale)
+* Interfaţa **List** - colecţie ordonată ce **poate** conţine elemente **duplicate**.
+* Interfaţa **Set** - colecţie ce **nu poate** conţine elemente **duplicate**. Există trei implementǎri utile pentru Set: [[http://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html|HashSet]] (neordonat, nesortat), [[http://docs.oracle.com/javase/8/docs/api/java/util/TreeSet.html|TreeSet]] (set sortat) și [[http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html|LinkedHashSet]] (set ordonat)
+* Interfaţa **Map** - colecţie care mapează **chei** pe **valori**. Într-o astfel de structurǎ nu pot exista chei duplicate. Cele trei implementǎri pentru ''Map'' sunt [[http://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html|HashMap]] (neordonat, nesortat), [[http://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html|TreeMap]] (map sortat) și [[http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html|LinkedHashMap]] (map ordonat)
+* **Contractul equals - hashcode**: dacă //obj1 equals obj2 atunci hashcode obj1 == hascode obj2//. Dacă implementați equals implementați și hashcode daca doriți să folosiți acele obiecte în colecții bazate pe hashuri (e.g. HashMap, HashSet).
+
+==Exerciţii==
+  - (**1p**) Instanţiati o colecţie care sǎ **nu** permitǎ introducerea elementelor duplicate, folosind o implementare corespunzǎtoare din bibliotecă. La introducerea unui element existent, semnalaţi eroare. Colecţia va reţine ''String''-uri şi va fi parametrizatǎ.
+  - (**2p**) Creaţi o clasǎ ''Student''.
+    - Adǎugaţi urmǎtorii membri:
+       * **câmpurile** ''nume'' (de tip ''String'') şi ''medie'' (de tip ''float'')
+       * un **constructor** care îi iniţializeazǎ
+       *  metoda ''toString''.
+    -  Folosiţi codul de la **exerciţiul anterior** şi modificaţi-l astfel încât colecţia aleasǎ de voi sǎ reţinǎ obiecte de tip ''Student''. Testaţi prin adǎugare de elemente duplicate, având aceleaşi valori pentru toate câmpurile, instanţiindu-le, de fiecare datǎ, cu ''new''. Ce observaţi?
+    - Prelucraţi implementarea de mai sus astfel încât colecţia sǎ reprezinte o tabelǎ de dispersie, care calculează codul de dispersie al elementelor dupǎ un criteriu ales de voi (puteţi suprascrie funcţia **hashCode**).
+       * În ''Student'' suprascrieți metoda ''equals'' astfel încât să se ţină cont de câmpurile clasei, şi încercaţi din nou. Ce observaţi?
+    * //Hint:// [[http://docs.oracle.com/javase/8/docs/api/java/util/Set.html#add(E)|Set.add]], [[http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)|Object.equals]], [[http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode()|Object.hashCode]]
+   - (**2p**) Plecând de la implementarea exerciţiului anterior, realizaţi urmǎtoarele modificǎri:
+     * Supraîncǎrcaţi, în clasa ''Student'', metoda ''equals'', cu o variantǎ care primeşte un parametru ''Student'', şi care întoarce întotdeauna ''false''.
+     * Testaţi comportamentul prin crearea unei colecţii ce conţine instanţe de ''Student'' şi iteraţi prin această colecţie, afişând la fiecare pas ''element.equals(element)'' şi ''((Object)element).equals(element)'' (unde ''element'' este numele de variabilă ales pentru fiecare element al colecţiei). Cum explicaţi comportamentul observat? Dacă folosiţi un iterator, acesta va fi şi el **parametrizat**.
+  - (**3p**) Creați clasa ''Gradebook'', de tip ''Map'', pentru reţinerea studenţilor dupǎ medie: cheile sunt mediile și valorile sunt liste de studenți. Gradebook va menţine cheile **ordonate descrescǎtor**. Extindeţi o implementare potrivitǎ a interfeţei ''Map'', care sǎ permitǎ acest lucru.
+    - Caracteristicile clasei definite sunt:
+      - Cheile pot avea valori de la 0 la 10 (corespunzǎtoare mediilor posibile). Verificați acest lucru la adăugare.
+      - Valoarea asociată fiecǎrei chei va fi o listǎ (''List'') care va reţine toţi studenţii cu media rotunjitǎ egalǎ cu cheia. Considerǎm cǎ un student are media rotunjitǎ 8 dacǎ media sa este în intervalul [7.50, 8.49].
+     - Implementați un [[http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html|Comparator]] pentru stabilirea ordinii cheilor. Gradebook va primi un parametru de tip ''Comparator'' în constructor și îl va da mai departe constructorului clasei moștenite.
+     - Definiţi în clasǎ metoda ''add(Student)'', ce va adǎuga un student în lista corespunzǎtoare mediei lui. Dacǎ, în prealabil, nu mai existǎ niciun student cu media respectivǎ (rotunjitǎ), atunci lista va fi creatǎ la cerere.
+    - Testați clasa:
+      - instanțiați un obiect Gradebook și adăugați in el câţiva studenţi.
+      - iteraţi pe Gradebook şi sortaţi alfabetic fiecare listǎ de studenţi pentru fiecare notă. Pentru a sorta, se va folosi metoda [[https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#sort-java.util.List-|Collections.sort]], iar clasa Student va implementa o interfață care specifică modul în care sunt comparate elementele.
+        * clasa ''Student'' va implementa interfaţa [[http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html|Comparable]], suprascriind metoda [[http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo(T)|compareTo]].
+  - (**2p**) Creaţi o clasǎ care moşteneşte ''HashSet<Integer>''.
+    * Definiţi în aceastǎ clasǎ o variabilǎ membru care reţine numǎrul total de elemente adǎugate. Pentru a contoriza acest lucru, suprascrieți metodele ''add'' şi ''addAll''. Pentru adǎugarea efectivǎ a elementelor, folosiţi implementǎrile din clasa pǎrinte (''HashSet'').
+    * Testaţi, folosind atât ''add'' cât şi ''addAll''. Ce observaţi? Corectaţi dacǎ este cazul.
+    * Modificaţi implementarea astfel încât clasa voastrǎ sǎ moşteneascǎ ''LinkedList<Integer>''. Ce observaţi? Ce **concluzii** trageţi?
+    * Hint: [[http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#add(E)|Collection.add]], [[http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#addAll(java.util.Collection)|Collection.addAll]].
+    * Hint: implementarea ''addAll'' din sursele pentru [[http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8u40-b25/java/util/HashSet.java#HashSet|HashSet]] şi [[http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8u40-b25/java/util/LinkedList.java#LinkedList|LinkedList]].
+== Resurse ==
+
+* <html><a class="media mediafile mf_pdf" href="/poo/laboratoare/colectii?do=export_pdf">PDF laborator</a></html>
+* {{|Soluții}}

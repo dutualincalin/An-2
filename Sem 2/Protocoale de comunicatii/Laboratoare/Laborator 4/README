@@ -1,0 +1,41 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+			Laboratorul 4 PC
+
+Fisierele laboratorului:
+- arp_table.txt
+- info.py
+- Makefile
+- parser.h
+- parser.o
+- README
+- router.c
+- rtable.txt
+- skel.c
+- skel.h
+- topo.py
+
+In cadrul acestui laborator s-a lucrat doar in fisierul router.c unde au fost
+implementate toate cerintele din TODO.
+
+Prima cerinta consta in implementarea procesului de rutare. Ce am facut eu este
+sa parcurg tabela si sa retin indicele liniei din tabela care face match si are
+masca cea mai mare. In final se returneaza linia din rtable si in cazul in care
+nu se gaseste atunci se returneaza NULL.
+
+A doua cerinta consta in preluarea adresei mac corespunzatoare unei adrese ip.
+Se trece prin toate intrarile tabelei si se returneaza linia de tabela care se
+potriveste. Daca nu exista potriviri se returneaza NULL.
+
+Pentru a treia cerinta la verificarea checksum-ului preiau checksum-ul actual
+in variabila separata checksum si recalculez checksum-ul intializand check la 0
+si apoi folosind functia ip-checksum. Se verifica cu un if daca checksum-ul e
+identic si in caz contrar se da drop la pachet cu un mesaj sugestiv :).
+
+A 4-a cerinta necesita doar sa se verifice daca ttl-ul e pozitiv si in caz contrar
+se da drop la pachet, la a 5-a cerinta se retine linia din rtable data de functia
+implementata la prima cerinta, la 6 se decrementeaza tt-ul si se recalculeaza check-sum,
+la 7 se updateaza protocolul ethernet modificand adresele de sursa si destinatie
+cu adresa mac a urmatorului hop respectiv adresa mac a interfetei, iar la 8 se
+trimite pachetul utilizand numarul interfetei alese din rtable si pachetul de trimis.

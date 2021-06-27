@@ -1,0 +1,90 @@
+#include <LiquidCrystal.h>
+#define rs 12
+#define en 11
+#define d4 10
+#define d5 9
+#define d6 8
+#define d7 7
+
+//Declarare LCD
+LiquidCrystal lcd(rs, en, d4 ,d5, d6, d7);
+
+//Declararea de variabile
+int button1 = 2;	// Asocierea butoanelor cu numerele de pe
+int button2 = 3;	// placuta Arduino.
+int button3 = 4;
+int button4 = 5;
+int button5 = 6;
+
+int piezo = 13;		// Asocierea difuzorului
+
+int a, b, c, d, e; // Asocierea variabilelor pentru output
+
+// Configurarea placii Arduino
+void setup()
+{
+  Serial.begin(9600);		// Initializarea comunicarii
+  
+  lcd.begin(16, 2);			// Intializarea LCD-ului
+  
+  lcd.print("Hello, there!");	// Printare mesaje de pornire
+  delay(2000);
+  
+  lcd.setCursor(0, 0);
+  lcd.print("             ");
+  lcd.setCursor(0, 0);
+  
+  delay(1000);
+  lcd.print("Let's sing!");
+  delay(1000);
+  
+  lcd.setCursor(0, 0);
+  
+  delay(1000);
+  lcd.print("Sound Frequency:");
+  
+  pinMode(button1,INPUT);	// Configurarea pinilor pentru receptionarea
+  pinMode(button2,INPUT);	// semnalului cu ajutorul butoanelor
+  pinMode(button3,INPUT);
+  pinMode(button4,INPUT);
+  pinMode(button5,INPUT);
+}
+
+// Programarea placii Arduino
+void loop()
+{
+  lcd.setCursor(0, 1);		// Seteaza cursorul pe linia a doua
+  
+  a = digitalRead(button1);	// Citirea datelor de intrare prin
+  b = digitalRead(button2);	// variabile...
+  c = digitalRead(button3);
+  d = digitalRead(button4);
+  e = digitalRead(button5);
+ 
+  if(a == 1){			// si trimiterea rezultatului catre
+    tone(piezo,523);		// Piezo a unei frecvente de vibrare
+    lcd.print("523 Hz");	// astfel incat sa scoata sunete
+  }				// cat mai intense cu apasarea 
+  else if(b == 1){		// butoanelor de la stanga la dreapta
+    tone(piezo,654);		// sau nici un sunet daca nu e apasat
+    lcd.print("654 Hz");	// nici un buton. Se printeaza in LCD
+  }				// intensitatea sunetului.
+  else if(c == 1){
+    tone(piezo,785);
+    lcd.print("785 Hz");
+  }
+  else if(d == 1){
+    tone(piezo,916);
+    lcd.print("916 Hz");
+  }
+  else if(e == 1){
+    tone(piezo,1047);
+    lcd.print("1047 Hz");
+  }
+  else{
+    noTone(piezo);
+  	lcd.setCursor(0, 1);
+  	lcd.print("       ");
+  }  
+  delay(50);
+}

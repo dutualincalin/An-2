@@ -1,0 +1,285 @@
+= Genericitate =
+
+* Responsabil: [[ casupopandrei@gmail.com | Andrei Casu-Pop ]]
+* Data publicării: 08.10.2017
+* Data ultimei modificări: 08.10.2017
+
+
+== Introducere ==
+
+Genericitatea este un concept nou, introdus o dată cu JDK 5.0. Din unele puncte de vedere se poate asemăna cu conceptul de //template// din C++. Mecanismul genericității oferă un mijloc de **abstractizare a tipurilor de date** și este util mai ales în ierarhia de colecții.
+
+Să urmărim exemplul de mai jos:
+
+<code java>
+List myIntList = new LinkedList();
+myIntList.add(new Integer(0));
+Integer x = (Integer) myIntList.iterator().next();
+</code>
+
+Se observă necesitatea operației de //cast// pentru a identifica corect variabila obținută din listă. Această situație are mai multe dezavantaje:
+  * Este îngreunată citirea codului
+  * Apare posibilitatea unor erori la execuție, în momentul în care în listă se introduce un obiect care nu este de tipul ''Integer''.
+
+Genericitatea intervine tocmai pentru a elimina aceste probleme. Concret, să urmărim secvența de cod de mai jos:
+
+<code java>
+List<Integer> myIntList = new LinkedList<Integer>();
+myIntList.add(new Integer(0));
+Integer x = myIntList.iterator().next();
+</code>
+
+În această situație, lista nu mai conține obiecte oarecare, ci poate conține doar obiecte de tipul ''Integer''. În plus, observăm că a dispărut și //cast//-ul. De această dată, **verificarea tipurilor este efectuată de compilator**, ceea ce elimină potențialele erori de execuție cauzate de //cast//-uri incorecte. La modul general, beneficiile dobândite prin utilizarea genericității constau în:
+  * îmbunătățirea lizibilității codului
+  * creșterea gradului de robusteţe
+
+== Definirea unor structuri generice simple ==
+
+Să urmărim câteva elemente din definiția oferită de Java pentru tipurile ''List'' și ''Iterator''.
+
+<code java>
+public interface List<E> {
+    void add(E x);
+    Iterator<E> iterator();
+    ...
+}
+
+public interface Iterator<E> {
+    E next();
+    boolean hasNext();
+    void remove();
+}
+</code>
+
+Sintaxa ''<E>'' este folosită pentru a defini tipuri formale în cadrul interfețelor. Aceste tipuri pot fi folosite în mod asemănător cu tipurile uzuale, cu anumite restricții totuși. În momentul în care invocăm o structură generică ele vor fi înlocuite cu tipurile efective utilizate în invocare. Concret, fie un apel de forma:
+
+<code java>
+ArrayList<Integer> myList = new ArrayList<Integer>();
+Iterator<Integer> it = myList.iterator();
+</code>
+
+În această situație, tipul formal ''E'' a fost înlocuit (la compilare) cu tipul efectiv ''Integer''.
+
+<note>
+O analogie (simplistă) referitoare la acest mecanism de lucru cu tipurile se poate face cu mecanismul funcțiilor: acestea se definesc utilizând parametri //formali//, urmând ca în momentul unui apel acești parametri să fie înlocuiți cu parametri //actuali//.
+</note>
+
+== Genericitatea în subtipuri ==
+
+Să considerăm următoarea situaţie:
+
+<code java>
+List<String> stringList = new ArrayList<String>(); // 1
+List<Object> objectList = stringList;              // 2
+</code>
+
+Operația 1 este evident corectă, însă este corectă și operația 2? Presupunând că ar fi, am putea introduce în ''objectList'' orice fel de obiect, nu doar obiecte de tip ''String'', fapt ce ar conduce la potențiale erori de execuție, astfel:
+
+<code java>
+objectList.add(new Object());
+String s = stringList.get(0); // Aceasta operaţie ar fi ilegală
+</code>
+
+Din acest motiv, operația 2 **nu va fi permisă de către compilator**!
+<note important>
+Dacă //ChildType// este un subtip (clasă descendentă sau subinterfață) al lui //ParentType//, atunci o structură generică //GenericStructure<ChildType>// **nu** este un subtip al lui //GenericStructure<ParentType>//. **Atenție** la acest concept, întrucât el nu este intuitiv!
+</note>
+== Wildcards ==
+
+//Wildcard//-urile sunt utilizate atunci când dorim să întrebuințăm o structură generică drept //parametru// într-o funcție și nu dorim să limităm tipul de date din colecția respectivă.
+
+<code java>
+void printCollection(Collection<Object> c) {
+    for (Object e : c)
+        System.out.println(e);
+}
+</code>
+
+De exemplu, o situație precum cea de mai sus ne-ar restricționa să folosim la apelul funcției doar o colecţie cu elemente de tip ''Object'', care **nu** //poate fi convertită la o colecție de un alt tip//, după cum am văzut mai sus. Această restricție este eliminată de folosirea **wildcard**-urilor, după cum se poate vedea:
+
+<code java>
+void printCollection(Collection<?> c) {
+    for (Object e : c)
+        System.out.println(e);
+}
+</code>
+
+O limitare care intervine însă este că **nu putem adǎuga elemente arbitrare** într-o colecție cu //wildcard//-uri:
+
+<code java>
+Collection<?> c = new ArrayList<String>();  // Operaţie permisă
+c.add(new Object());                        // Eroare la compilare
+</code>
+
+Eroarea apare deoarece nu putem adăuga într-o colecţie generică decât elemente **de un anumit tip**, iar //wildcard//-ul **nu indică un tip anume**.
+
+<note>
+Aceasta înseamnă că nu putem adăuga nici măcar elemente de tip ''String''. Singurul element care poate fi adăugat este însă ''null'', întrucât acesta este membru al oricărui tip referință. Pe de altă parte, operațiile de tip //getter// sunt posibile, întrucât rezultatul acestora poate fi mereu interpretat drept ''Object'':
+</note>
+
+<code java>
+List<?> someList = new ArrayList<String>();
+((ArrayList<String>)someList).add("Some String");
+Object item = someList.get(0);
+</code>
+
+== Bounded Wildcards ==
+
+În anumite situații, faptul că un //wildcard// poate fi înlocuit cu orice tip se poate dovedi un inconvenient. Mecanismul bazat pe **Bounded Wildcards** permite introducerea unor restricţii asupra tipurilor ce pot înlocui un //wildcard//, obligându-le să se afle într-o relație ierarhică (de descendență) față de un tip fix specificat.
+
+Exemplificăm acest mecanism:
+
+<code java>
+class Pizza {
+    protected String name = "Pizza";
+
+    public String getName() {
+        return name;
+    }
+}
+
+class HamPizza extends Pizza {
+    public HamPizza() {
+        name = "HamPizza";
+    }
+}
+
+class CheesePizza extends Pizza {
+    public CheesePizza() {
+        name = "CheesePizza";
+    }
+}
+
+class MyApplication {
+    // Aici folosim "bounded wildcards"
+    public static void listPizza(List<? extends Pizza> pizzaList) {
+        for(Pizza item : pizzaList)
+            System.out.println(item.getName());
+    }
+
+    public static void main(String[] args) {
+        List<Pizza> pList = new ArrayList<Pizza>();
+
+        pList.add(new HamPizza());
+        pList.add(new CheesePizza());
+        pList.add(new Pizza());
+
+        MyApplication.listPizza(pList);
+        // Se va afişa: "HamPizza", "CheesePizza", "Pizza"
+    }
+}
+</code>
+
+Sintaxa ''List<? extends Pizza>'' ([[https://docs.oracle.com/javase/tutorial/java/generics/upperBounded.html|Upper Bounded Wildcards]]) impune ca tipul elementelor listei să fie ''Pizza'' sau o subclasă a acesteia. Astfel, ''pList'' ar fi putut avea, la fel de bine, tipul ''List<HamPizza>'' sau ''List<CheesePizza>''. În mod similar, putem imprima constrângerea ca tipul elementelor listei să fie ''Pizza'' sau o superclasă a acesteia, utilizând sintaxa ''List<? super Pizza>'' ([[https://docs.oracle.com/javase/tutorial/java/generics/lowerBounded.html|Lower Bounded Wildcards]]).
+
+<note>
+Trebuie reținut faptul că **în continuare nu putem introduce valori** într-o colecție ce folosește //bounded wildcards// și este dată ca parametru unei funcții.
+</note>
+
+== Type Erasure ==
+
+[[https://docs.oracle.com/javase/tutorial/java/generics/erasure.html|Type Erasure]] este un mecanism prin care compilatorul Java înlocuieşte la **compile time** parametrii de genericitate ai unei clase generice cu prima lor apariţie (ţinând cont de restricţii în cazul Bounded Wildcards) sau cu ''Object'' dacǎ parametrii nu apar (Raw Type). De exemplu, următorul cod:
+
+<code java>
+List<String> list = new ArrayList<String>();
+list.add("foo");
+String x = list.get(0);
+</code>
+
+se va transforma dupǎ acest pas al compilării în:
+
+<code java>
+List list = new ArrayList();
+list.add("foo");
+String x = (String) list.get(0);
+</code>
+
+Sǎ urmǎrim urmǎtorul fragment de cod:
+
+<code java>
+class  GenericClass <T> {
+    void genericFunction(List<String> stringList) {
+        stringList.add("foo");
+    }
+    // {...}
+    public static void main(String[] args) {
+        GenericClass genericClass = new GenericClass();
+        List<Integer> integerList = new ArrayList<Integer>();
+
+        integerList.add(100);
+        genericClass.genericFunction(integerList);
+
+        System.out.println(integerList.get(0)); // 100
+        System.out.println(integerList.get(1)); // foo
+    }
+}
+</code>
+
+Observăm că în ''main'' se instanţiază clasa ''GenericClass'' cu Raw Type, apoi se trimite ca argument metodei ''genericFunction'' un ''ArrayList<Integer>''. Codul nu va genera erori şi va afişa //100//, apoi //foo//. Acest lucru se întâmplă tot din cauza mecanismului de **Type Erasure**. Să urmărim ce se întâmplă: la instanţierea clasei ''GenericClass'' nu se specifică tipul generic al acesteia iar compilatorul va înlocui în corpul clasei peste tot ''T'' cu ''Object'' şi va dezactiva verificarea de tip. Așadar, obiectul ''genericClass'' va aparţine unei clase de forma:
+
+<code java>
+class  GenericClass {
+    void genericFunction(List stringList) {
+        stringList.add("foo");
+    }
+    // {...}
+}
+
+</code>
+<note important>
+Modelul de mai sus este **bad practice** tocmai pentru că are un comportament nedeterminat și poate conduce la erori. De aceea nu e recomandat să folosiți Raw Types, ci să specificați **întotdeauna** tipul obiectelor în cazul instanțierii claselor generice!
+</note>
+== Metode generice ==
+
+Java ne oferă posibilitatea scrierii de metode generice (deci având un tip-parametru) pentru a facilita prelucrarea unor structuri generice.
+Să exemplificăm acest fapt. Observăm în continuare 2 căi de implementare ale unei metode ce copiază elementele unui vector intrinsec într-o colecție:
+
+<code java>
+// Metoda corectă
+static <T> void correctCopy(T[] a, Collection<T> c) {
+    for (T o : a)
+        c.add(o); // Operaţia va fi permisă
+}
+
+// Metoda incorectă
+static void incorrectCopy(Object[] a, Collection<?> c) {
+    for (Object o : a)
+        c.add(o); // Operatie incorectă, semnalată ca eroare de către compilator
+}
+</code>
+
+Trebuie remarcat faptul că ''correctCopy()'' este o metodă validă, care se execută corect, însă ''incorrectCopy()'' nu este, din cauza limitării pe care o cunoaştem deja, referitoare la adăugarea elementelor într-o colecție generică cu tip specificat. Putem remarca, de asemenea, că, și în acest caz, putem folosi //wildcards// sau //bounded wildcards//. Astfel, următoarele declaraţii de metode sunt corecte:
+
+<code java>
+// Copiază elementele dintr-o listă în altă listă
+public static <T> void copy(List<T> dest, List<? extends T> src) { ... }
+
+// Adaugă elemente dintr-o colecţie în alta, cu restricţionarea tipului generic
+public <T extends E> boolean addAll(Collection<T> c);
+</code>
+
+== Exerciții ==
+
+  - (**6p**) Implementați o **tabelă de dispersie** generică care va permite să stocaţi perechi de tip cheie-valoare.
+    * (**2p**) Scrieţi antetul clasei ''MyHashMap'' şi prototipul funcţiilor **put** şi **get**. Aveţi grijă la parametrizarea tipurilor.
+    * (**2p**) Implementaţi metoda **put**. Vă puteți crea o clasă internă cu rol de //entry// şi puteţi stoca //entry-urile// într-o colecţie generică existentă în Java.
+    * (**1p**) Implementaţi metoda **get**.
+    * (**1p**) Testaţi implementarea voastră folosind o clasă definită de voi, care suprascrie metoda **hashCode** din ''Object''.
+    * (**Bonus 2p**) Implementați tabela de dispersie ca //iterabilă//, compatibilă cu syntactic-sugar-ul **for-each**
+      * Trebuie să implementați interfața ''Iterable''. Atenție, și ea este generică.
+      * Creați-vă //iteratorul//, parametrizat, ca o clasă internă care să rețină datele necesare.
+      * Nu este necesar să implementați metoda ''remove'' din ''Iterator''.
+      * Afișați-vă rezultatele folosind **for-each** pe tabela de dispersie.
+  - (**4p**) Să considerăm interfața ''Sumabil'', ce conține metoda ''void addValue(Sumabil value)''. Această metodă adună la valoarea curentă (stocată în instanța ce apelează metoda) o altă valoare, aflată într-o instanță cu același tip. Pornind de la această interfață, va trebui să:
+    * Definiți clasele ''MyVector3'' și ''MyMatrix'' (ce reprezintă un vector cu 3 coordonate și o matrice de dimensiune 4 x 4), ce implementează Sumabil
+    * Scrieți **o metodă generică** ce primește o colecție generică cu elemente de tipul ''Sumabil'' și returnează suma tuturor elementelor din colecție. Trebuie să utilizați //bounded types//. Care trebuie să fie, deci, antetul metodei?
+
+== Resurse ==
+* <html><a class="media mediafile mf_pdf" href="/poo/laboratoare/genericitate?do=export_pdf">PDF laborator</a></html>
+==Referinţe==
+
+* [[https://docs.oracle.com/javase/tutorial/java/generics/types.html | Generic Types]]
+* [[https://docs.oracle.com/javase/tutorial/extra/generics/wildcards.html | Wildcards]]
+* [[https://docs.oracle.com/javase/tutorial/java/generics/upperBounded.html | Upper Bounded Wildcards]]
+* [[https://docs.oracle.com/javase/tutorial/java/generics/lowerBounded.html | Lower Bounded Wildcards]]
+* [[https://docs.oracle.com/javase/tutorial/java/generics/erasure.html | Type Erasure]]

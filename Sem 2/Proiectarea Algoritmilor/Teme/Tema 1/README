@@ -1,0 +1,152 @@
+Nume: Dutu Alin Calin
+Grupa: 323CD
+
+	Tema 1 PA
+
+Aceasta este tema 1 la materia Proiectarea Algoritmilor din anul universitar 
+2020-2021.
+
+Aceasta contine urmatoarele fisiere:
+- crypto.cpp
+- stocks.cpp
+- valley.cpp
+- ridge.cpp
+
+
+Limbajul folosit pentru toate programele este C++. Programele au fost concepute
+si testate pe o masina virtuala de Ubuntu 20.04.2 LTS cu 8 giga de ram.
+
+Nota :Din pacate testele rulate local iau mai mult timp pe masina mea virtuala
+deoarece masina virtuala are performante mai slabe decat un dual-boot, dar am
+rezolvat aceasta problema utilizand Vmchecker.
+
+Cerinte:
+Task 1
+
+Pentru acest task se uitilizeaza mai intai sortarea din biblioteca algorithm
+care sorteaza calculatoare crescator dupa productie folosind functia compare.
+Urmatoarea parte ilustreaza ideea folosita in algoritm. Se itereaza prin
+fiecare calculator, se insumeaza costurile calculatoarelor iterate, se retine
+produtivitatea calculatorului actual si se verifica daca exista diferente intre
+calculatorul actual si urmatorul calculator in functie de productivitate. Daca
+exista atunci se iau calculatorul actual si precedentele si se incearca
+imbunatatirea lor la nivelul calculatorului urmator. Aici se iau in calcul doua
+cazuri. Primul caz e cand sunt suficienti bani pentru toate imbunatatirile si
+atunci se continua ciclul de iteratie scazand din bani suma necesara. In cazul
+in care nu exista bani atunci se returneaza productivitatea calculatorului
+actual + numarul de nivele maxim la care pot fi imbunatatite calculatoarele,
+fiind reprezentat prin catul dat de bani/suma necesara. Daca se trece de 
+iteratie atunci se returneaza productia ultimului calculator + numarul de
+imbunatatiri pe care le mai poate face Gigel cu banii ramasi in aceeasi maniera
+, bani/suma necesara. 
+
+Complexitatea algorimtului e O(n * log n) datorita functiei sort care are aceasta
+complexitate si datorita for-urilor care au complexitate O(n). Deci avem
+O(n * log n + 2 * n) = O(n * log n)
+
+
+Task 2
+
+Pentru task-ul 2 s-a utilizat tehnica programarii dinamice utilizand o matrice
+cu 3 dimensiuni, una pentru actiuni, una pentru costuri si una pentru pierderi.
+Ideea este in felul urmator, daca una din dimensiuni este 0 atunci solutia va
+fi 0. Daca actualul cost este mai mic decat costul actiunii curente atunci se
+va considera silutia precedenta. In urmatorul caz se face o comparatie intre
+actiunea actuala si solutia precedenta si se stabileste solutia actuala intr-o
+prima faza. A doua si ultima faza implica alte doua cazuri. Primul caz este
+cand actiunea actuala nu poate fi cumulata cu alte actiuni datorita pierderilor
+si atunci solutia finala va fi solutia din prima faza, iar in caz contrar, se
+verifica daca o cumulare cu solutia precedenta aduce avantaje si se stabileste
+solutia din prima faza daca aceea este mai buna, altfel solutia finala va fi
+atribuita cumulului de actiuni. Dupa iterarea tabelei se va alege maximul de pe
+linie a tabelei si se va scrie in output. 
+
+Avand for-ul de la citire cu complexitatea O(n), cele 3 for-uri pentru tabelul
+de programare dinamica de complexitate O(n * bani * max_loss) si for-urile
+pentru maxim cu complexitatea O(bani * max_loss) avem O(2 * n * bani * max_loss)
+= O(n * bani * max_loss). 
+
+
+Task 3
+
+Algoritmul are la baza o idee destul de simplista. Se gaseste indexul
+elementului minim din vectorul muntilor exceptand cele doua capete si apoi se
+itereaza din extremitati spre mijloc in acelasi timp printr-un while. Pentru
+partea stanga se verifica daca muntele actual este mai inalt decat precedentul,
+iar pentru partea dreapta daca muntele actual este mai inalt decat urmatorul.
+In caz afirmativ se vor reduce muntii de la pasul actual si numarul de ore va
+fi actualizat. Dupa iterare se scrie rezultatul in output.
+
+Complexitatea algorimtului este O(n) intrucat avem un for pana la n la citire
+care are O(n) si un while care va itera practic prin vectorul de n elemente de
+la extremitati la indexul elementului minim.
+
+
+Task 4
+
+Pentru acest task s-a folosit programarea dinamica. Dupa citirea datelor de intrare
+si alocarea tuturor vectorilor se itereaza prin tabela dp. La fiecare element din
+tabel se verifica printr-un if daca se poate sapa de j ori prin munte. Daca se
+poate se compara toate posibilitatile muntelui actual cu cel precedent. Se verifica
+daca nivelul muntelui sapat de j ori este diferit de nivelul muntelui nesapat,
+sapat odata sau de doua ori si se salveaza in min_cost minimul dintre costul actual
+si costul total pentru a ajunge la situatia descrisa in if. Dupa verificarea celor
+3 situatii se adauga la costul pentru saparea muntelui i de j ori plus costul minim
+ce reprezinta practic costul precedent. Dupa completarea tabelei se itereaza pe
+ultima linie a tabelului si se memoreaza costul minim care va fi afisat la output.
+
+Complexitatea acestui algoritm este O(n) datorita celor doua for-uri folosite
+pentru popularea tabelei dp. Primul for este de la 1 la n, ceea ce aduce o complexitate
+O(n), iar for-ul cu j din interiorul for-ului cu i este de la 0 la 2, ceea ce
+inseamna O(3). De asemenea avem si for-ul la citire de la 1 la n care are si el
+complexitate O(n). Restul instructiunilor se fac in O(1). Deci O(n) + O(3 * n)
+este egal cu O(4 * n) = O(n).
+
+!! Sursa de inspiratie pentru acest task:
+https://www.geeksforgeeks.org/minimize-the-cost-to-make-all-the-adjacent-elements-distinct-in-an-array/
+(accesat la data de 19 aprilie 2021 ora 18:00)
+
+Task 5
+
+Pentru 5 s-a ales ca metoda de abordare exponentierea matricelor. As vrea totusi
+sa mentionez etapele prin care am trecut ca sa inteleg aceasta problema. Intr-o
+prima etapa am generat toate multimile pana la n = 11 si mi-am dat seama ca pana
+la n = 4 avem doar cazuri de baza deoarece acestea se formeaza doar pe baza
+colectiei precedente de multimi. La n > 4, am putea lua ca exemplu n = 5. In acest
+caz s-ar lua toate multimile de la n = 4 si s-ar mai adauga un 5 la ele plus
+multimea {5}, asta inseamna numarul multimilor de la n = 4 plus inca o submultime.
+In plus la acest numar se mai adauga si multimile de la n = 2, in care s-ar lua
+practic multimile si s-ar inlocui ultima cifra, adica 2 cu 5 si se adauga si aceste
+multimi la numar si la final se mai adauga si numarul multimilor la iteratiile
+precedente. 170 de multimi mai incolo, dupa ce am iterat si n = 11. Am constatat
+ca numarul submultimilor pentru n = i, sau nr[i] = nr[i - 1] + nr[i - 1] - nr[i - 2] +
+nr[i - 3] - nr[i - 4] + 1 - 1, unde un nr[i - 1] este numarul multimilor de la iteratiile
+precedente, nr[i - 1] - nr[i - 2] de la numarul submultimilor de la iteratia
+precedenta, aceea la care adaugam i si nr[i - 3] - nr[i - 4] de la numarul
+submultimilor la care se inlocuieste ultima cifra din multimi cu i. + 1 si -1
+sunt de la submultimile de un element. Deci formula de recurenta este
+nr[i] = 2 * nr[i - 1] - nr[i - 2] + nr[i - 3] - nr[i - 4];
+
+Implementand recurenta printr-un algoritm cu complexitate O(n) am reusit sa obtin
+rezultate doar la primele 10 teste. Pentru a rezolva aceasta problema am folosit 
+algoritmul de exponentiere logaritmica pe matrice de pe OCW(am sa pun link-ul
+mai jos). Utilizand acest algoritm cu schimbari la matricea C, la cazurile de baza,
+formula pentru solutie, o gramada de schimbari in long long si un if la functia
+multiply_matrix pentru ca am coeficienti negativi in formula de recurenta si
+trebuia adaptat modul de calcul al elementelor aplicarea restului impartirii
+la MOD in functie de semn. In final toate teste mi-au mers.
+
+Complexitatea algoritmului este O(4^3 * log n) = O(64 * log n) = O(log n) deoarece
+facem doar log n pasi si pentru ca avem un numar fix si relativ mic de pasi fata
+de alte probleme complexitatea finala va fi O(log n).
+
+!! Sursa de inspiratie pentru acest task: 
+https://ocw.cs.pub.ro/courses/pa/laboratoare/laborator-04
+(accesat la data de 21 aprilie 2021 ora 20:43)
+
+
+!!! As dori, va rog frumos, daca primesc TLE la un test pentru ca checker-ul   !!!
+!!! este foarte aglomerat sa imi repuneti submisia dupa ce se mai linisteste   !!!
+!!! lumea de la pus submisii. La ultima submisie pe VM mi-au picat niste teste !!!
+!!! pe vm (TLE), dar merg local pe o masina virtuala cu 2 core-uri de 2,4GHz   !!!
+!!! adica presupun ca intelegeti ce zic :)))). Va multumesc!                   !!!

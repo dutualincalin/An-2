@@ -1,0 +1,43 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+	Tema 2 PA
+	
+Aceasta tema contine:
+- poduri.cpp
+- Makefile
+- README
+
+
+Task 1
+
+Pentru task-ul 1 s-au aplicat principiile algoritmului lui Lee care nu este
+altceva decat un BFS care foloseste o matrice de distante pentru a stabili
+drumul minim.
+
+Pentru acest caz s-au luat doua matrice: una pentru retinerea literelor pentru
+fiecare camp al matricei initializata cu "+" si una pentru distante initializata
+cu -1. Se citesc tipurile de poduri cu numerotarea de la 1, se seteaza distanta
+sursei si se adauga coordonatele sursei in doua cozi, una pentru coordonatele x
+si alta pentru coordonatele y si apoi se incepe stadiul de calcul al distantei
+minime.
+
+Se face un while pana cand ambele cozi sunt goale (este suficient ca una din ele
+sas fie goala) si in interior se scod coordonatele primului element din coada, se
+verifica ce tip de pod este si pentru fiecare tip de pod, se verifica daca este la
+una din margini, caz in care avem iesire, deci vom retine distanta pana la iesire
+intr-o variabila d numai daca distanta actuala e mai mica decat distanta precedenta
+retinuta in d.
+
+Urmeaza apoi adaugarea vecinilor. In functie de tipul podului se aleg vecinii
+care nu sunt marcati cu punct si care sunt poduri (sunt inafara matricei de
+poduri), se actualizeaza distantele vecinilor in matricea de distante si li se
+adauga coordonatele in cele doua cozi. La finalul while-ului se elimina nodul sursa
+din cele doua cozi, iar la finalul programului se scrie rezultatul final in output.
+
+
+Bibliografie
+
+Lee's algorithm Explained (Ultima data vizualizat la data de 29 mai 2021)
+Link: https://www.freecodecamp.org/news/lees-algorithm-explained-with-examples/
+

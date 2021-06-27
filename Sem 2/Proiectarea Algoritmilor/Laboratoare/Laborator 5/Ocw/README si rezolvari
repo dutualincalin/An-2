@@ -1,0 +1,48 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+			Laboratorul 5
+
+
+Laboratorul contine:
+- folderul cpp cu implementarile celor 2 probleme
+- folderul java care nu contine nicio implementare
+- folderul tests cu testele pentru fiecare problema
+- check
+- README si rezolvari
+- true.png
+- false.png
+
+Exercitii:
+
+1)Complexitatea algoritmului pentru varianta cu programare dinamica din punct
+de vedere temporal este O(n) datorita for-urilor de la 1 la n, iar din punct de
+vedere temporal este tot O(n) datorita declararii in memorie a vectorului dp de
+dimensiune n x 2.
+
+
+Pentru varianta matematica am reusit sa calculez recurentele si sa gasesc termenul
+general, dar nu am reusit sa fac o implementare..Asta este ce am gasit
+
+Fie p - numarul submultimilor cu suma para si i - numarul submultimilor cu suma impara:
+
+	   |2^(n-1) - 1 pentru v[n] par;
+p(n) = |
+	   |suma de la k = 1 la n - 1 din i(k) pentru v[n] impar;
+
+
+	   |2^(n-1) pentru v[n] par;
+i(n) = |
+	   |(suma de la k = 1 la n - 1 din p(k)) - 1 pentru v[n] impar;
+
+Desi neimplementata, complexitatea algoritmului din punct de vedere temporal ar
+fi O(n) pentru iterarea prin fiecare element, iar din punct de vedere temporal
+complexitatea ar putea fi O(1) deoarece nu ar mai fi necesar sa declaram alte
+solutii in afara de 2 variabile care sa retina numarul submultimilor cu suma para
+si numarul submultimilor cu suma impara.
+
+
+2)Pentru exercitiul 2 am pus si pozele true.png si false.png pentru a arata cum am
+implementat programul. Efectiv am aplicat formulele de acolo. Insa cu toata
+implementarea de acolo nu imi trece ultimul test, testul 10. Am o marja de eroare
+de 1,12% ca sa zic asa.

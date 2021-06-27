@@ -1,0 +1,138 @@
+Nume: Dutu Alin Calin
+Grupa: 323CD
+
+
+			Tema 1 PC	
+	
+Tema a fost rulata pe o masina virtuala de Ubuntu 20.04.2 LTS cu 6 giga de RAM
+si cu un maxim de 4,8 GHZ pe procesor.
+
+
+Tema a fost scrisa in mare in fisierul router.c unde se afla majoritatea
+functiilor esentiale pentru rezolvarea acestei teme. De asemenea au mai fost
+adaugate noi structuri pe langa cele deja declarate care vor fi folosite pentru
+definierea tabelelor de rutare si ARP. Acestea sunt:
+- arp_table_line    -> Structura pentru o linie a tabelei ARP
+- arp_table         -> Structura pentru tabela ARP
+- route_table_line  -> Structura pentru o linie a tabelei de rutare
+- route_table       -> Structura pentru tabela de rutare
+
+Structurile se pot gasi in skel.h impreuna cu semnaturile functiile ip_checksum si
+build_ethhdr care se gasesc in skel.c si vor fi folosite si in router.c.
+
+
+In router.c s-au creat urmatoarele functii:
+1) read_route_table - Functie de creare a tabelei de rutare
+Aceasta aloca o noua tabela de rutare care are o capacitate de un milion de
+de intrari. Se citeste fisierul care contine tabela de rutare pana se goleste
+si se adauga la fiecare citire cate o linie de tabela urmand sa se incrementeze
+si marimea tabelului. Functia se incheie cu returnarea tabelei de rutare.
+
+2) merger - Functie folosita pentru aplicarea algoritmului de Merge Sort
+Functia are la baza conceptul de Divide et Impera/Divide and Conqueror,
+divide de la faptul ca imparte continutul tabelei in doua bucati si impera
+pentu ca le uneste la final in functie de ordinea prefixelor liniilor in ordine
+inversa. Oridine inversa deoarece sortarea intr-o ordine normala ar fi fost
+descrescatoare. La unirea celor doi vectori, dupa ce s-a golit un vector se
+adauga si restul elementelor din celalalt vector.
+
+3) sort_table - Functie folosita pentru gestionarea functiei merge
+Functia merge foloseste conceptul de Divide et Impera la nivelul portiunii din
+tabela care i se ofera, insa sort_table gestioneaza acest concept astfel incat
+merge sa fie folosit pe tot tabelul de rutare. Functia imparte tabela in doua
+si o sorteaza folosind functia merge.
+
+4)route_finder - Functie care aplica algoritmul de matching pe o adresa ip
+Si aceasta functie ca si precedentele foloseste tot Divide et Impera sub forma
+de cautare binar care are complexitatea in cazul cel mai rau O(n), insa tabela
+de rutare este sortata ceea ce inseamna ca complexitatea a scazut la O(log n).
+Functia verifica daca inceputul e mai mic sau egal cu sfarsitul vectorului si
+in acest caz se verifica daca linia din miijloc face matching cu adresa ip si
+in caz pozitiv se trimite ca rezultat. Altfel, in functie de prefix, se va alege
+fie partea dreapta, fie partea stanga a vectorului. Verificarea prefixelor se
+va face din nou in ordinea inversa a prefixelor.
+
+5)get_arp_table - Functie care aloca dinamic o tabela arp cu capacitatea de 50 
+de mii de elemente.
+
+6)add_arp_entry - Functie care aloca o noua linie arp, o populeaza cu datele
+date ca parametrii de intrare si o pune in tabela arp.
+
+7)arp_mac_finder - Functie care va returna o adresa mac pentru o adresa ip
+Aceasta functie iteraza prin tabela arp pana cand gaseste o potrivire de
+adrese ip, caz in care se returneaza mac-ul respectiv, iar daca nu se gaseste
+returneaza null.
+
+8)destination_router_ip - Verifica daca adresa ip este o adresa a router-ului
+
+
+
+Si acum partea interesanta. In functia main se gaseste implementarea tuturor
+protocoalelor necesare pentru implementarea temei. Se incepe cu declararea si
+intializarea tabelelor si tuturor variabilelor necesare urmata de aplicarea
+sortarii pe tabela de rutare. Se declara si se aloca doi vectori: r_ips pentru
+adresele ip ale ruterului si r_macs pentru adresele mac ale ruterului. Acestea
+se vor umple folosind functiile get_interface_ip si get_interface_mac aflate
+intr-un for care itereaza prin toate interfetele. Toate acestea se intampla la
+initializarea ruterului. Odata intializat de da drumul la receptionarea pachetelor.
+Pentru toate pachetele se extrag headerele pentru protocoalele Ethernet, ARP,
+IPv4 si ICMP.
+
+Urmeaza procesul de dirijare a pachetelor care verifica intr-un
+prim caz daca pachetul este de tip ICMP, daca da atunci se verifica daca
+destinatia este chiar ruterul si daca si asta este adevarat, se mai face o ultima
+verificare sa se vada daca pachetul este de tip Echo Request. In caz afirmativ
+se trimite raspuns catre sursa care a trimis request-ul folosind ca adresa sursa
+adresa destinatie a requestului, ca adresa destinatie adresa sursa a request-ului
+si in acelasi mod si pentru protocolul Ethernet. Li se atribuie campurilor type
+si code valoarea 0 deoarece acestea arata ca pachetul e de tip ICMP Echo Reply,
+iar restul valorilor se iau din pachetul vechi. Totusi, in cazul in care pachetul
+nu e de tip Request, dar e destinat ruter-ului acesta va fi aruncat in neant unde
+nimeni nu stie ce se va intampla cu el :).
+
+Partea a doua a dirijarii vizeaza pachetele ARP. Se verifica daca pachetul este
+ARP prin header-ul extras. Daca are continut inseamna ca pachetul este de tip ARP.
+Astfel exista doua tipuri de pachete procesate de ruter: ARP Request si ARP Reply.
+Pentru ARP Request se verifica daca acest pachet este destinat ruterului si trimite
+un ARP reply care este completat in aceeasi maniera cu pachetul de ICMP Reply din
+punctul de vedere al protocoalelor IP si Ethernet. Ce se mai schimba este tipul 
+pachetului care este de tip 2 scris in network order. In final se trimite pachetul.
+Pentru ARP Reply se va adauga in tabela ARP adresele mac si ip ale pachetului
+de tip ARP Reply intrucat ARP reply este raspuns la un broadcast si asta inseamna
+ca aceasta intrare de tabela nu exista in tabela arp. Urmeaza trimiterea pachetului
+din coada. Bazandu-ma pe faptul ca orice ARP request va primi imediat si un ARP
+reply care va fi imediat procesat pot folosi coada aceasta ca si cand ar fi o multime
+de un singur pachet. Daca exista pachet in queue, il scot din queue, ii extrag
+headerele IP si ETHERNET si caut ruta cea mai buna, pun in ethernet la shost mac-ul
+mac-ul intefetei gasite cu algoritmul de matching, iar la dhost, shost-ul arp
+reply-ului si trimit pachetul.
+
+In acest moment urmeaza efectuarea de verificari a pachetului in care algoritmul
+de dirijare se va uita la checksum si ttl ca sa vada daca sunt bune. Daca ttl
+nu e bun, atunci se va trimite un mesaj de eroare de tip Time Exceeded(type 11,
+code 0), iar daca checksum este gresit pachetul va fi aruncat in adancurile
+uitarii :).
+
+Dupa aceste verificari se decrementeaza ttl si se recalculeaza checksum-ul packetului
+urmat de aplicarea algoritmului de matching pe ip-ul destinatie al pachetului.
+Se verifica daca s-a gasit ruta perfecta si apoi se cauta adresa mac a next_hop-ului.
+In cazul in care o gaseste, protocolul Ethernet al pachetului va avea ca sursa
+adresa MAC a interfetei si ca destinatie adresa MAC a next hop-ului, iar dupa
+asta pachetul va fi trimis. Daca nu se gaseste MAC pentru next hop, va trebui
+trimis un ARP Request care va cere adresa MAC next-hop-ului care va fi procesata
+la primirea ARP reply-ului. Pentru asta protocolul Ethernet va avea ca destinatie
+o adresa de Broadcast, la sursa va avea MAC-ul interfetei, iar tipul Ehternet-ului
+va fi pentru un pachet ARP. Pentru adaugarea in coada a pachetului actual este
+nevoie de o copie a acetuia care urmeaza a fi inserata in coada. In final se trimite
+ARP Request-ul si se da drop la pachetul original urmand mai apoi sa se proceseze
+un ARP Reply.
+
+
+
+Surse de inspiratie:
+
+Pentru algoritmul Merge Sort am apelat la Geeks for Geeks de unde am si preluat
+algoritmul si l-am adaptat la ce aveam nevoie pentru sortarea corecta si rapida
+a tabelului de rutare.
+
+Site: https://www.geeksforgeeks.org/merge-sort/

@@ -1,0 +1,24 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+Aceasta tema are in componenta sa:
+- otp.asm
+- caesar.asm
+- vigenere.asm
+- my_strstr.asm
+- bin_to_hex.asm
+- README.txt
+
+Fiecare program a fost realizat cu scopul realizarii functionalitatii cerute in cerinta acestei teme. Programele au fost realizate astfel:
+
+1) otp.asm - Se ia litera cu cheia respectiva si se face xor intre ele. Rezultatul va fi returnat la finalul programului
+
+2) caesar.asm - Se ia fiecare litera si se aduna cu cheia in cod ASCII. In cazul in care rezultatul e prea mare, se va scadea in cod ASCII cu numarul literelor din alfabet. Caracterele care nu sunt litere vor fi ignorate.
+
+3) vigenere.asm - Se ia fiecare litera cu cheia ei precizand faptul ca in cazul in care cheia nu e suficient de mare, cheia se va reitera astfel incat nicio litera sa nu ramana fara cheie. Se adauga cheia si se scade 65 (litera A in ASCII) pentru a se aduna litera cu pozitia cheii in alfabet. Se verfica daca rezultatul e prea mare si se fac ajustari si in final se returneaza noul rezultat
+
+4) my_strstr.asm - Se trece prin string litera cu litera pana cand se gaseste secventa. Pozitia ceruta se calculeaza scazand din lungimea intregului string, numarul literelor ramase si adunand cu 1 daca secventa este gasita. Altfel pozitia se calculeaza ca fiind lungimea sirului + 1. In final, se returneaza pozitia ceruta.
+
+5) bin_to_hex.asm - Se preia cate o secventa de 4 biti si se transforma in baza 16 (Se ia de la dreapta la stanga pana cand se trece prin toata secventa binara, iar rezultatul se trece in hexa_value. In aceast stadiu insa, secventa hexazecimala e scrisa invers, de aceea se mai apeleaza si la un swipe care face interschimbare intre caractere. Rezultatul final este scris corect si va fi returnat.
+
+Nota: As dori sa mentionez faptul ca aceasta tema primeste 90/90 de puncte pe checker-ul local si daca nu functioneaza vmchecker-ul atunci doresc rularea acesteia pe checker-ul local.

@@ -1,0 +1,4 @@
+Test print args containing spaces
+%s %s
+Ana si
+\t Bob

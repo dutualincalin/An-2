@@ -1,0 +1,13 @@
+title Visitor Pattern
+participant Client 
+participant Collection
+participant "Concrete\nObject1"
+participant "Concrete\nVisitor1"
+
+Client ->  Visitor: create
+Client -> "Concrete\nVisitor1": create
+Client -> Collection: accept(v:Visitor)
+Collection->"Concrete\nObject1": accept(v:Visitor)
+"Concrete\nObject1"-> "Concrete\nVisitor1": v.visit(this)
+
+

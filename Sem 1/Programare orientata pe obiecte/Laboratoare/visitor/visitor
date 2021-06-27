@@ -1,0 +1,463 @@
+= More OOP & Visitor pattern =
+
+== Obiective ==
+
+Scopul acestui laborator este aprofundarea noțiunilor de programare orientată pe obiecte întalnite in laboratoarele precedente, prezentarea design pattern-ului Visitor și familiarizarea cu situațiile în care acesta este util de aplicat.
+
+
+== Overloading ==
+
+Supraîncarcarea se referă la posibilitatea de a avea într-o clasă mai multe metode cu același nume, dar implementari diferite. În Java, compilatorul poate distinge între metode pe baza semnăturii lor, acesta fiind mecanismul din spatele supraîncărcarii.
+
+**Semnătura (signature)** unei metode constă în:
+  * numele metodei
+  * numărul și tipul parametrilor
+
+Opțional, pe lângă semnătura metodei poate fi menționat și tipul excepțiilor ce pot fi aruncate din codul acesteia.
+
+<note important>
+Tipul de return al unei metode nu face parte din semnătura acesteia. Din acest motiv simpla modificare a tipului de return al unei metode nu este suficientă pentru supraîncărcare. Ceea ce vom primi este o eroare de compilare.
+<code java>
+public class TRex {
+    public void eat(Triceratops victim) {
+        System.out.println("Take 5 huge bites");
+    }
+
+    public boolean eat(Triceratops victim) {
+        boolean satisfaction = false;
+        if (victim.isJuicy()) {
+            System.out.println("Eat and be satisfied");
+            satisfaction = true;
+        }
+        return satisfaction;
+    }
+
+    // Error "Duplicate method eat(Triceratops)" in type TRex
+</code>
+Observăm de asemenea că la compilare nu se ține cont de numele dat parametrilor. Astfel modificarea acestuia din //victim// în //dino//, spre exemplu, nu constituie o supraîncărcare validă.
+</note>
+
+Mai jos avem un exemplu valid de supraîncărcare pentru metoda // eat//:
+<code java>
+public class TRex {
+
+    public void eat(Triceratops victim) {
+        System.out.println("Take 5 huge bites");
+    }
+
+    public void eat(Dromaeosaurus victim) {                  // parametru cu tip diferit
+        System.out.println("Take 1 single bite");
+    }
+
+    public void eat(Human firstCourse, Human secondCourse) {  // numar si tipuri diferite de parametrii
+        System.out.println("No humans to eat at the time");
+    }
+
+    public int eat(Grass desert) {                             // parametru cu tip diferit, return type este irelevant
+        System.out.println("Rather starve");
+        return 0;
+    }
+
+    public static void main(String [] args) {
+        TRex john = new TRex();
+
+        john.eat(new Triceratops());                     // "Take 5 huge bites"
+        john.eat(new Dromaeosaurus());                   // "Take 1 single bite"
+        john.eat(new Human("Ana"), new Human("Andrei")); // "No humans to eat at the time"
+        john.eat(new Grass());                           // "Rather starve"
+    }
+}
+</code>
+
+O clasă poate supraîncărca metodele moștenite. Constructorii pot fi supraîncărcați.
+
+**Supraîncărcarea are loc la compilare**, motiv pentru care mai este numită și polimorfism static (//compile time polymorphism//). În aceasta fază compilatorul decide ce metodă este apelată pe baza __tipului referinței__ și prin analiza numelui și a listei de parametri. La runtime, când este întalnit apelul unei metode supraîncărcate, deja se știe unde este codul care trebuie executat.
+
+
+== Overriding ==
+
+Suprascrierea se referă la redefinirea metodelor existente în clasa părinte de către clasa copil în vederea specializării acestora. Metodele din clasa parinte nu sunt modificate. Putem suprascrie doar metodele vizibile pe lanțul de moștenire (public, protected). O metodă din clasa copil suprascrie metoda din clasa părinte dacă are același tip de return și aceeași semnatură (nume și parametri).
+
+Spre deosebire de supraîncărcare care face acest lucru la compilare, în cazul suprascrierii se determină ce metodă va fi apelată, în mod dinamic, **la runtime**. Explicația este că decizia se face pe baza__ tipului obiectului__ care apelează metoda, deci a instanței (cunoscută la runtime). Din acest motiv, suprascrierea este cunoscută și ca polimorfism dinamic (''Runtime polymorphism''). Polimorfismul reprezintă abilitatea unei clase să se comporte ca o altă clasă de pe lanțul de moștenire, și de aceea conceptul de suprascriere a metodelor este foarte strâns legat. Supraîncărcarea, fiind la compile-time, nu are legătură cu acest polimorfism dinamic.
+
+<note important> La apelarea unei metode suprascrise, Java se uită la tipul intern al obiectului pentru care este apelată metoda, NU la referință. Astfel dacă referința are tipul clasei părinte, dar tipul este al clasei copil, JVM va apela metoda din clasa copil. </note>
+
+Câteva reguli pentru suprascriere sunt:
+  * metoda suprascrisă are același tip de return și semnatură ca metoda inițială
+  * putem avea un tip de return diferit de cel al metodei inițiale, atâta timp cat este un tip ce moștenește tipul de return al metodei inițiale
+  * specificatorul de access al metodei suprascrise nu poate fi mai restrictiv decât cel al metodei inițiale
+  * nu poate arunca mai multe excepții sau excepții mai generale, poate însă arunca mai puține sau mai particulare sau excepții unchecked (de runtime)
+  * metodele de tip ''static'' și ''final'' nu pot fi suprascrise
+  * constructorii nu pot fi suprascriși
+
+În exemplul de mai jos, metodele //purr// și //getFeatures// au fost suprascrise de tipul //GrumpyCat//.
+<code java>
+class CatFeatures { }
+class GrumpyCatFeatures extends CatFeatures { }
+class GrumpyFeatures { }
+
+class Cat {
+
+	public void purr() {
+		System.out.println("purrrr");
+	}
+
+	public CatFeatures getFeatures() {
+		System.out.println("Cat getFeatures");
+		return new CatFeatures();
+	}
+
+	public final void die() {
+		System.out.println("Dying! frown emoticon");
+	}
+}
+
+class GrumpyCat extends Cat {
+        @Override
+	public void purr() {
+		System.out.println("NO!");
+	}
+
+        @Override
+	public GrumpyCatFeatures getFeatures() {
+		System.out.println("Grumpy getFeatures");
+		return new GrumpyCatFeatures();
+	}
+
+        // compiler would complain if you included @Override here
+        //@Override
+	//public void die() { } // Cannot override the final method from Cat
+
+	public static void main(String [] args) {
+		ArrayList<Cat> cats = new ArrayList<Cat>();
+		cats.add(new Cat());
+		cats.add(new GrumpyCat());
+
+		for (Cat c : cats) {
+			c.purr();
+			c.die();
+			c.getFeatures();
+		}
+	}
+}
+
+</code>
+
+
+<note important>**Adnotarea** (**Annotation**) ''@Override'' este complet opțională. Totuși este indicat să o includeți mereu când suprascrieți o metodă. Motivele sunt simple:
+  * Compilatorul vă va anunța printr-o eroare dacă ați greșit numele metodei sau tipul parametrilor și această nouă metodă nu suprascrie de fapt o metodă a părintelui
+  * Face codul vostru mai ușor de citit, pentru că devine evident când o metodă suprascrie o altă metodă
+</note>
+
+
+== Cuvântul cheie super și overriding ==
+
+În laboratoarele trecute am folosit cuvântul cheie //super// pentru a invoca un anumit constructor din clasa părinte.
+
+O alta utilizare a lui //super// este de a apela in mod explicit metoda din clasa părinte în cazul metodelor suprascrise.
+
+Rescriem metoda ''purr()'' din clasa ''GrumpyCat'' astfel:
+<code java>
+@Override
+public void purr() {
+    super.purr();
+    System.out.println("NO!");
+}
+</code>
+La apelul metodei pe o instanță a clasei'' GrumpyCat'' output-ul va fi:
+<code>
+purrrr
+NO!
+</code>
+== Visitor ==
+
+Design pattern-urile reprezintă soluții generale și reutilizabile ale unei probleme comune în design-ul software. Un design pattern este o descriere a soluției sau un template ce poate fi aplicat pentru rezolvarea problemei, nu o bucata de cod ce poate fi aplicata direct. În general pattern-urile orientate pe obiect arată relațiile și interacțiunile dintre clase sau obiecte, fără a specifica însă forma finală a claselor sau a obiectelor implicate.
+
+Design pattern-ul //Visitor// oferă o modalitate de a //separa un algoritm de structura pe care acesta operează//. Avantajul constă în faptul că putem adauga noi posibilităţi de prelucrare a structurii, fără să o modificăm. Extrapolând, folosind //Visitor//, putem adăuga noi funcţii care realizează prelucrări asupra unei familii de clase, fără a modifica efectiv structura claselor.
+
+Acest pattern este comportamental (//behavioral//) pentru că definește modalități de comunicare între obiecte.
+
+//Cum recunoaștem o situație în care Visitor e aplicabil?//
+* Mai multe obiecte și operații pentru acestea
+* Schimbarea/adăugarea operațiilor fără a modifica clasele
+* Elemente heterogene - tipuri diferite de obiecte pe care se aplică mai multe operații
+
+Decizia de utilizare a pattern-ului Visitor este în strânsă legătură cu __stabilitatea ierarhiilor de clase prelucrate__: dacă noi clase copil sunt adăugate rar, atunci se poate aplica acest pattern (într-o manieră eficientă), altfel nu este indicat.
+
+=== Structură ===
+
+<imgcaption image1|Componente pattern Visitor >{{ .:visitor:visitor.png?680 | }}</imgcaption>
+
+**Visitor** - o interfață pentru operația aplicată
+**Visitable** - o interfață pentru obiecte pe care pot fi aplicate operațiile (în diagramă este numită ''Element'')
+   * metoda ''accept'' e independentă de tipul concret al Visitor-ului
+   * în ''accept'' se folosește obiectul de tip Visitor
+Pentru fiecare algoritm/operație ce trebuie aplicată, se implementează clase de tip Visitor. În fiecare obiect de tip //Visitor// trebuie să implementăm metode care aplică operația pentru fiecare tip de element vizitabil.
+
+<note tip>În <imgref image2> este reprezentat **flow-ul aplicării acestui pattern**:
+  -  Clientul este cel care folosește o colecție de obiecte de unul sau mai multe tipuri, și dorește să aplice pe acestea diferite operații (în exercițiile din laborator clientul este practic programul vostru de test - main-ul). Clientul folosește obiecte //Visitor// create pentru fiecare operație necesară.
+  - Clientul parcurge colecția și în loc să aplice operaţia direct pe fiecare obiect de tip //Element//, îi oferă acestuia un obiect de tip //Visitor//.
+  - Obiectul de tip //Element// apelează metoda de "vizitare" oferită de //Visitor//.
+  - Pe obiectul //Visitor// se apelează metoda //visit// corespunzătoare obiectului, iar în ea se efectuează operația. (:!: în Visitor folosim conceptul de //overloading// pentru fiecare metodă //visit//)
+</note>
+
+<imgcaption image2|Interacțiunile dintre componentele pattern-ului Visitor>{{ .:visitor:visitor-flow.png |}}</imgcaption>
+
+<note important>
+
+**Visitor și structurile de date**
+
+Aparent, folosirea lui //accept// este artificială. De ce nu declanşăm vizitarea unui obiect, apelând **direct** //v.visit(e)// atunci când dorim vizitarea unui obiect oarecare? Răspunsul vine însă chiar din situaţiile în care vrem să folosim pattern-ul; vrem să lăsăm structura internă a colecţiei să facă aplicarea vizitatorilor. Cu alte cuvinte vizitatorul se ocupă de fiecare obiect în parte, iar colecţia îl "plimbă" prin elementele sale. De exemplu, când dorim să vizităm un arbore:
+  * declanşarea vizitării se va face printr-un apel ''accept'' pe un prim obiect (e.g. rădacina arborelui)
+  * elementul curent este vizitat, prin apelul ''v.visit(this)''
+  * pe lângă vizitarea elementului curent, este necesar sa declanşăm vizitarea //tuturor elementelor accesibile din elementul curent// (e.g. nodurile-copil din arbore etc). Realizăm acest lucru apelând ''accept'' pe //fiecare// dintre aceste elemente. Acest comportament depinde de logica structurii.
+</note>
+
+=== Scenariu Visitor ===
+
+Pentru a înţelege mai bine motivaţia din spatele design-pattern-ului //Visitor//, să considerăm următorul exemplu.
+
+==== Before ====
+
+Fie ierarhia de mai jos, ce defineşte un angajat (//Employee//) şi un şef (//Manager//), văzut, de asemenea, ca un angajat:
+
+<code java Test.java>
+class Employee {
+        String  name;
+        float   salary;
+        public Employee(String name, float salary) {
+                this.name       = name;
+                this.salary     = salary;
+        }
+        public String getName() {
+                return name;
+        }
+        public float getSalary() {
+                return salary;
+        }
+}
+class Manager extends Employee {
+        float bonus;
+        public Manager(String name, float salary) {
+                super(name, salary);
+                bonus = 0;
+        }
+        public float getBonus() {
+                return bonus;
+        }
+        public void setBonus(float bonus) {
+                this.bonus = bonus;
+        }
+}
+public class Test {
+        public static void main(String[] args) {
+                Manager manager;
+                List<Employee> employees = new LinkedList<Employee>();
+                employees.add(new Employee("Alice", 20));
+                employees.add(manager= new Manager("Bob", 1000));
+                manager.setBonus(100);
+        }
+}
+</code>
+
+Ne interesează să interogăm toţi angajaţii noştri asupra //venitului lor total//. Observăm că:
+  * anagajaţii obişnuiţi au salariul ca unic venit
+  * şefii posedă, pe lângă salariu, un posibil bonus
+
+Varianta la îndemână ar fi să definim, în fiecare din cele doua clase, câte o metodă, //getTotalRevenue()//, care întoarce salariul pentru angajaţi, respectiv suma dintre salariu şi bonus pentru şefi:
+
+<code java>
+class Employee {
+        ...
+        public float getTotalRevenue() {
+                return salary;
+        }
+}
+class Manager extends Employee {
+        ...
+        public float getTotalRevenue() {
+                return salary + bonus;
+        }
+}
+</code>
+
+Acum ne interesează să calculăm //procentul mediu// pe care îl reprezintă bonusul din venitul şefilor, luându-se în considerare doar bonusurile pozitive. Avem două posibilităţi:
+  * Definim câte o metodă, //getBonusPercentage()//, care în //Employee// întoarce mereu 0, iar în //Manager// raportul real. **Dezavantajul** constă în adăugarea în interfeţe a unor funcţii prea specializate, de detalii ce ţin doar de unele implementări ale acestora.
+  * Parcurgem lista de angajaţi, //testăm//, la fiecare pas, tipul angajatului, folosind ''instanceof'', şi calculăm, doar pentru şefi, raportul solicitat. **Dezavantajul** este tratarea într-o manieră //neuniformă// a structurii noastre, cu evidenţierea particularităţilor fiecărei clase.
+
+Datorită acestor particularităţi (în cazul nostru, modalităţile de calcul al venitului, respectiv procentului mediu), constatăm că ar fi foarte utilă **izolarea implementărilor specifice** ale algoritmului (în cazul nostru, scrierea unei funcţii în fiecare clasă). Acest lucru conduce, însă, la introducerea unei metode noi în //fiecare// din clasele antrenate in prelucrări, de fiecare dată cand vrem să punem la dispoziţie o nouă operaţie. Obţinem următoarele dezavantaje:
+  * în cazul unui număr mare de operaţii, **interfeţele claselor se aglomerează excesiv** şi se ascunde funcţionalitatea //de bază// a acestora
+  * codul din interiorul clasei (care servea functionalităţii primare a acesteia) va fi amestecat cu cel necesar algoritmilor de prelucrare, devenind mai greu de parcurs şi întreţinut
+  * în cazul în care nu avem acces la codul claselor, singura modalitate de adăugare de funcţionalitate este extinderea
+
+În final, tragem concluzia că este de dorit să **izolăm algoritmii de clasele pe care le prelucrează**. O primă idee se referă la utilizarea //metodelor statice//. Dezavantajul acestora este că nu pot reţine, într-un mod elegant, informaţie de stare din timpul prelucrării. De exemplu, dacă structura noastră ar fi arborescentă (recursivă), în sensul că o instanţă //Manager// ar putea ţine referinţe la alte instanţe //Manager//, ce reprezintă şefii ierarhic inferiori, o funcţie de prelucrare ar trebui să menţină o informaţie parţială de stare (precum suma procentelor calculate până într-un anumit moment) sub forma unor parametri furnizaţi apelului recursiv:
+<code java>
+class Manager extends Employee {
+        ...
+        public float getPercentage(float sum, int n) {
+                float f = bonus / getTotalRevenue();
+                if (f > 0)
+                        return inferiorManager.getPercentage(sum + f, n + 1); // trimite mai departe cererea catre nivelul inferior
+                return inferiorManager.getPercentage(sum, n);
+        }
+}
+</code>
+
+O abordare mai bună ar fi:
+  * conceperea claselor cu **posibilitatea de primire/ataşare a unor obiecte-algoritm**, care definesc operaţiile dorite
+  * definirea unor **clase algoritm** care vor __//**vizita**//__ structura noastră de date, vor //efectua// prelucrările specifice fiecărei clase, având, totodată, //posibilitatea de încapsulare a unor informaţii de stare// (cum sunt suma şi numărul din exemplul anterior)
+
+==== After ====
+Conform observațiilor precedente, structura programului Employee-Manager devine:
+
+<code java Test.java>
+interface Visitor {
+        public void visit(Employee employee);
+        public void visit(Manager manager);
+}
+interface Visitable {
+        public void accept(Visitor v);
+}
+class Employee implements Visitable {
+        ...
+        public void accept(Visitor v) {
+                v.visit(this);
+        }
+}
+class Manager extends Employee {
+        ...
+        public void accept(Visitor v) {
+                v.visit(this);
+        }
+}
+public class Test {
+        public static void main(String[] args) {
+                ...
+                Visitor v = new SomeVisitor();        // creeaza un obiect-vizitator concret
+                for (Employee e : employees)
+                        e.accept(v);
+        }
+}
+</code>
+
+Iată cum poate arăta un vizitator ce determină venitul total al fiecărui angajat şi îl afişează:
+<code java RevenueVisitor.java>
+public class RevenueVisitor implements Visitor {
+        public void visit(Employee employee) {
+                System.out.println(employee.getName() + " " + employee.getSalary());
+        }
+        public void visit(Manager manager) {
+                System.out.println(manager.getName() + " " + (manager.getSalary() + manager.getBonus()));
+        }
+}
+</code>
+
+Secvenţele de cod de mai sus definesc:
+  * o interfaţă, **Visitor**, ce reprezintă un //algoritm// oarecare, ce va putea vizita orice clasă. Observaţi definirea câte //unei metode visit(...)// pentru //fiecare clasă ce va putea fi vizitată//
+  * o interfaţă, **Visitable**, a carei metodă ''accept(Visitor)'' permite rularea unui algoritm pe structura curentă.
+  * implementări ale metodei ''accept(Visitor)'', în cele două clase, care, pur şi simplu, solicită vizitarea instanţei curente de către vizitator.
+  * o implementare a unei operații aplicabilă pe obiectele de tip Visitable
+
+În exemplul de mai sus, putem identifica :
+  * Element - Visitable
+  * ConcreteElement - Employee, Manager
+
+=== Double-dispatch ===
+
+Mecanismul din spatele pattern-ului Visitor poartă numele de **double-dispatch**. Acesta este un concept raspândit, şi se referă la faptul că metoda apelată este determinată la //runtime// de doi factori. În exemplul Employee-Manager, efectul vizitarii, solicitate prin apelul ''e.accept(v)'', depinde de:
+  * tipul elementului vizitat, ''e'' (//Employee// sau //Manager//), pe care se invocă metoda
+  * tipul vizitatorului, ''v'' (//RevenueVisitor//), care conţine implementările metodelor //visit//
+
+Acest lucru contrastează cu un simplu apel //e.getTotalRevenue()//, pentru care efectul este hotărât doar de tipul anagajatului. Acesta este un exemplu de **single-dispatch**.
+
+[[:laboratoare:tutorial-doubledispatch| Tutorialul de double-dispatch]] oferă mai multe detalii legate de acest mecanism.
+
+=== Aplicabilitate ===
+
+Pattern-ul **Visitor** este util când:
+  * se doreşte prelucrarea unei //structuri complexe//, ce cuprinde mai multe obiecte de //tipuri diferite//
+  * se doreşte definirea de //operaţii distincte pe aceeaşi structură//, pentru a preveni poluarea interfeţelor claselor implicate, cu multe detalii aparţinând unor algoritmi diferiţi. În acest fel, se centralizează aspectele legate de acelaşi algoritm //într-un singur loc//, dar, în acelaşi timp, //se separă detaliile ce ţin de algoritmi diferiţi//. Acest lucru conduce la simplificarea atât a claselor prelucrate, cât şi a vizitatorilor. Orice date specifice algoritmului rezidă în vizitator.
+  * ** clasele ce se doresc prelucrate se modifică rar, în timp ce operaţiile de prelucrare se definesc des**. Dacă însă sunt introduse multe clase visitabile, după crearea obiectelor Visitor, atunci este necesară modificarea acestora din urmă, pentru adăugarea de metode //visit// pentru noile clase.
+
+<note important>
+**Avantaje:**
+*  Decuplarea datelor de operațiile aplicate pe acestea
+*  Ușurează adăugarea unor noi operații/algortimi. Se creează o implementare a unui obiect de tip Visitor și nu se schimbă nimic în obiecte vizitate.
+*  Spre deosebire de Iterator poate gestiona elemente de tipuri diferite
+*  Poate menține informații de stare pe măsură ce vizitează obiectele
+
+**Dezavantaje:**
+* Depinde de stabilitatea ierarhiei de obiecte vizitate. Adăugarea de obiecte vizitabile rezultă în schimbarea implementării obiectelor Visitor.
+     *:!: obiecte de noi tipuri adăugate des + multe operații aplicabile = NU folosiți Visitor
+* Expune metode publice care folosesc informații de stare ale obiectelor. Nu se pot accesa membrii privați ai claselor, necesitatea expunerii acestor informaţii (in forma publică) ar putea conduce la //ruperea încapsulării//
+</note>
+
+==== Exemple din API-uri ====
+
+Visitor este de obicei utilizat pentru structuri arborescente de obiecte:
+ * Parcurgerea arborilor de parsare
+     * [[https://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTVisitor.html| ASTVisitor]] din Eclipse JDT. Folosind [[http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTParser.html|ASTParser]] se creează arborele de parsare al codului dat ca intrare, iar [[https://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTVisitor.html|ASTVisitor]] parcurge arborele, oferind metode (//preVisit//, //postVisit//, //visit//) pentru multe tipuri de noduri (MethodDeclaration, Assignment, IfStatement etc.)
+ * Parcurgerea și vizitarea ierarhiei de directoare și fișiere
+     * Java Nio - [[http://docs.oracle.com/javase/8/docs/api/index.html?java/nio/file/FileVisitor.html | FileVisitor]]
+        * //FileVisitor// - interfața cu metode de vizitare
+        * trebuie apelat [[http://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#walkFileTree(java.nio.file.Path,%20java.nio.file.FileVisitor) | Files.walkFileTree]] transmițându-i ca parametru un obiect care implementează //FileVisitor//
+        * [[http://docs.oracle.com/javase/tutorial/essential/io/walk.html | un tutorial]]
+
+== TL;DR ==
+
+**Supraîncărcarea (overloading) ** - mai multe metode cu același nume dar cu listă diferită de argumente
+   * metoda care va fi executată este stabilită la //compilare//, pe baza tipului referinței
+   * metoda supraîncărcată are neapărat o listă diferită de argumente și poate, opțional, avea:
+     * alți modificatori de acces
+     * alt tip de return
+     * alte excepții
+   * constructorii pot fi supraîncărcati
+   * metodele moștenite pot fi supraîncărcate
+
+**Suprascrierea (overriding) ** - redefinirea metodelor moștenite
+   * metoda care va fi executată este stabilită la //runtime//, pe baza tipului obiectului
+   * metoda suprascrisă are același tip de return și semnătură ca metoda inițială
+   * putem avea un tip de return diferit de cel al metodei inițiale, atâta timp cât este un tip ce moștenește tipul de return al metodei inițiale
+   * specificatorul de access al metodei suprascrise nu poate fi mai restrictiv decât cel al metodei inițiale
+   * nu poate arunca mai multe excepții sau excepții mai generale, poate însă arunca mai puține sau mai particulare sau excepții unchecked (de runtime)
+   * metodele de tip ''static'' și ''final'' nu pot fi suprascrise
+   * constructorii nu pot fi suprascriși
+
+
+**Visitor** - pattern pt modelarea comportamentului claselor
+  * util în situații în care:
+      * avem mai multe obiecte și operații pentru acestea
+      * dorim schimbarea/adăugarea operațiilor fără a modifica clasele
+  * indicat de utilizat pentru operații pe colecții și parcurgerea de structuri arborescente
+  * conceptul de [[laboratoare:tutorial-doubledispatch|double dispatch]]
+
+== Exerciţii ==
+  - **(2p)** Scheletul de laborator conține implementarea folosind pattern-ul Visitor a scenariului Employee-Manager descris [[.:visitor#scenariu-visitor| mai sus]]. Spre deosebire de exemplele din laborator, clasa Employee conține și câmpul extraHours, relevant pentru exercițiul 3.
+         * a) Rulați codul și observați comportamentul și interacțiunea dintre obiectele vizitate și obiectul de tip Visitor.
+         * b) Nu mai suprascrieți metoda ''accept'' din //Manager//, rulați și explicați rezultatul execuției.
+  - **(5p)** Obiectele Employee-Manager pot fi reprezentate printr-o structură arborescentă, ce are ca rădăcină un Manager (ceo-ul). Creați un Visitor care să permită parcurgerea ierarhiei și efectuarea unei acțiuni pe fiecare nod. Acea acțiune este practic o operație, implementată într-o altă clasă de tip Visitor, deci TreeVisitor-ul va primi un obiect de tip Visitor pe care să îl aplice pe nodurile parcurse.
+       * fiecare //Manager// va ţine referinţe către angajaţii aflaţi sub răspunderea lui directă (ce pot fi alţi șefi la rândul lor, sau salariaţi obişnuiţi)
+       * implementați un //TreeVisitor// care pentru:
+             * //Employee// - aplică operația primită
+             * //Manager// - parcurge subordonații și apoi aplică operația primită pe Manager
+       * implementați un visitor (numit //MostHardworkingEmployeeFinder//) care compară numărul mediu de ore suplimentare pentru angajați cu cel pentru șefi.
+   - **(3p)** Adăugați încă un tip de obiect vizitabil - //Intern//. Acesta nu are salariu și extra hours, doar nume și durata (în luni) a internship-ului.
+       * modificați clasele existente deja, pentru a lua în considerare și obiectele Intern
+       * testați operațiile de la exercițiile anterioare pe o colecție care conține și obiecte Intern
+       * :!: Observați modificările pe care le-ați efectuat pentru a adăuga o nouă operație (ex. 2) și pe cele pentru a adăuga un nou tip de obiect în colecție. Ca să merite să aplicăm pattern-ul Visitor, ce situație ar trebui să fie evitată?
+       {{:laboratoare:visitor:employee-manager-visitor.jpg?500|}}
+   - **(bonus - 2p)** Găsiți folosind java.nio toate fișierele cu extensia ".class" dintr-un director.
+       * implementați un [[http://docs.oracle.com/javase/8/docs/api/index.html?java/nio/file/FileVisitor.html | FileVisitor]], extinzând [[http://docs.oracle.com/javase/8/docs/api/java/nio/file/SimpleFileVisitor.html | SimpleFileVisitor]] în care suprascrieți metoda de vizitare a fișierelor
+        * un exemplu similar găsiți în [[http://docs.oracle.com/javase/tutorial/essential/io/walk.html | acest tutorial]]
+        * Clasele din API-ul //nio//  folosite pentru acest exercițiu sunt disponibile începând cu jdk7.
+
+== Resurse ==
+* {{.:visitor:visitor-skel.zip| Schelet cod}}
+* <html><a class="media mediafile mf_pdf" href="/poo/laboratoare/visitor?do=export_pdf">PDF laborator</a></html>
+
+== Referințe ==
+    - Kathy Sierra, Bert Bates. //SCJP Sun Certified Programmer for Java™ 6 - Study Guide//. Chapter 2 - Object Orientation ([[http://firozstar.tripod.com/_darksiderg.pdf|available online]]) - moștenire, polimorfism, overriding, overloading + exemple de întrebări
+  - Vlissides, John, et al. //Design patterns: Elements of reusable object-oriented software//. Addison-Wesley (1995)
+  - [[http://en.wikipedia.org/wiki/Software_design_pattern | Clasificarea design pattern-urilor]]
+  - [[laboratoare:tutorial-doubledispatch| Tutorial double-dispatch]]
+

@@ -1,0 +1,5 @@
+Parcurgerea Inorder: 2, 4, 9, 13, 20, 23, 24, 33, 35, 42, 45, 47, 52, 53, 61, 64, 66, 71, 74, 76, 82, 83, 88, 92, 97;
+Maximul din AVL: 97
+Minimul din AVL: 2
+Maximul dupa delete: 92, 97
+Minimul dupa delete: 4, 2

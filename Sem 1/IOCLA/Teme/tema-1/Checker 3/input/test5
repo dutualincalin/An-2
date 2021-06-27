@@ -1,0 +1,5 @@
+Test print signed int and unsigned int/hex
+%d\n0x%x\n%%%u\n
+3
+-3
+-15

@@ -1,0 +1,3 @@
+Se citesc 3 numere naturale S, n si e cu urmatoarele semnificatii: S este o suma de bani care trebuie platita folosind bancnote care au valori puterile lui e de la 1 la e la n. Se se afiseze modalitatea de plata folosind un numar minim de bancnote de tipurile precizate. Sa se afiseze la final numarul de bancnote folosite. Datele se vor citi din fisierul eur.in, iar rezultatele se vor afisa in fisierul eur.out.
+
+https://info.mcip.ro/?cap=Greedy&prob=592

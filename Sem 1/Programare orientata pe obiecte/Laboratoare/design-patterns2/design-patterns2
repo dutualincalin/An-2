@@ -1,0 +1,156 @@
+= Design patterns - Command, Strategy =
+
+* Responsabil: [[alexandru.razvan.c@gmail.com|Alexandru Căciulescu]], [[adriana.draghici@cs.pub.ro|Adriana Drăghici]]
+* Data ultimei modificări: 04.01.2016
+
+
+== Obiective ==
+
+Scopul acestui laborator este familiarizarea cu folosirea unor pattern-uri des întâlnite în design-ul atât al aplicațiilor, cât și al API-urilor - //Command// și //Strategy//.
+
+
+== Introducere ==
+
+Design pattern-urile reprezintă soluții generale și reutilizabile ale unei probleme comune în design-ul software. Un design pattern este o descriere a soluției sau un template ce poate fi aplicat pentru rezolvarea problemei, nu o bucata de cod ce poate fi aplicata direct. În general pattern-urile orientate pe obiect arată relațiile și interacțiunile dintre clase sau obiecte, fără a specifica însă forma finală a claselor sau a obiectelor implicate.
+
+Se consideră că există aproximativ 2000 de design patterns [[http://ptgmedia.pearsoncmg.com/images/9780321711922/samplepages/0321711920.pdf|[2]]], iar principalul mod de a le clasifica este următorul:
+ * **"Gang of Four" patterns**
+ * Concurrency patterns
+ * Architectural patterns  - sunt folosite la un nivel mai inalt decat design patterns, stabilesc nivele și componente ale sistemelor/aplicațiilor, interacțiuni între acestea (e.g. Model View Controller şi derivatele sale). Acestea descriu structura întregului sistem, iar multe framework-uri vin cu ele deja încoporate, sau faciliteaza aplicarea lor (e.g. Java Spring).  În cadrul laboratoarelor nu ne vom lega de acestea.
+
+O carte de referință pentru design patterns este "Design Patterns: Elements of Reusable Object-Oriented Software" [1], denumită și "Gang of Four" (GoF). Aceasta definește 23 de design patterns, foarte cunoscute și utilizate în prezent. Aplicațiile pot încorpora mai multe pattern-uri pentru a reprezenta legături dintre diverse componente (clase, module).
+În afară de GoF, și alți autori au adus în discuție pattern-uri orientate în special pentru aplicațiile enterprise și cele distribuite.
+
+Pattern-urile GoF sunt clasificate în felul următor:
+* **Creational Patterns** - definesc mecanisme de creare a obiectelor
+   * Singleton, Factory etc.
+* **Structural Patterns** - definesc relații între entități
+   * Decorator, Adapter, Facade, Composite, Proxy etc.
+* **Behavioural Patterns** - definesc comunicarea între entități
+   * Visitor, Observer, Command, Mediator, Strategy etc.
+
+<note important>
+Design pattern-urile nu trebuie privite drept niște rețete care pot fi aplicate direct pentru a rezolva o problemă din design-ul aplicației, pentru că de multe ori pot complica inutil arhitectura. Trebuie întâi înțeles dacă este cazul să fie aplicat un anumit pattern, si de-abia apoi adaptat pentru situația respectivă. Este foarte probabil chiar să folosiți un pattern (sau o abordare foarte similară acestuia) fără să vă dați seama sau să îl numiți explicit. Ce e important de reținut după studierea acestor pattern-uri este un mod de a aborda o problemă de design.
+</note>
+
+
+În laboratorul [[.:visitor|Visitor Pattern]] au fost introduse design pattern-urile și aplicabilitatea Visitor-ului. Acesta este un pattern comportamental, și după cum ați observat oferă avantaje în anumite situații, în timp ce pentru altele nu este potrivit. Pattern-urile comportamentale modelează interacțiunile dintre clasele și componentele unei aplicații, fiind folosite în cazurile în care vrem sa facem un design mai clar și ușor de adaptat și extins. /*În afară de acest tip de pattern-uri, mai se folosesc și cele //structural// și //creational//, prezentate în clasificarea următoare:
+
+* //Creational Patterns// - mecanisme de creare a obiectelor
+   * **Singleton**, **Factory** etc
+* //Structural Patterns// - definesc relații între entități
+   * Decorator, Adapter, Facade, Composite, Proxy etc.
+* //Behavioural Patterns// - definesc comunicarea între entități
+  * Visitor,** Observer**, **Command**, Mediator, Strategy etc.
+
+== Command Pattern ==
+
+Design pattern-ul //Command// încapsulează un apel cu tot cu parametri într-o clasă cu interfață generică. Acesta este //Behavioral// pentru ca modifică interacțiunea dintre componente, mai exact felul în care se efectuează apelurile.
+
+Acest pattern este recomandat în următoarele cazuri:
+* pentru a ușura crearea de structuri de delegare, de callback, de apelare întârziată
+* pentru a reține lista de comenzi efectuate asupra obiectelor
+    * accounting
+    * liste de Undo, Rollback pentru tranzacții - suport pentru operații reversibile (//undoable operations//)
+
+Exemple de utilizare:
+* sisteme de logging, accounting pentru tranzacții
+* sisteme de undo (ex. editare imagini)
+* mecanism ordonat pentru delegare, apel întârziat, callback
+
+=== Structura ===
+
+Ideea principală este de a crea un obiect de tip //Command// care va reține parametrii pentru comandă. Comandantul reține o referință la comandă și nu la componenta comandată. Comanda propriu-zisă este anunțată obiectului //Command// (de către comandant) prin execuția unei metode specificate asupra lui. Obiectul //Command// este apoi responsabil de trimiterea (//dispatch//) comenzii către obiectele care o îndeplinesc (//comandați//).
+
+<imgcaption cmd_image|Diagrama de stări pentru CommandPattern>{{ .:design-patterns:command.png |}}</imgcaption>
+
+ Tipuri de componente (**roluri**):
+ * **Invoker** - comandantul
+ ** apelează acțiuni pe comenzi (invocă metode oferite de obiectele de tip //Command//)
+ ** poate menține, dacă e cazul, o //listă a tutoror comenzilor aplicate// pe obiectul (obiectele) comandate. Este necesară reținerea acestei liste de comenzi atunci când implementăm un comportament de undo/redo al comenzilor.
+ ** primește clase //Command// pe care să le invoce
+ * **Receiver** - comandatul
+ ** este clasa asupra căreia se face apelul
+ ** conține implementarea efectivă a ceea ce se dorește executat
+ * **Command** - obiectele pentru reprezentarea comenzilor implementează această interfață/o extind dacă este clasă abstractă
+ ** //concrete command// - ne referim la implementări/subclasele acesteia
+ ** de obicei conțin metode cu nume sugestiv pentru executarea acțiunii comenzii (e.g. ''execute()''). Implementările acestora conțin apelul către clasa //Receiver//.
+ ** în cazul implementării unor acțiuni //undoable// adăugăm metode pentru ''undo'' și/sau ''redo''.
+ ** țin referințe către comandați (receivers) pentru a aplica/invoca acțiunea ce reprezintă acea comandă
+
+În Java, se pot folosi atât interfețe cât și clase abstracte, pentru Command, depinzând de situație (e.g. clasă abstractă dacă știm sigur ca obiectele de tip Command nu mai au nevoie să extindă și alte clase).
+
+În diagrama din <imgref cmd_image>, comandantul este clasa //Invoker// care conține o referință la o instanță (command) a clasei (Command). //Invoker// va apela metoda abstractă ''execute()'' pentru a cere îndeplinirea comenzii. //ConcreteCommand// reprezintă o implementare a interfeței //Command//, iar în metoda ''execute()'' va apela metoda din //Receiver// corespunzătoare acelei acțiuni/comenzi.
+
+=== Implementare ===
+
+Diagrama de secvență din <imgref cmd_flow_image> prezintă apelurile în cadrul unei aplicație de editare a imaginilor, ce este structurată folosind pattern-ul Command. În cadrul acesteia, Receiver-ul este //Image//, iar comenzile //BlurCommand// și //CropCommand// modifică starea acesteia. Structurând aplicația în felul acesta, este foarte ușor de implementat un mecanism de undo/redo, fiind suficient să menținem în Invoker o listă cu obiectele de tip //Command// aplicate imaginii.
+
+<imgcaption cmd_flow_image|Diagrama de secvență pentru comenzile de prelucrare a imaginilor>{{ .:design-patterns:command_image_sequence.png |}}</imgcaption>
+
+Pe [[http://en.wikipedia.org/wiki/Command_pattern | wikipedia]] puteți analiza exemplul PressSwitch. Flow-ul pentru acesta este ilustrat în <imgref cmd_flow_image2>
+<imgcaption cmd_flow_image2|Diagrama de secvență pentru comenzile de aprindere/stingere a switch-ului>{{ .:design-patterns:command_switch_sequence.png | }}</imgcaption>
+
+== Strategy Pattern ==
+
+Design pattern-ul //Strategy// încapsulează algoritmii în clase ce oferă o anumită interfață de folosire, și pot fi selecționați la runtime. Ca și Command, acest pattern este //behavioral// pentru ca permite decuplarea unor clase ce oferă un anumit comportament și folosirea lor independentă în funcție de situația de la runtime.
+
+Acest pattern este recomandat în cazul în care avem nevoie de un tip de algoritm (strategie) cu mai multe implementări posibile si dorim să alegem dinamic care algoritm îl folosim, fără a face sistemul prea strâns cuplat.
+
+Exemple de utilizare:
+* sisteme de tip Layout Managers din API-urile pentru UI
+* selectarea in mod dinamic la runtime a unor algoritmi de sortare, compresie, criptare etc.
+
+Structură:
+* trebuie să definiți o **interfață comună** pentru strategiile pe care le implementați (fie ca o <<interface>> sau ca o clasa abstractă)
+* implementați strategiile respectând interfața comună
+* clasa care are nevoie să folosească strategiile **va ști doar despre interfața lor**, nu va fi legată de implementările concrete
+
+Denumirile uzuale în exemplele acestui pattern sunt: //Strategy// (pt interfață sau clasa abstractă), //ConcreteStrategy// pentru implementare, //Context//, clasa care folosește/execută strategiile.
+
+
+
+
+
+
+
+== Exerciții ==
+
+Acest laborator și [[laboratoare:design-patterns|cel precedent]] au ca temă comună a exercițiilor realizarea unui joc controlat din consolă. Jocul constă dintr-o lume (aka hartă) în care se plimbă eroi de trei tipuri, colectează comori și se bat cu monștrii. În acestă săptămână terminam jocul inceput in laboratorul precedent folosind pattern-urile studiate (//Strategy//, //Command//).
+
+Detalii joc:
+* //Harta//
+   * reprezentată printr-o matrice. Fiecare element din matrice reprezintă o zonă care poate fi liberă, poate conține obstacole sau poate conține o comoară (în laboratorul următor poate conține și monștrii).
+   * este menținută în clasa ''GameState''.
+* //Eroii//
+   * sunt reprezentați prin clase de tip ''Hero'' și sunt de trei tipuri: //Mage//, //Warrior//, //Priest//.
+   * puteți adăuga oricâți eroi doriți pe hartă (cât vă permite memoria :))
+   * într-o zonă pot fi mai mulți eroi
+   * acțiunile pe care le pot face:
+     * ''move'' - se mută într-o zonă învecinată
+     * ''attack'' - ataca un monstru cand se afla pe aceeasi pozitie cu el
+     * ''collect'' - eroul ia comoara găsită în zona în care se află
+* Entry-point-ul în joc îl consitituie clasa ''Main''.
+* **(5p)** Folosiți design pattern-ul //Command// pentru a implementa functionalitatea de undo si redo la comanda ''move''.
+   * Va trebui sa completati clasa ''MoveCommand'' care implementeaza interfata ''Command''
+   * Precum si clasa ''CommandManager'' care va tine evidenta comenzilor si ordinea lor
+* **(5p)** Folosiți design pattern-ul //Strategy// pentru a implementa logica de atac a unui monstru.
+   * Pentru acest exercitiu va trebui sa implementati 3 strategii unice pentru fiecare clasa : ''Warrior'', ''Mage'', ''Priest''. Toate vor implementa interfata ''Strategy'' si vor tine cont algoritmul de atac mentionat in comentarii.
+    * Urmăriți todo-urile din scheletul de cod (pentru a le vizualiza mai ușor pe toate puteți să folosiți view-ul pt ele din IDE, de exemplu în eclipse aveți //Window -> Show View -> Tasks//)
+* (**Bonus 2p**) Implementați coliziunile cu obstacolele de pe harta
+  * Va trebui sa creati un nou obiect ''Obstacle'' precum si un ''ObstacleObserver''
+  * Cand eroul ajunge pe un obstacol se va printa un mesaj ''Can't move there !'' si se va apela automat undo pe ultima comanda de move pentru a reveni in pozitia anterioara coliziunii. Acest feature de wall collision va fi implementat in ''ObstacleObserver''
+
+
+
+== Resurse ==
+
+* {{|Schelet}}
+* {{|Soluții}}
+* <html><a class="media mediafile mf_pdf" href="/poo/laboratoare/design-patterns2?do=export_pdf">PDF laborator</a></html>
+
+== Referințe ==
+
+* [[http://www.codeproject.com/Articles/15207/Design-Patterns-Command-Pattern |Descriere Command Pattern si exemplu pentru operatii undo/redo]]
+* [[http://www.javaworld.com/cgi-bin/mailto/x_java.cgi?pagetosend=/export/home/httpd/javaworld/javaworld/javatips/jw-javatip68.html&pagename=/javaworld/javatips/jw-javatip68.html&pageurl=http://www.javaworld.com/javaworld/javatips/jw-javatip68.html&site=jw_core |Learn how to implement the Command pattern in Java]]
+* [[https://sourcemaking.com/design_patterns/strategy |Strategy Pattern]]

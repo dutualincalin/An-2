@@ -1,0 +1,4 @@
+Test print big (un)signed int
+%u\t%d\n
+4294967295
+-4294967295

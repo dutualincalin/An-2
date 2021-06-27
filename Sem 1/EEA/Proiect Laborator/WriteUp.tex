@@ -1,0 +1,76 @@
+\documentclass[10pt]{report}
+\usepackage{graphicx}																		
+\usepackage[romanian]{babel}
+\usepackage[unicode]{hyperref}
+\usepackage[dvipsnames]{xcolor} 
+\usepackage{amsmath,epsfig,pifont,calc,pifont,pstricks}
+\usepackage{rom} 						 % pentru a scrie cu diacritice in limba romana	
+\usepackage{color}
+\usepackage{listings}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+\usepackage{placeins}
+
+\definecolor{ultramarine}{rgb}{0.07, 0.04, 0.56}
+\definecolor{Capri}{rgb}{0.0, 0.75, 1.0}
+\definecolor{violet}{rgb}{0.56, 0.0, 1.0}
+
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\chapter*}{\section*}{}{}
+
+%%% setari ale paginii
+%indentarea la inceput de paragraf
+\setlength{\parindent}{3ex}
+
+%dimensiunea textului pe pagina
+\setlength{\voffset}{-2cm}
+\setlength{\textheight}{23cm}  
+\setlength{\textwidth}{16cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{1cm}
+\renewcommand{\baselinestretch}{1.2}
+\newcommand{\myindent}{\hspace*{3ex}}
+%\renewcommand{\baselinestretch}{1}
+
+%margini
+\setlength{\oddsidemargin}{0.5cm}
+\setlength{\evensidemargin}{-0.3cm}
+%\raggedright
+\raggedbottom
+
+%% begin preambul - macro-uri definite de autor
+\newcommand{\D}{\mathrm{d}}	% va fi folosita in mediul matematic, pentru diferentiala d
+\newcommand{\I}{\mathrm{i}}	% va fi folosita in mediul matematic, pentru unitatea imaginara
+\newcommand{\eul}{\mathrm{e}}	% numarul lui Euler
+\newcommand{\vect}[1]{\mathbf{#1}}	% comanda cu un argument, pentru scrierea vectorilor cu lidere aldine, drepte
+
+\begin{document}
+\title{{\color{ultramarine}{
+Proiect EEA \\
+\large Piano circuit \\
+Universitatea Politehnic'a Bucure'sti \\
+Facultatea de Automatic'a 'si Calculatoare}}}
+\author{\textbf{{Du'tu Alin C'alin --- Iftimie Adelin Cosmin}}}
+\date{\parbox{\linewidth}{\centering
+  \today\endgraf\bigskip
+\vspace{10mm}
+\textit{\textbf{Abstract.} Prin electronic'a se pot ob'tine sunete folosind un num'ar mic de piese necesare. 'In acest proiect am realizat construirea a dou'a circuite, ambele reprezent\^and un pian, folosind Tinkercad 'si o serie de piese prezentate 'in construc'tia fiec'arui circuit.}\\
+\textit{\textbf{Cuvinte cheie}: Piano, Temporizator 555, Arduino}}}
+\maketitle
+
+\tableofcontents
+\input{Fisiere/Cuprins}
+
+
+\vspace{60mm}
+\section*{Mul'tumiri}
+\addcontentsline{toc}{chapter}{Mul'tumiri}
+\myindent
+Am dori s'a adres'am mul'tumiri domnului Isuf Vlad pentru 'indrumarea 'si toate indica'tiile oferite pentru realizarea acestui proiect. 
+
+\newpage
+\nocite{*}
+\bibliographystyle{plainrom}
+\addcontentsline{toc}{chapter}{Bibliografie}
+\bibliography{Fisiere/Bibliografie}
+\end{document}

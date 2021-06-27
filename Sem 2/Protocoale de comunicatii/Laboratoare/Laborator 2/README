@@ -1,0 +1,41 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+
+Laboratorul 2 - Protocoale de comunicatii
+
+
+Acest laborator contine fisierele:
+- din emulator aflate in folderul link_emulator;
+- Makefile;
+- README;
+- recv.c;
+- run_experiment.sh
+- send.c
+- Text_File.txt
+- Text_File_Transmission.txt
+
+Implementarile efective ale canalului de comunicatie sunt scrise in fisierele
+send.c care implementeaza sender-ul si recv.c care implementeaza receiver-ul.
+
+~ send.c
+
+In send.c se deschide fisierul de intrare care in acest caz este "Text_File.txt"
+si apoi se vor citi cate 7 bytes din fisier si retine in structura de tip msg.
+Se adauga la payload-ul mesajului caracterul 0 sau caracterul 1 (alternat)
+urmate de terminatorul de sir. Se actualizeaza marimea mesajului si se trimite
+bucata de mesaj catre receiver. Actiunile de citire, prelucrare si trimitere se
+vor repeta pana cand s-a citit tot din fisier. In final, sender-ul va transmite
+receiver-ului un mesaj de oprire si se va inchide fisierul de intrare.
+
+~ recv.c
+
+In recv.c se va deschide fisierul de iesire "Text_File_Transmission.txt" si apoi
+se va intra intr-o bucla de while unde se va primi fiecare mesaj, se va verifica
+daca mesajul primit este cel de oprire ("SSSTOPP"), se va scrie in fisier
+payload-ul primit si se va elabora un raspuns care va fi trimis catre sender.
+
+Nota: Afisand la final ultima bucata din mesaj, apareau caractere in plus, un "\n"
+urmat de un c, asa ca pentru toate bucatile de mesaje am efectuat o cautare a
+caracterului '\n' si retin pozitia acestuia. Apoi prin 2 copieri am am eliminat tot
+ce e dupa "\n" inclusiv. Deci, rezultatul final nu va avea caractere in plus.

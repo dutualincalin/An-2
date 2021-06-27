@@ -1,0 +1,18 @@
+1) Gasim pactientul cu cea mai mare prioritate folosind Heap si apoi folosind AVL.
+
+Urmeaza pacientul nr 16 cu descrierea  Dumitru Lungu - Test Anti-HIV 1+2;
+Timp de executie folosind Max-heap: 0.0007 ms
+
+Urmeaza pacientul nr 16 cu descrierea  Dumitru Lungu - Test Anti-HIV 1+2;
+Timp de executie folosind AVL: 0.000747 ms
+
+
+2) Eliminam pactientul cu cea mai mare prioritate din Heap si apoi din AVL.
+
+Urmeaza pacientul nr 15 cu descrierea  Eftemie Codreanu - Test Anti-HIV 2;
+Timp de executie pentru eliminare folosind Max-heap: 0.006114 ms
+
+Urmeaza pacientul nr 15 cu descrierea  Eftemie Codreanu - Test Anti-HIV 2;
+Timp de executie pentru eliminare folosind AVL: 0.001747 ms
+
+

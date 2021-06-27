@@ -1,0 +1,11 @@
+Dutu Alin Calin
+323 CD
+
+Aceasta este rezolvarea temei 3 la IOCLA din anul universitar 2020 - 2021.
+
+In cadrul acestei teme se gasesc 2 functii fiecare cu rolul sau:
+- create_tree: Extrage operatia sau numarul din string parcurgand byte cu byte si il adauga in nodul corespunzator, apoi se arcurge arborele folosind stiva
+				pana cand ajunge la nodul urmator. Procesul se repeta pana cand string-ul se goleste
+
+- iocla_atoi: Se preia numarul de pe stiva in format string, se extrage cifra din string byte cu byte si se formeaza imultind cu 10 numarul format din cifrele precedente si se aduna cifra actuala in zona cifrei unitatilor. De asemenea, la inceput se retine daca primul caracter este - si la final daca primul caracter
+este minus se va face numarul negativ rpin complementarea numarului si incrementarea complementului.

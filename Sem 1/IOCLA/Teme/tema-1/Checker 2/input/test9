@@ -1,0 +1,7 @@
+Test print everything
+%s%x%u%d\n\t%c
+Bob\n
+-130
+-131
+-132
+\n

@@ -1,0 +1,5 @@
+Parcurgerea Inorder: 1, 10, 25, 40, 100;
+Maximul din AVL: 100
+Minimul din AVL: 1
+Maximul dupa delete: 40, 100
+Minimul dupa delete: 10, 1

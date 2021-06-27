@@ -1,0 +1,118 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+# Tema 4 IOCLA
+
+## Introducere
+
+## Taskuri
+
+### Task 1:
+
+#### Vulnerabilitatile binarului nice
+
+Functia are adresa de inceput 0x08049346 si se numeste FUN_08049346.
+Vulnerabilitatea functiei apare in momentul citirii variabilei auStack388 care
+are 384 de bytes alocati, dar la citire se pot adauga pana la 0x194 adica 404
+bytes ceea ce inseamna ca se poate face buffer overflow. Avand si variabila
+param 3 care contine adresa unei functii pe care o si executa folosind functia
+de citire se poate foarte usor trece la o cu totul alta functie.
+
+### Task 2:
+
+#### Obtinerea Payload-ului pentru binarul nice
+
+Utilizand Ghidra pentru a vedea codul binarului se observa existenta a 7
+functii din care doar primele 5 vor fi rulate folosind payload-ul creat pentru
+afisarea flag-ului. Logica crearii payload-ului este urmatoarea: Pentru a afisa
+flag-ul este nevoie de introducerea functiei print_flag in flow-ul programului.
+Pentru asta este nevoie o functie care are un pointer la o functie si o functie
+cu care se poate genera un buffer overflow. Toate acestea se gasesc in a 5-a
+functie "FUN_08049346", astfel este nevoie sa generam un payload care sa
+introduca in pointerul la functie adresa functiei "print_flag". Totusi trebuie
+luat in considerare ca la primele 4 functii exista functii de read care vor
+citi caractere din payload deci trebuie sa se faca o suma in baza 10 cu numarul
+de biti pe care read-urile le citesc. Pentru binarul nice din aceasta tema avem
+suma: S = 204 + 167 + 140 + 316 = 827.
+
+Intrand in a 5-a functie mai trebuie umpluta stiva pana cand se ajunge la
+adresa din pointer pentru suprascriere, astfel vom mai adauga la suma
+capacitatea vectorului si a celor 2 parametrii din stiva + o zona de 4 octeti
+din stiva care se afla intre vector si primul parametru pentru a ajunge la
+pointer care in cazul asta: S = 827 + 384 + 16 = 1227. Verificand cu Ghidra
+adresa primei instructiuni din print_flag, 0x08049291 care se va fi scrisa in
+payload sub forma \x91\x92\x04\x08 datorita faptului ca sistemul este de tip
+little endian si asa se va percepe adresa in mod corect. Aplicand si putine
+elemente de personalitate am creat payload-ul nice_payload cu ajutorul caruia
+se va obtine flag-ul: 
+"NICE_FLAG{b8b49cecf6fb821f6b6ba2b254528530}".
+
+
+### Task 3:
+
+#### Vulnerabilitatile binarului naughty
+
+In toate functiile programului exista un buffer overflow deoarece read-urile
+acestora citesc mai multi bytes decat are vectorul respectiv ceea ce rezulta ca
+se pot suprascrie valorile variabilelor, insa vulnerabilitatea cea mai mare
+este in functia FUN_08049362 cu adresa de inceput 0x08049362 deoarece exista
+in cadrul functiei un pointer la o functie care poate fi suprascris la un
+anumit payload ceea ce rezulta in rularea nefireasca a programului.
+
+#### Obtinerea Payload-ului pentru binarul naughty
+
+Rationamentul este acelasi ca si cel pentru obtinerea payload-ului pentru nice,
+dar in acest caz avem in cele 4 functii de inceput o structura decizionala care
+inchide programul daca variabila locala nu are o anumita valoare, valoare care
+poate fi modificata folosind buffer overflow. Astfel pentru fiecare functie se
+va completa payload-ul pana cand vectorul este completat si apoi se suprascrie
+variabila locala, care urmeaza imediat dupa vector in stiva, cu adresa din
+structura decizionala in acelasi mod cum a fost pusa adresa functiei print_flag
+in nice_payload. Pentru a trece la urmatoarea functie este necesara adaugarea
+de noi biti pana cand read-ul a citit tot numarul de biti pe care trebuie sa il
+citeasca(Daca nu facem asta read-ul va prelua toti octetii de la celelalte
+bucati necesare pentru alte functii).
+
+In functia a 5-a, unde avem pointer la functie, avem de schimbat si variabila
+locala, dar si adresa din pointer. Deci se vor adauga un numar de octeti
+suficient de mare pentru a umple vectorul, se va suprascrie variabila cu adresa
+din structura decizionala, se va mai adauga un numar de octeti astfel incat
+sa se ajunga la adresa pointerului si apoi se adauga la pointer adresa functiei
+print_flag. Odata ce toate aceste operatii au fost efectuate, la rularea
+binarului naughty cu payload-ul creat se obtine flag-ul:
+"NAUGHTY_FLAG{463bf1e7d7898b44609a895e37518835}"
+
+### Task 4:
+
+#### Crearea payload-ului
+
+Pentru acest task se va folosi functia a 5-a de la binarul naughty. S-a ales
+aceasta functie datorita faptului ca in niciuna dintre functiile din main nu
+se poate suprascrie adresa de retur datorita read-ului care nu permite
+suprascrierea stivei pana in acel punct, deci singura optiune este folosirea
+pointer-ului la functie.
+
+In functia a 5-a am decis sa introduc shellcode-ul intre adresa variabilei
+locale si adresa pointer-ului, un spatiu de 110 bytes dintre care: 43 de bytes
+pentru shellcode, 28 de bytes de tip nop si 27 de bytes ocupati pentru
+amplasarea shellcode-ului la mijlocul celor 110 bytes. In prima faza am facut
+un payload astfel incat sa se ajunga pana la adresa pointer-ului la functie
+a carui noua adresa la care va pointa la nop-urile puse in stack astfel incat
+programul sa ajunga sa ruleze shellcode-ul. Pentru gdb functiona, insa pentru
+rularea normala nu.
+
+Am creat programul test.c din folder care contine un char si afiseaza adresa
+char-ului. Cu tot cu ASLR dezactivat a existat o diferenta constanta de 112
+octeti. Adunand adresa din pointerul la functie cu 112 si ruland programul
+normal obtinem shell-ul. Se obtine un shell cu drepturi depline.
+
+## Surse
+
+1) https://0xrick.github.io/binary-exploitation/bof5/
+- De aici a fost luat shellcode-ul si am preluat modul de implementare al
+	payload-ului.
+
+- Link accesat ultima oara la data de: 19.01.2020
+
+2) https://reverseengineering.stackexchange.com/questions/2983/how-to-predict-address-space-layout-differences-between-real-and-gdb-controlled
+- Link accesat ultima oara la data de: 20.01.2020

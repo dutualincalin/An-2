@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1616691445">
+  <File Type="BITSTR-BMM" Name="Sumator_bd.bmm"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="Sumator_methodology_drc_opted.rpt"/>
+  <File Type="INIT-TIMING" Name="Sumator_timing_summary_init.rpt"/>
+  <File Type="ROUTE-PWR" Name="Sumator_power_routed.rpt"/>
+  <File Type="PA-TCL" Name="Sumator.tcl"/>
+  <File Type="OPT-TIMING" Name="Sumator_timing_summary_opted.rpt"/>
+  <File Type="OPT-DCP" Name="Sumator_opt.dcp"/>
+  <File Type="ROUTE-PWR-SUM" Name="Sumator_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="Sumator_reports.tcl"/>
+  <File Type="OPT-DRC" Name="Sumator_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="Sumator.hwdef"/>
+  <File Type="PWROPT-DCP" Name="Sumator_pwropt.dcp"/>
+  <File Type="PWROPT-DRC" Name="Sumator_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="Sumator_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="Sumator_placed.dcp"/>
+  <File Type="PLACE-IO" Name="Sumator_io_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="Sumator_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="Sumator_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="Sumator_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="Sumator_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="Sumator_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="Sumator_incremental_reuse_pre_placed.rpt"/>
+  <File Type="PLACE-TIMING" Name="Sumator_timing_summary_placed.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="Sumator_postplace_pwropt.dcp"/>
+  <File Type="BG-BIN" Name="Sumator.bin"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="Sumator_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="Sumator_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="Sumator_drc_physopted.rpt"/>
+  <File Type="BITSTR-MSK" Name="Sumator.msk"/>
+  <File Type="PHYSOPT-TIMING" Name="Sumator_timing_summary_physopted.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="Sumator_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="Sumator_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="Sumator_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="Sumator_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="Sumator_drc_routed.pb"/>
+  <File Type="ROUTE-DRC-RPX" Name="Sumator_drc_routed.rpx"/>
+  <File Type="BITSTR-MMI" Name="Sumator.mmi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="Sumator_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="Sumator_methodology_drc_routed.rpx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="Sumator_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="Sumator_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="Sumator_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="Sumator_route_status.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="Sumator_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="Sumator_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="Sumator_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="Sumator_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-CLK" Name="Sumator_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="Sumator_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="Sumator_bus_skew_routed.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="Sumator_bus_skew_routed.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="Sumator_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="Sumator_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="Sumator_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="Sumator_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="Sumator_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="Sumator_bus_skew_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="Sumator_bus_skew_postroute_physopted.pb"/>
+  <File Type="BG-BIT" Name="Sumator.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="Sumator_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BITSTR-RBT" Name="Sumator.rbt"/>
+  <File Type="BITSTR-NKY" Name="Sumator.nky"/>
+  <File Type="PDI-FILE" Name="Sumator.pdi"/>
+  <File Type="RCFI_FILE" Name="Sumator.rcfi"/>
+  <File Type="CFI_FILE" Name="Sumator.cfi"/>
+  <File Type="RNPI_FILE" Name="Sumator.rnpi"/>
+  <File Type="NPI_FILE" Name="Sumator.npi"/>
+  <File Type="RBD_FILE" Name="Sumator.rbd"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="Sumator.ltx"/>
+  <File Type="BITSTR-SYSDEF" Name="Sumator.sysdef"/>
+  <File Type="BG-BGN" Name="Sumator.bgn"/>
+  <File Type="BG-DRC" Name="Sumator.drc"/>
+  <File Type="RDI-RDI" Name="Sumator.vdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/new/Sumator.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="Sumator"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/new/myxdc.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+  </Strategy>
+</GenRun>

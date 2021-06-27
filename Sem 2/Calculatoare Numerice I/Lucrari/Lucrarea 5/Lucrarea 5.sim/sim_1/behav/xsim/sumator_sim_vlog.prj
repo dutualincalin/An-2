@@ -1,0 +1,15 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../Lucrarea 5.srcs/sources_1/new/Dreg.v" \
+"../../../../Lucrarea 5.srcs/sources_1/new/diferentiator.v" \
+"../../../../Lucrarea 5.srcs/sources_1/new/inmultitor.v" \
+"../../../../Lucrarea 5.srcs/sources_1/new/sumator.v" \
+"../../../../Lucrarea 5.srcs/sources_1/new/TopLevel.v" \
+"../../../../Lucrarea 5.srcs/sim_1/new/BA_sim.v" \
+"../../../../Lucrarea 5.srcs/sim_1/new/sumator_sim.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

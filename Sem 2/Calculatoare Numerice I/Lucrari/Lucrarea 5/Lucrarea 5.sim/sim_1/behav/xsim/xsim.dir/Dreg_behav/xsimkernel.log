@@ -1,0 +1,7 @@
+Running: xsim.dir/Dreg_behav/xsimk.exe -simmode gui -wdb Dreg_behav.wdb -simrunnum 0 -socket 52993
+Design successfully loaded
+Design Loading Memory Usage: 5332 KB (Peak: 5332 KB)
+Design Loading CPU Usage: 62 ms
+Simulation completed
+Simulation Memory Usage: 5916 KB (Peak: 5916 KB)
+Simulation CPU Usage: 78 ms

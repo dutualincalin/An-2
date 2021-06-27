@@ -1,0 +1,39 @@
+https://www.websequencediagrams.com/#
+
+title "PressSwitch Example"
+
+participant Test
+participant Switch
+participant FlipUpCommand
+participant FlipDownCommand
+participant Light
+
+alt ON
+   Test -> Switch: flip-up
+Switch -> FlipUpCommand: execute
+FlipUpCommand -> Light: turn-on
+else OFF
+    Test -> Switch: flip-down
+Switch -> FlipDownCommand: execute
+FlipDownCommand -> Light: turn-off
+end
+
+title "ImageEditor Example"
+
+participant User
+participant Invoker
+
+participant CropCommand
+
+participant BlurCommand
+participant Image
+
+alt CROP IMAGE
+  User -> Invoker: crop
+Invoker -> CropCommand: execute
+CropCommand -> Image: crop
+else BLUR IMAGE
+   User -> Invoker: blur
+Invoker -> BlurCommand: execute
+BlurCommand -> Image: blur
+end

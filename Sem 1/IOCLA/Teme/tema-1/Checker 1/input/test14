@@ -1,0 +1,5 @@
+Test print climits
+%d\n\t%d\n\t\t%u\n
+2147483647
+-2147483648
+4294967295

@@ -1,0 +1,88 @@
+\documentclass[10pt]{report}
+\usepackage{graphicx}																		
+\usepackage[romanian]{babel}
+\usepackage[unicode]{hyperref} 
+\usepackage{amsmath,epsfig,pifont,calc,pifont,pstricks}
+\usepackage{rom} 						 % pentru a scrie cu diacritice in limba romana	
+\usepackage{color}
+\usepackage{listings}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+\usepackage{placeins}
+
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\chapter*}{\section*}{}{}
+
+\usepackage{titlesec}
+\titleformat{\chapter}
+  {\normalfont\fontsize{14}{19}\sffamily\bfseries\color{mylilas}}
+  {\thechapter}
+  {1em}
+  {}
+
+\titleformat{\section}
+  {\normalfont\fontsize{10}{17}\sffamily\bfseries\color{mylilas}}
+  {\thesection}
+  {1em}
+  {}
+
+\titleformat{\subsection}
+  {\normalfont\fontsize{10}{17}\sffamily\bfseries\color{mylilas}}
+  {\thesubsection}
+  {1em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalfont\fontsize{10}{17}\sffamily\slshape\color{mylilas}}
+  {\thesubsubsection}
+  {1em}
+  {}
+	
+%%% setari ale paginii
+%indentarea la inceput de paragraf
+\setlength{\parindent}{3ex}
+
+%dimensiunea textului pe pagina
+\setlength{\voffset}{-2cm}
+\setlength{\textheight}{23cm}  
+\setlength{\textwidth}{16cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{1cm}
+\renewcommand{\baselinestretch}{1.2}
+\newcommand{\myindent}{\hspace*{3ex}}
+%\renewcommand{\baselinestretch}{1}
+
+%margini
+\setlength{\oddsidemargin}{0.5cm}
+\setlength{\evensidemargin}{-0.3cm}
+%\raggedright
+\raggedbottom
+
+%% begin preambul - macro-uri definite de autor
+\newcommand{\D}{\mathrm{d}}	% va fi folosita in mediul matematic, pentru diferentiala d
+\newcommand{\I}{\mathrm{i}}	% va fi folosita in mediul matematic, pentru unitatea imaginara
+\newcommand{\eul}{\mathrm{e}}	% numarul lui Euler
+\newcommand{\vect}[1]{\mathbf{#1}}	% comanda cu un argument, pentru scrierea vectorilor cu lidere aldine, drepte
+
+\begin{document}
+\title{\LARGE{\textbf{Proiect Analiza Algoritmilor \\ Structuri de Date - Cozi de prioritate \\ Arbore AVL 'si Max-Heap}}}
+\author{Du'tu Alin C'alin\\323 CD\\\\Facultatea de Automatic'a 'si Calculatoare\\Universitatea Politehnic'a Bucure'sti}
+\date{\parbox{\linewidth}{\centering%
+  \today\endgraf\bigskip
+\textit{\textbf{Abstract.} Contextul acestei lucr'ari este prezentarea temei 1 la disciplina Analiza Algoritmilor parcurs'a 'in primul semenstru al anului  universitar 2020 - 2021. Aceast'a lucrare are ca scop analizarea anumitor opera'tii efectuate de anumite structuri de date abstracte. Se iau 'in vedere implementarea, testarea 'si analiza algoritmilor ce se afl'a 'in leg'atur'a cu scopul structurilor de date, dar 'si analiza beneficiilor pe care le aduc ace'sti algoritmi cu scopul g'asirii celei mai bune op'tiuni pentru diverse situa'tii. Raportul con'tine 13 pagini strcturate pe 5 capitole care ofer'a o analiz'a ampl'a a temei abordate.}\\
+\textit{\textbf{Cuvinte cheie:} AVL Tree, Max Heap, Element maxim, Complexitate, Timpi de execu'tie}}}
+\maketitle
+\tableofcontents
+\newpage
+\input{Fisiere/Cuprins}
+
+\chapter{Concluzii}
+'In concluzie, pentru situa'tiile 'in care este nevoie de o baz'a de date nu foarte populat'a cu pu'tine ad'aug'ari 'si 'stergeri de date se poate opta pentru o structur'a de date de tip AVL, iar pentru cazul 'in care este nevoie de o baz'a de date al c'aror principal atribut este un num'ar prioritar se poate folosi pentru cea mai bun'a performan't'a un Max - Heap.
+
+\vspace{5 mm}
+\nocite{*}
+\bibliographystyle{plainrom}
+\addcontentsline{toc}{chapter}{Bibliografie}
+\bibliography{Fisiere/Bibliografie}
+
+\end{document}

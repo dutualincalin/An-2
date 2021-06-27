@@ -1,0 +1,23 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+	Continut:
+	-  tema1.c
+	- README
+
+	Acest program a fost realizat cu scopul crearii unui printf creat  personal, de aceea in continutul acestuia exista 5 functii, fiecare jucand un rol important in implementarea si functionarea corecta a programului. Aceste functii sunt:
+
+1) write_stdout - gasita in scheletul de cod -  are rolul de a scrie in fisier un sir de caracter si de a returna un program numarul de biti al programului;
+
+2)unstochar - transforma un unsigned int intr-un sir de caractere;
+
+3)inttochar - transforma un int, indiferent daca este un int pozitiv sau negativ, intr-un sir de caractere;
+
+4)hextochar - converteste un numar in baza 16, iar rezultatul este transformat intr-un sir de caractere;
+
+5)iocla_printf - functia primeste un format si niste argumente. Argumentele vor fi prelucrate in functie de formatul primit folosind functiile unstochar, inttochar si hextochar si transformate in siruri de caracterere, care la randul lor vor fi unite toate intr-un singur sir de caractere. Acest sir final va fi scris intr-un fisier folosind fuctia write_stdout si se va returna la finalul rularii functiei numarul de biti al sirului;
+
+Detalii tehnice:
+-  204 linii
+- Maxim 70 de caractere per linie
+- Comentarii in cod care explica fiecare pas

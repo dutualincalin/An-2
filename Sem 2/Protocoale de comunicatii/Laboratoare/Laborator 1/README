@@ -1,0 +1,35 @@
+Nume: Dutu Alin Calin
+Grupa: 323 CD
+
+Laboratorul 1
+
+In acest laborator se vor gasi fisierele:
+- cartof.txt
+- my_cat.c
+- mt_tac.c
+- README
+
+1) cartof.txt
+
+In acest fisier text se gaseste un pasaj de pe Wikipedia legat de cartof.
+
+2) my_cat.c
+
+In acest program se deschide si se citeste fisierul de intrare, continutul
+fiind stocat in buffer-ul buf. Urmeaza scrierea pe consola a continutului
+fisierului prin iterarea buffer-ului si apoi inchiderea fisierului de intrare.
+
+3) my_tac.c
+
+In acest program se deschide si se citeste fisierul de intrare, continutul
+fiind stocat in buffer-ul buf. Urmatorul pas va fi retinerea marimii in
+variabila size a buffer-ului citit prin parcurgerea iterativa a acestuia urmata
+apoi de scrierea in consola a continutului scris pe dos.
+
+Nota: Ghilimelele si literele cu diacritice vor fi scrise cu "?".
+
+IMPORTANT: Pentru rularea celor 2 programe se va executa in consola:
+./<nume executabil> <nume fisier text>
+
+
+Surse: https://ro.wikipedia.org/wiki/Cartof

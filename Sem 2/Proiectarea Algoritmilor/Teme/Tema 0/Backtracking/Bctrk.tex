@@ -1,0 +1,168 @@
+\chapter{Backtracking}
+\section{Enun't}
+\myindent
+Se cite'ste din fisierul plata.in care are pe prima linie num'arul tipurilor de bancnote urmat de o sum'a, pe a doua linie valorile bancnotelor, iar pe a treia linie num'arul de bancnote disponibile pentru fiecare valoare citit'a de la linia 2. S'a se genereze modalit'a'tile de plat'a sub form'a de submul'timi a sumei cu bancnotele disponibile. Submul'timile trebuie s'a fie 'in ordine cresc'atoare 'si s'a nu se repete.
+
+\vspace{10mm}
+\section{Descrierea solu'tiei probemei}
+\myindent
+Pentru a genera toate combina'tiile posibile, dar av\^and anumite restric'tii se poate apela f'ar'a ezit'ari la Backtracking. Algoritmul are 3 func'tii. Prima este main 'in care se citesc toate datele 'si se creaz'a vectorul de bancnote 'in care se va insera c\^ate o bancnot'a. A doua este backtracking care creeaz'a un vector de solu'tii, se itereaz'a prin vectorul de domeniu sau vectorul de bancnote 'si se verific'a dac'a valoarea din domeniu e mai mare dec\^at ultima valoare din solu'tie (dac'a valoarea exist'a). Dac'a este, atunci se adaug'a acel element 'in solu'tie, 'il scoate din domeniu 'si apoi prin recursivitate se creeaz'a toate combina'tiile posibile care au acela'si 'inceput. Odat'a ce s-a ajuns la o solu'tie se verific'a dac'a este valid'a, adic'a dac'a suma solu'tiei este exact suma c'autat'a. Dac'a da, aici intervine partea cu restric'tii. Se va verifica dac'a solution se reg'ase'ste deja printre solu'tiile g'asite utiliz\^and a treia func'tie, is\_not\_in\_sols. Dac'a solu'tia e nou'a atunci ea va fi ad'augat'a la vectorul de solu'tii. 'In final se va afi'sa vectorul de solu'tii.
+
+\section{Prezentarea algoritmului de rezolvare a problemei}
+\begin{lstlisting}[language=Python]
+int is_not_in_sols(solution, sols)
+	pentru i de la 0  la marimea lui sols - 1
+		daca (marimea lui sols(i) = marimea lui solution)
+			same = 1;
+
+			pentru j  de la 0  la marimea lui sols(i) - 1
+				daca (sols(i)(j) diferit de solution(j))
+					same = 0;
+					iesi din for
+
+			daca (same = 1)
+				returneaza 0;
+
+	returneaza 1;
+
+
+void bactracking(domain, solution, sols, sol_sum, sum)
+	daca (sol_sum > sum)
+		iesi din functie;
+
+	daca (sol_sum = sum)
+		daca(is_not_in_sols(solution, sols)  = 1)
+			adauga solution in sols;
+			iesi din functie;
+
+	pentru i de la 0 la marimea lui domain - 1
+		daca solution are elemente 
+		   si domain(i) < ultimul element al lui solution
+			continua;
+
+		new_domain = domain;
+		scoate domain(i) din new_domain;
+
+		new_solution = solution;
+	adauga domain(i) in solution;
+
+	new_sol_sum = sol_sum + domain(i);
+
+	backtracking(new_domain, new_solution, sols, new_sol_sum, sum);
+
+
+int main()
+	citeste n;
+	citeste S;
+	
+	citeste types;
+	
+	pentru i de la 0 la n - 1
+		citeste times;
+		pentru j de la 0 la times -1
+			adauga types(i) in domain;
+
+	backtracking(domain, solution, sols, 0, S);
+
+	pentru i de la 0 la marimea lui sols
+		pentru j de la 0 la marimea lui sols(i)
+			scrie sols(i)(j);
+
+		scrie pe urmatoarea linie
+
+	returneaza 0;
+\end{lstlisting}
+
+\vspace{10mm}
+\section{Aprecierea complexit'a'tii algoritmului propus}
+\myindent
+Din punct de vedere temporal algoritmul con'tine un for la citire de complexitate O(n * max(times)) 'si un for pentru scriere de complexitate O(sol.size * sols(i).size). 'In func'tia is\_not\_in\_sols algoritmul itereaz'a prin toate solutiile lui sols deci avem complexitate O(sol.size * sols(i).size), iar 'in func'tia backtracking, pentru c'a avem un for care trece prin tot domeniul 'si un apel recursiv care va genera toate combina'tiile posibile, vom avea complexitate O(m *  m!) unde m este num'arul de bancnote. Compar\^and cele 3 complexit'a'ti pe cazul cel mai r'au ar rezulta O(n * max(times)) $<$ O(sol.size * sols(i).size) $\le$  O(m * m!) pentru c'a generarea solu'tiilor ia cel mai mult timp 'si pentru c'a num'arul solu'tiilor va fi evident mai mic dec\^at num'arul itera'tiilor de backtracking. 'In concluzie complexitatea temporal'a este O(m *  m!), unde m este num'arul de bancnote disponibile.\\
+\newline
+Din punct de vedere spa'tial, programul are un vector care stocheaz'a tipurile de bancnote, deci O(n) 'si un vector domain care stocheaz'a toate bancnotele, una c\^ate una, deci O(m), unde m este num'arul de bancnote disponibile.\\
+\newline
+Astfel pentru acest program avem complexitate temporal'a O(m * m!) 'si complexitate spa'tial'a O(m), unde m este num'arul de bancnote. 
+
+\vspace{10mm}
+\section{Analiz'a succint'a asupra eficien'tei algoritmului propus}
+\myindent
+Algoritmul nu are foarte multe optimiz'ari. Singura optimizare este 'in momentul 'in care se alege din domeniu o valoare 'si se impune restric'tia pentru multimi cresc'atoare. Dac'a elementul din domeniu e mai mic dec\^at ultimul element din solu'tie, atunci se trece la urm'atoarea itera'tie, acest lucru elimin\^and o bun'a parte din combina'tii. In plus se mai pot aplica optimiz'arile din compilator cu O1, O2 sau O3, dar altfel consider acest algoritm ca fiind eficient pentru aceast'a problem'a.
+
+\vspace{10mm}
+\section{Exemplificarea aplicarii algoritmului propus pentru un exemplu sugestiv}
+\subsection{Exemplu de input}
+\begin{verbatim}
+plata.in
+4 40
+1 5 10 50
+5 3 3 1
+
+Rezultat:
+1 1 1 1 1 5 5 5 10 10
+1 1 1 1 1 5 10 10 10
+5 5 10 10 10
+\end{verbatim}
+\subsection{Aplicarea algoritmului}
+
+Algoritmul va primi datele de intrarea si va forma vectorul domain cu toate bancnotele disponibile si apoi se va apela func'tia backtracking. Acesta va fi parcursul:\\\\
+\myindent
+Pasul 1:   Solution = \{1\}; Domain = \{1, 1, 1, 1, 5, 5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 2:   Solution = \{1, 1\}; Domain = \{1, 1, 1, 5, 5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 3:   Solution = \{1, 1, 1\}; Domain = \{1, 1, 5, 5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 4:   Solution = \{1, 1, 1, 1\}; Domain = \{1, 5, 5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 5:   Solution = \{1, 1, 1, 1, 1\}; Domain = \{5, 5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 6:   Solution = \{1, 1, 1, 1, 1, 5\}; Domain = \{5, 5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 7:   Solution = \{1, 1, 1, 1, 1, 5, 5\}; Domain = \{5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 8:   Solution = \{1, 1, 1, 1, 1, 5, 5, 5\}; Domain = \{10, 10, 10, 50\}\\
+\myindent
+Pasul 9:   Solution = \{1, 1, 1, 1, 1, 5, 5, 5, 10\}; Domain = \{10, 10, 50\}\\
+\myindent
+Pasul 10: Solution = \{1, 1, 1, 1, 1, 5, 5, 5, 10, 10\}; Domain = \{10, 50\}\\
+\myindent
+Pasul 11: Solution = \{1, 1, 1, 1, 1, 5, 5, 5, 10, 10, 10\}; Domain = \{50\}\\
+\myindent
+-$>$ suma bancnotelor din Solution este 40, deci se adaug'a Solution in sols.\\
+
+Urmeaz'a un set de pasi unde solu'tiile vor fi identice cu prima solu'tie p\^an'a c\^and:\\
+
+Pasul 12: Solution = \{1, 1, 1, 1, 1, 5\}; Domain = \{ 10, 10, 10, 50\}\\
+\myindent
+Pasul 13: Solution = \{1, 1, 1, 1, 1, 5, 10\}; Domain = \{10, 10, 50\}\\
+\myindent
+Pasul 14: Solution = \{1, 1, 1, 1, 1, 5, 10, 10\}; Domain = \{10, 50\}\\
+\myindent
+Pasul 15: Solution = \{1, 1, 1, 1, 1, 5, 10, 10, 10\}; Domain = \{50\}\\
+\myindent
+-$>$ suma bancnotelor din Solution este 40, deci se adaug'a Solution in sols.\\
+
+Urmeaz'a din nou un set de solu'tii care se vor repeta p\^an'a c\^and:\\
+
+Pasul 16: Solution = \{5\}; Domain = \{5, 10, 10, 10, 50\}\\
+\myindent
+Pasul 17: Solution = \{5, 5\}; Domain = \{10, 10, 10, 50\}\\
+\myindent
+Pasul 18: Solution = \{5, 5, 10\}; Domain = \{10, 10, 50\}\\
+\myindent
+Pasul 19: Solution = \{5, 5, 10, 10\}; Domain = \{10, 50\}\\
+\myindent
+Pasul 20: Solution = \{5, 5, 10, 10, 10\}; Domain = \{50\}\\
+\myindent
+-$>$ suma bancnotelor din Solution este 40, deci se adaug'a Solution in sols.\\
+
+P\^an'a la finalul execu'tiei metoda backtracking nu va mai g'asi alte combina'tii. 'In final se vor afi'sa 'in output solu'tiile:\\
+\myindent
+1 1 1 1 1 5 5 5 10 10\\
+\myindent
+1 1 1 1 1 5 10 10 10\\
+\myindent
+5 5 10 10 10\\
+\myindent
+
+
+

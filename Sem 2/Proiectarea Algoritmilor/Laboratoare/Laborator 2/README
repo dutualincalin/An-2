@@ -1,0 +1,22 @@
+Nume: Dutu Alin Calin
+Grupa: 323CD
+
+
+		Laboratorul 2 - Proiectarea algoritmilor
+
+Laboratorul contine:
+- Makefile
+- README
+- schelet_lab02.c
+- tree.c
+- tree.h
+
+Toate cerintele principale ale laboratorului au fost rezolvate cu succes.
+
+La cerintele bonus am reusit sa fac doar al doilea exercitiu, dar fiindca
+programul a fost facut in asa fel incat evaluarea sa se blocheze la primul
+test care da fail, am comentat functia care verifica prima problema bonus.
+Astfel consola poate lua in considerare si a doua problema bonus.
+
+De asemenea, am modificat denumirile fisierelor cu schimbarile aferente in
+Makefile ca sa se potriveasca cu numarul laboratorului.
