@@ -1,1 +1,17 @@
-# An-2
+#Repo Facultate - An 2:
+- Achizitii de date
+- Analiza Algoritmilor
+- Calculatoare Numerice I
+- Didactica specialitatii
+- Electronica Digitala
+- EEA
+- Engleza 3
+- Engleza 4
+- Filosofie
+- Iocla
+- Paradigme de programare
+- Pedagogie
+- POO
+- Proiectarea algoritmilor
+- Protocoale de comunicatii
+- Teoria Sistemelor
