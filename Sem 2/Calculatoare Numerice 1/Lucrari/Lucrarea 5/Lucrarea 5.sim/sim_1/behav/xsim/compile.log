@@ -1,0 +1,14 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/Dreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Dreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/diferentiator.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module diferentiator
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/inmultitor.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inmultitor
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/sumator.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module sumator
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/TopLevel.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module TopLevel
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sim_1/new/BA_sim.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module BA_sim
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl

@@ -1,0 +1,11 @@
+0.7
+2020.2
+Nov 18 2020
+09:47:47
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.sim/sim_1/behav/xsim/glbl.v,1631213836,verilog,,,,glbl,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sim_1/new/BA_sim.v,1631213836,verilog,,,,BA_sim,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/Dreg.v,1631213836,verilog,,C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/diferentiator.v,,Dreg,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/TopLevel.v,1631213836,verilog,,C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sim_1/new/BA_sim.v,,TopLevel,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/diferentiator.v,1631213836,verilog,,C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/inmultitor.v,,diferentiator,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/inmultitor.v,1631213836,verilog,,C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/sumator.v,,inmultitor,,,,,,,,
+C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/sumator.v,1631213836,verilog,,C:/Users/Calin/Desktop/Facultate/Anul 2/Sem 2/Calculatoare Numerice 1/Lucrari/Lucrarea 5/Lucrarea 5.srcs/sources_1/new/TopLevel.v,,sumator,,,,,,,,
